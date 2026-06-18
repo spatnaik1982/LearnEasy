@@ -5,13 +5,20 @@
   "scripts": {
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0"
   },
   "devDependencies": {
+    "@types/node": "^18.19.130",
     "prisma": "^5.22.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
     "typescript": "^5.9.3"
   }
 }
