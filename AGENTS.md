@@ -107,15 +107,37 @@ When working with the AI Tutor (packages/ai), adhere to these product constraint
 - Use Zod structured outputs for type-safe responses
 - Handle API failures with graceful fallback messages
 
-## UI Design Principles
+## Design Guidelines
 
-- **Low sensory load**: No flashing, loud sounds, complex animations, or excessive colors
-- **Muted palette**: Slate/blue/green tones, no bright reds/yellows
-- **Large touch targets**: Minimum 44px on all interactive elements
-- **Keyboard navigation**: All components operable via keyboard
-- **ARIA attributes**: Proper labels, roles, and states for screen readers
-- **High contrast mode**: CSS class toggle available
-- **Dyslexia-friendly font**: Option available
+Always refer to the **Autism Learning Experience (ALX) Design Guidelines** before making UI changes.
+
+The formal design system is documented in:
+- `knowledge/design/design-guidelines.md` — Full ALX framework (703 lines) covering Core Design Philosophy (ALX-1 through ALX-8), Visual Design, Typography, Layout, Interaction Design, Motion, Audio, Language/Microcopy, Error Prevention, Learning-Specific UX, Personalization, AI Tutor Guidelines, and a Design Review Checklist
+- `knowledge/design/DESIGN.md` — Token spec with exact color hex values (Serene Structure palette), typography definitions (Inter font stack, sizes, weights, line heights), spacing units (8px base, 48px component separation), rounded corner values, elevation/shadow specs, and component-level guidance for the lesson flow
+
+### Key ALX Principles (Quick Reference)
+
+| Principle | Summary |
+|-----------|---------|
+| **ALX-1 Predictability** | Every screen feels familiar; navigation, actions, and lesson structure never change |
+| **ALX-2 Visual First** | Show before explaining; pair text with imagery |
+| **ALX-3 One Concept at a Time** | One concept, one task, one decision per screen |
+| **ALX-4 Visible Progress** | Step indicators, question counts, completion status always shown |
+| **ALX-5 Safe Mistakes** | Unlimited retries, no penalties, no failure states |
+| **ALX-6 Controlled Sensory Environment** | No autoplay audio/video, no flashing, user controls for sound/motion/contrast |
+| **ALX-7 Routine-Based Learning** | Fixed lesson sequence: Observe → Practice → Quiz → Complete |
+| **ALX-8 Mastery-Based Progression** | Emphasize skills learned, not points/leaderboards |
+
+### Critical Visual Specs
+
+- **Colors**: Soft Blue (#5D87B1), Muted Teal (#76A5AF), Muted Green (#8FB996), Soft Amber (#EBC06D), Soft Coral (#E5989B), Warm Off-White (#F9F7F2), Slate Text (#374151)
+- **Typography**: Inter font family, 16px body minimum, 20px+ questions, 24px+ headings, left-aligned, line height 1.5–1.75
+- **Touch Targets**: Minimum 56x56px (preferred), 16px minimum spacing between interactive elements
+- **Motion**: Only fade transitions and small scale changes, 150–300ms duration, no bounce/parallax/infinite loops
+- **Button Labels**: Explicit literalism — "Submit Answer", "Continue Lesson", never vague "Go" or "Next" without context
+- **Screen Structure**: Header → Progress Indicator → Main Learning Area → Primary Action → Secondary Actions
+
+### Before implementing any UI feature, run the Design Review Checklist (section 15 of design-guidelines.md)
 
 ## Branch Strategy
 
