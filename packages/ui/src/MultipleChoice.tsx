@@ -51,10 +51,10 @@ export function MultipleChoice({
 
   return (
     <div className={cn("flex flex-col", className)} role="group" aria-label="Multiple choice question">
-      <p className="mb-4 text-lg font-semibold text-slate-800" id="mc-question">
+      <p className="mb-4 text-lg font-semibold text-slate-text" id="mc-question">
         {question}
       </p>
-      <div className="flex flex-col gap-3" role="listbox" aria-labelledby="mc-question">
+      <div className="flex flex-col gap-4" role="listbox" aria-labelledby="mc-question">
         {options.map((option, index) => {
           const isSelected = selectedId === option.id;
           return (
@@ -65,22 +65,22 @@ export function MultipleChoice({
               role="option"
               aria-selected={isSelected}
               className={cn(
-                "min-h-[44px] rounded-lg border-2 px-4 py-3 text-left text-base font-medium text-slate-700",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                "min-h-[56px] rounded-lg border-2 px-4 py-3 text-left text-base font-medium text-slate-text",
+                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
                 !hasAnswered && "border-slate-300 bg-white hover:border-slate-400",
                 hasAnswered &&
                   isSelected &&
                   isCorrect &&
-                  "border-green-500 bg-green-50 text-green-700",
+                  "border-muted-green bg-muted-green/10 text-muted-green",
                 hasAnswered &&
                   isSelected &&
                   !isCorrect &&
-                  "border-red-400 bg-red-50 text-red-600",
+                  "border-soft-coral bg-soft-coral/10 text-soft-coral",
                 hasAnswered &&
                   !isSelected &&
                   index === correctIndex &&
-                  "border-green-400 bg-green-50/50 text-green-700",
-                hasAnswered && !isSelected && index !== correctIndex && "border-slate-200 bg-slate-50 text-slate-400",
+                  "border-muted-green bg-muted-green/10 text-muted-green",
+                hasAnswered && !isSelected && index !== correctIndex && "border-outline-variant bg-slate-50 text-on-surface-variant",
               )}
               disabled={hasAnswered}
             >
@@ -99,11 +99,11 @@ export function MultipleChoice({
         <p
           className={cn(
             "mt-4 text-center text-base font-semibold",
-            isCorrect ? "text-green-600" : "text-red-500",
+            isCorrect ? "text-muted-green" : "text-soft-coral",
           )}
           aria-live="polite"
         >
-          {isCorrect ? "That's right! Well done." : "Not quite. Try the next one."}
+          {isCorrect ? "That's right! Well done." : "Let's try that again"}
         </p>
       )}
     </div>

@@ -44,13 +44,13 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
   const selectedChildData = childrenList.find((c) => c.id === selectedChild);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+    <div className="min-h-screen bg-warm-off-white">
+      <header className="border-b border-outline-variant bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-slate-800">LearnEasy Parent</h1>
+            <h1 className="text-xl font-bold text-slate-text">LearnEasy Parent</h1>
             {selectedChildData && (
-              <span className="rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
+              <span className="rounded-full bg-soft-blue/10 px-3 py-1 text-sm font-medium text-soft-blue">
                 {selectedChildData.name}, Age {selectedChildData.age} &middot; {selectedChildData.level}
               </span>
             )}
@@ -61,7 +61,7 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
               id="child-select"
               value={selectedChild}
               onChange={(e) => setSelectedChild(e.target.value)}
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="min-h-[56px] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-text focus:border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue"
             >
               {childrenList.map((child) => (
                 <option key={child.id} value={child.id}>
@@ -73,7 +73,7 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
         </div>
       </header>
 
-      <nav className="border-b border-slate-200 bg-white">
+      <nav className="border-b border-outline-variant bg-white">
         <div className="mx-auto max-w-5xl px-4">
           <div className="flex gap-1 py-2" role="tablist">
             {NAV_ITEMS.map((item) => {
@@ -84,10 +84,10 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
                   href={`${item.href}?child=${selectedChild}`}
                   role="tab"
                   aria-selected={isActive}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300 ${
+                  className={`min-h-[56px] rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-soft-blue inline-flex items-center ${
                     isActive
-                      ? "bg-indigo-100 text-indigo-700"
-                      : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                      ? "bg-soft-blue/10 text-soft-blue"
+                      : "text-on-surface-variant hover:bg-slate-100 hover:text-slate-text"
                   }`}
                 >
                   {item.label}
@@ -99,7 +99,7 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
       </nav>
 
       <main className="mx-auto max-w-5xl px-4 py-6">
-        <h2 className="mb-6 text-2xl font-bold text-slate-800">{title}</h2>
+        <h2 className="mb-6 text-2xl font-bold text-slate-text">{title}</h2>
         {children}
       </main>
     </div>

@@ -38,7 +38,7 @@ export default function DashboardPage() {
   return (
     <DashboardLayout title="Overview">
       {loading ? (
-        <p className="text-lg text-slate-400">Loading dashboard...</p>
+        <p className="text-lg text-on-surface-variant">Loading dashboard...</p>
       ) : (
         <div className="space-y-8">
           <div className="grid gap-4 sm:grid-cols-3">
@@ -48,10 +48,10 @@ export default function DashboardPage() {
           </div>
 
           <section>
-            <h3 className="mb-3 text-lg font-semibold text-slate-700">Recent Activity</h3>
-            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <h3 className="mb-3 text-lg font-semibold text-slate-text">Recent Activity</h3>
+            <div className="overflow-hidden rounded-xl border border-outline-variant bg-white">
               {recent.length === 0 ? (
-                <p className="p-4 text-slate-400">No recent activity</p>
+                <p className="p-4 text-on-surface-variant">No recent activity</p>
               ) : (
                 <ul className="divide-y divide-slate-100">
                   {recent.map((item) => (
@@ -59,14 +59,14 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-3">
                         <span
                           className={`inline-block h-2 w-2 rounded-full ${
-                            item.completed ? "bg-emerald-400" : "bg-amber-400"
+                            item.completed ? "bg-muted-green" : "bg-soft-amber"
                           }`}
                         />
-                        <span className="text-sm font-medium text-slate-700">{item.conceptName}</span>
+                        <span className="text-sm font-medium text-slate-text">{item.conceptName}</span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-slate-400">{item.mastery}%</span>
-                        <span className="text-xs text-slate-400">{item.lastActivity}</span>
+                        <span className="text-sm text-on-surface-variant">{item.mastery}%</span>
+                        <span className="text-xs text-on-surface-variant">{item.lastActivity}</span>
                       </div>
                     </li>
                   ))}
@@ -76,16 +76,16 @@ export default function DashboardPage() {
           </section>
 
           <section>
-            <h3 className="mb-3 text-lg font-semibold text-slate-700">Quick Links</h3>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <h3 className="mb-3 text-lg font-semibold text-slate-text">Quick Links</h3>
+            <div className="grid gap-4 sm:grid-cols-3">
               {QUICK_LINKS.map((link) => (
                 <button
                   key={link.href}
                   onClick={() => router.push(`${link.href}?child=${child}`)}
-                  className="rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:border-indigo-200 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                  className="min-h-[56px] rounded-xl border border-outline-variant bg-white p-4 text-left transition-colors hover:border-soft-blue hover:bg-soft-blue/5 focus:outline-none focus:ring-2 focus:ring-soft-blue"
                 >
-                  <h4 className="font-semibold text-indigo-600">{link.label}</h4>
-                  <p className="mt-1 text-sm text-slate-500">{link.desc}</p>
+                  <h4 className="font-semibold text-soft-blue">{link.label}</h4>
+                  <p className="mt-1 text-sm text-on-surface-variant">{link.desc}</p>
                 </button>
               ))}
             </div>
@@ -98,10 +98,10 @@ export default function DashboardPage() {
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="text-sm font-medium text-slate-500">{label}</p>
-      <p className="mt-1 text-3xl font-bold text-slate-800">{value}</p>
-      <p className="mt-1 text-xs text-slate-400">{sub}</p>
+    <div className="rounded-xl border border-outline-variant bg-white p-4">
+      <p className="text-sm font-medium text-on-surface-variant">{label}</p>
+      <p className="mt-1 text-3xl font-bold text-slate-text">{value}</p>
+      <p className="mt-1 text-xs text-on-surface-variant">{sub}</p>
     </div>
   );
 }

@@ -71,8 +71,8 @@ export function Matching({ pairs, onMatch, className }: MatchingProps) {
   );
 
   return (
-    <div className={cn("flex gap-8", className)} role="group" aria-label="Matching activity">
-      <div className="flex flex-col gap-3" role="list" aria-label="Left column items">
+    <div className={cn("flex gap-4", className)} role="group" aria-label="Matching activity">
+      <div className="flex flex-col gap-4" role="list" aria-label="Left column items">
         {pairs.map((pair) => {
           const isSelected = selectedLeft === pair.id;
           const isMatched = matchedIds.has(pair.id);
@@ -82,11 +82,11 @@ export function Matching({ pairs, onMatch, className }: MatchingProps) {
               onClick={() => handleLeftClick(pair.id)}
               onKeyDown={(e) => handleKeyDownLeft(e, pair.id)}
               className={cn(
-                "min-h-[44px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium text-slate-700",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                "min-h-[56px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium text-slate-text",
+                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
                 isMatched && "opacity-50",
                 isSelected
-                  ? "border-blue-500 bg-blue-50"
+                  ? "border-soft-blue bg-soft-blue/10"
                   : "border-slate-300 bg-white hover:border-slate-400",
               )}
               role="listitem"
@@ -100,7 +100,7 @@ export function Matching({ pairs, onMatch, className }: MatchingProps) {
         })}
       </div>
 
-      <div className="flex flex-col gap-3" role="list" aria-label="Right column items">
+      <div className="flex flex-col gap-4" role="list" aria-label="Right column items">
         {pairs.map((pair) => {
           const isMatched = matchedIds.has(pair.id);
           const showFeedback = feedbackPairId === pair.id && feedback !== "idle";
@@ -112,17 +112,17 @@ export function Matching({ pairs, onMatch, className }: MatchingProps) {
               onClick={() => handleRightClick(pair.id)}
               onKeyDown={(e) => handleKeyDownRight(e, pair.id)}
               className={cn(
-                "min-h-[44px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
-                isMatched && "border-green-500 bg-green-50 text-green-700 opacity-50",
+                "min-h-[56px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium",
+                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
+                isMatched && "border-muted-green bg-muted-green/10 text-muted-green opacity-50",
                 !isMatched &&
                   showFeedback &&
                   feedback === "correct" &&
-                  "border-green-500 bg-green-50 text-green-700",
+                  "border-muted-green bg-muted-green/10 text-muted-green",
                 !isMatched &&
                   showFeedback &&
                   feedback === "incorrect" &&
-                  "border-red-400 bg-red-50 text-red-600",
+                  "border-soft-coral bg-soft-coral/10 text-soft-coral",
                 !isMatched &&
                   !showFeedback &&
                   isSelectedFeedback &&
@@ -135,12 +135,12 @@ export function Matching({ pairs, onMatch, className }: MatchingProps) {
             >
               {pair.itemB}
               {showFeedback && feedback === "correct" && (
-                <span className="ml-2 text-green-600" aria-label="Correct match">
+                <span className="ml-2 text-muted-green" aria-label="Correct match">
                   ✓
                 </span>
               )}
               {showFeedback && feedback === "incorrect" && (
-                <span className="ml-2 text-red-500" aria-label="Incorrect match">
+                <span className="ml-2 text-soft-coral" aria-label="Incorrect match">
                   ✗
                 </span>
               )}

@@ -14,12 +14,22 @@ import type { Concept } from "../../lib/mockData";
 
 const STEPS = ["Observe", "Guided Practice", "Independent Practice", "Mastery Check", "Completion"];
 
+const TRANSITIONS: Record<number, { title: string; button: string } | null> = {
+  0: null,
+  1: { title: "Next: Guided Practice", button: "Start Practice" },
+  2: { title: "Next: Independent Practice", button: "Continue Lesson" },
+  3: { title: "Next: Mastery Check", button: "Continue Lesson" },
+  4: null,
+};
+
 const Learn: NextPage = () => {
   const router = useRouter();
   const { conceptId } = router.query;
   const [concept, setConcept] = useState<Concept | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
+  const [showTransition, setShowTransition] = useState(false);
+  const [pendingStep, setPendingStep] = useState<number | null>(null);
 
   useEffect(() => {
     if (!conceptId) return;
@@ -40,8 +50,22 @@ const Learn: NextPage = () => {
   }, [conceptId]);
 
   const handleNext = useCallback(() => {
-    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
-  }, []);
+    const nextStep = currentStep + 1;
+    if (nextStep >= STEPS.length - 1) {
+      setCurrentStep(nextStep);
+      return;
+    }
+    setPendingStep(nextStep);
+    setShowTransition(true);
+  }, [currentStep]);
+
+  const handleStartTransition = useCallback(() => {
+    if (pendingStep !== null) {
+      setCurrentStep(pendingStep);
+      setPendingStep(null);
+    }
+    setShowTransition(false);
+  }, [pendingStep]);
 
   const handleComplete = useCallback(() => {
     router.push("/subjects");
@@ -49,16 +73,16 @@ const Learn: NextPage = () => {
 
   if (loading || !conceptId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-lg text-slate-500">Loading lesson...</p>
+      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
+        <p className="text-lg text-on-surface-variant">Loading lesson...</p>
       </div>
     );
   }
 
   if (!concept) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-lg text-slate-500">Concept not found</p>
+      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
+        <p className="text-lg text-on-surface-variant">Concept not found</p>
       </div>
     );
   }
@@ -69,24 +93,44 @@ const Learn: NextPage = () => {
   const sequencingActivity = activities.find((a) => a.type === "sequencing");
   const mcActivity = activities.find((a) => a.type === "multiple-choice");
 
+  const transition = TRANSITIONS[currentStep];
+
+  if (showTransition && transition) {
+    return (
+      <div className="min-h-screen bg-warm-off-white px-4 py-8">
+        <div className="mx-auto max-w-content">
+          <div className="flex flex-col items-center justify-center py-20">
+            <h2 className="mb-6 text-2xl font-bold text-slate-text text-center">{transition.title}</h2>
+            <button
+              onClick={handleStartTransition}
+              className="min-h-[56px] rounded-lg bg-soft-blue px-8 py-3 text-base font-semibold text-white hover:bg-primary transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+            >
+              {transition.button}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
-      <div className="mx-auto max-w-2xl">
+    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+      <div className="mx-auto max-w-content">
         <button
           onClick={() => router.back()}
-          className="mb-4 min-h-[44px] text-left text-base text-slate-500 hover:text-slate-700 focus:outline-none focus:underline"
+          className="mb-4 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
           &larr; Back
         </button>
 
-        <h1 className="mb-6 text-2xl font-bold text-slate-800">{concept.title}</h1>
+        <h1 className="mb-6 text-2xl font-bold text-slate-text">{concept.title}</h1>
 
         <ProgressBar steps={STEPS} currentStep={currentStep} className="mb-10" />
 
         {currentStep === 0 && (
           <section aria-label="Observe step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-700">Observe</h2>
-            <p className="mb-6 text-base text-slate-500">
+            <h2 className="mb-4 text-lg font-semibold text-slate-text">Observe</h2>
+            <p className="mb-6 text-base text-on-surface-variant">
               Look at the visual below. Count what you see.
             </p>
             {visualActivity && (
@@ -99,24 +143,24 @@ const Learn: NextPage = () => {
             )}
             <button
               onClick={handleNext}
-              className="min-h-[52px] w-full rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
             >
-              I'm ready to practice
+              Continue Lesson
             </button>
           </section>
         )}
 
         {currentStep === 1 && (
           <section aria-label="Guided Practice step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-700">
+            <h2 className="mb-4 text-lg font-semibold text-slate-text">
               Guided Practice
             </h2>
-            <p className="mb-6 text-base text-slate-500">
+            <p className="mb-6 text-base text-on-surface-variant">
               Match the items below. Hints are available to help you.
             </p>
             {matchingActivity && (
               <div className="mb-8">
-                <p className="mb-3 text-sm font-medium text-blue-600">
+                <p className="mb-3 text-sm font-medium text-soft-blue">
                   💡 Hint: Look carefully at each item before matching
                 </p>
                 <Matching
@@ -127,19 +171,19 @@ const Learn: NextPage = () => {
             )}
             <button
               onClick={handleNext}
-              className="min-h-[52px] w-full rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
             >
-              I'm ready for independent practice
+              Continue Lesson
             </button>
           </section>
         )}
 
         {currentStep === 2 && (
           <section aria-label="Independent Practice step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-700">
+            <h2 className="mb-4 text-lg font-semibold text-slate-text">
               Independent Practice
             </h2>
-            <p className="mb-6 text-base text-slate-500">
+            <p className="mb-6 text-base text-on-surface-variant">
               Try this on your own. No hints this time!
             </p>
             {sequencingActivity ? (
@@ -160,19 +204,19 @@ const Learn: NextPage = () => {
             ) : null}
             <button
               onClick={handleNext}
-              className="min-h-[52px] w-full rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
             >
-              Check my understanding
+              Submit Answer
             </button>
           </section>
         )}
 
         {currentStep === 3 && (
           <section aria-label="Mastery Check step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-700">
+            <h2 className="mb-4 text-lg font-semibold text-slate-text">
               Mastery Check
             </h2>
-            <p className="mb-6 text-base text-slate-500">
+            <p className="mb-6 text-base text-on-surface-variant">
               Show what you've learned!
             </p>
             {mcActivity && (
@@ -187,9 +231,9 @@ const Learn: NextPage = () => {
             )}
             <button
               onClick={handleNext}
-              className="min-h-[52px] w-full rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
             >
-              Finish
+              Continue Lesson
             </button>
           </section>
         )}
