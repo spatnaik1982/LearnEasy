@@ -48,12 +48,21 @@ importers:
       '@types/react':
         specifier: ^18.0.0
         version: 18.3.31
+      autoprefixer:
+        specifier: ^10.5.0
+        version: 10.5.0(postcss@8.5.15)
       eslint:
         specifier: ^8.0.0
         version: 8.57.1
       eslint-config-next:
         specifier: ^13.0.0
         version: 13.5.11(eslint@8.57.1)(typescript@5.9.3)
+      postcss:
+        specifier: ^8.5.15
+        version: 8.5.15
+      tailwindcss:
+        specifier: ^3.4.19
+        version: 3.4.19(tsx@4.22.4)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -6745,7 +6754,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.29.7
       chalk: 4.1.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       cosmiconfig: 7.1.0
       deepmerge: 4.3.1
       fs-extra: 10.1.0
