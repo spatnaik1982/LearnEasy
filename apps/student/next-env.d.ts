@@ -1,0 +1,3 @@
+// Next.js TypeScript support
+/// <reference types="next/types" />
+/// <reference types="next/image-types/global" />
