@@ -16,10 +16,10 @@ const LABEL_MAP: Record<Insight["category"], string> = {
   suggestion: "Suggestion",
 };
 
-const BORDER_MAP: Record<Insight["category"], string> = {
-  strength: "border-emerald-300",
-  "area-for-growth": "border-amber-300",
-  suggestion: "border-indigo-300",
+const BORDER_COLORS: Record<Insight["category"], string> = {
+  strength: "#8FB996",
+  "area-for-growth": "#EBC06D",
+  suggestion: "#5D87B1",
 };
 
 export default function InsightsPage() {
@@ -40,11 +40,11 @@ export default function InsightsPage() {
   return (
     <DashboardLayout title="Insights">
       {loading ? (
-        <p className="text-lg text-slate-500">Loading insights...</p>
+        <p className="text-lg text-on-surface-variant">Loading insights...</p>
       ) : insights.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+        <div className="rounded-xl border border-outline-variant bg-white p-8 text-center">
           <p className="text-4xl">&#x1F9E0;</p>
-          <p className="mt-3 text-lg text-slate-500">
+          <p className="mt-3 text-lg text-on-surface-variant">
             AI analysis will appear here
           </p>
         </div>
@@ -53,17 +53,18 @@ export default function InsightsPage() {
           {insights.map((insight, i) => (
             <div
               key={i}
-              className={`rounded-xl border-l-4 bg-white p-5 shadow-sm ${BORDER_MAP[insight.category]}`}
+              className="rounded-xl border border-outline-variant bg-white p-5 shadow-sm"
+              style={{ borderLeft: `4px solid ${BORDER_COLORS[insight.category]}` }}
             >
               <div className="flex items-start gap-3">
                 <span className="text-2xl" aria-hidden="true">
                   {ICON_MAP[insight.category]}
                 </span>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
                     {LABEL_MAP[insight.category]}
                   </p>
-                  <p className="mt-1 text-base text-slate-700">{insight.text}</p>
+                  <p className="mt-1 text-base text-slate-text">{insight.text}</p>
                 </div>
               </div>
             </div>

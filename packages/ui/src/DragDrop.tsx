@@ -59,10 +59,10 @@ export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
   );
 
   return (
-    <div className={cn("flex gap-8", className)}>
+    <div className={cn("flex gap-4", className)}>
       <div role="group" aria-label="Available items">
-        <p className="mb-3 text-sm font-medium text-slate-500">Items</p>
-        <div className="flex flex-col gap-3">
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">Items</p>
+        <div className="flex flex-col gap-4">
           {items.map((item) => {
             const isPlaced = placed.has(item.id);
             const isSelected = selectedItem === item.id;
@@ -72,11 +72,11 @@ export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
                 onClick={() => handleItemClick(item.id)}
                 onKeyDown={(e) => handleItemKeyDown(e, item.id)}
                 className={cn(
-                  "min-h-[44px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium text-slate-700",
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                  "min-h-[56px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium text-slate-text",
+                  "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
                   isPlaced && "opacity-40",
                   isSelected && !isPlaced
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-soft-blue bg-soft-blue/10"
                     : "border-slate-300 bg-white hover:border-slate-400",
                 )}
                 aria-pressed={isSelected}
@@ -92,8 +92,8 @@ export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
       </div>
 
       <div role="group" aria-label="Target zones">
-        <p className="mb-3 text-sm font-medium text-slate-500">Targets</p>
-        <div className="flex flex-col gap-3">
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">Targets</p>
+        <div className="flex flex-col gap-4">
           {targets.map((target) => {
             const placedItemId = [...placed.entries()].find(
               ([, tId]) => tId === target.id,
@@ -108,13 +108,13 @@ export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
                 onClick={() => handleTargetClick(target.id)}
                 onKeyDown={(e) => handleTargetKeyDown(e, target.id)}
                 className={cn(
-                  "min-h-[44px] rounded-lg border-2 border-dashed px-4 py-2 text-left text-base font-medium",
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                  "min-h-[56px] rounded-lg border-2 border-dashed px-4 py-2 text-left text-base font-medium",
+                  "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
                   placedItem
-                    ? "border-green-400 bg-green-50 text-green-700"
+                    ? "border-muted-green bg-muted-green/10 text-muted-green"
                     : selectedItem
-                      ? "border-blue-400 bg-blue-50 text-slate-500"
-                      : "border-slate-300 bg-slate-50 text-slate-400",
+                      ? "border-soft-blue bg-soft-blue/10 text-on-surface-variant"
+                      : "border-slate-300 bg-slate-50 text-on-surface-variant",
                 )}
                 aria-label={`Target: ${target.label}${placedItem ? `, contains ${placedItem.label}` : ", empty"}`}
               >

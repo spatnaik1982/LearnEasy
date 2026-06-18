@@ -30,7 +30,7 @@ export default function ProgressPage() {
   return (
     <DashboardLayout title="Progress">
       {loading ? (
-        <p className="text-lg text-slate-500">Loading progress...</p>
+        <p className="text-lg text-on-surface-variant">Loading progress...</p>
       ) : (
         <>
           <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Filter by chapter">
@@ -40,10 +40,10 @@ export default function ProgressPage() {
                 role="tab"
                 aria-selected={activeChapter === ch}
                 onClick={() => setActiveChapter(ch)}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
+                className={`min-h-[56px] rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-soft-blue ${
                   activeChapter === ch
-                    ? "bg-indigo-100 text-indigo-700"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-soft-blue/10 text-soft-blue"
+                    : "bg-outline-variant/30 text-on-surface-variant hover:bg-outline-variant/50"
                 }`}
               >
                 {ch}
@@ -51,7 +51,7 @@ export default function ProgressPage() {
             ))}
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {filtered.map((concept, i) => (
               <ProgressRow key={i} concept={concept} />
             ))}
@@ -70,22 +70,22 @@ function ProgressRow({ concept }: { concept: ConceptProgress }) {
       : "Not Started";
 
   const barColor = concept.completed
-    ? "bg-emerald-500"
+    ? "bg-muted-green"
     : concept.mastery > 0
-      ? "bg-amber-500"
-      : "bg-slate-300";
+      ? "bg-soft-amber"
+      : "bg-outline-variant";
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="min-h-[56px] rounded-xl border border-outline-variant bg-white p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-base font-semibold text-slate-800">{concept.conceptName}</p>
+        <p className="text-base font-semibold text-slate-text">{concept.conceptName}</p>
         <span
           className={`rounded-full px-3 py-0.5 text-xs font-medium ${
             concept.completed
-              ? "bg-emerald-100 text-emerald-700"
+              ? "bg-muted-green/10 text-muted-green"
               : concept.mastery > 0
-                ? "bg-amber-100 text-amber-700"
-                : "bg-slate-100 text-slate-500"
+                ? "bg-soft-amber/10 text-soft-amber"
+                : "bg-outline-variant/30 text-on-surface-variant"
           }`}
         >
           {statusLabel}
@@ -93,13 +93,13 @@ function ProgressRow({ concept }: { concept: ConceptProgress }) {
       </div>
 
       <div className="mt-3 flex items-center gap-3">
-        <div className="flex-1 overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-valuenow={concept.mastery} aria-label={`${concept.conceptName} mastery`}>
+        <div className="flex-1 overflow-hidden rounded-full bg-outline-variant/30" role="progressbar" aria-valuenow={concept.mastery} aria-label={`${concept.conceptName} mastery`}>
           <div
-            className={`h-3 rounded-full transition-all duration-500 ${barColor}`}
+            className={`h-3 rounded-full transition-all duration-200 ${barColor}`}
             style={{ width: `${concept.mastery}%` }}
           />
         </div>
-        <span className="w-10 text-right text-sm font-medium text-slate-600">
+        <span className="w-10 text-right text-sm font-medium text-on-surface-variant">
           {concept.mastery}%
         </span>
       </div>

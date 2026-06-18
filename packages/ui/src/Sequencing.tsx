@@ -113,16 +113,16 @@ export function Sequencing({
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div role="group" aria-label="Available items">
-        <p className="mb-3 text-sm font-medium text-slate-500">Click items to add to sequence</p>
-        <div className="flex flex-wrap gap-3">
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">Click items to add to sequence</p>
+        <div className="flex flex-wrap gap-4">
           {available.map((item) => (
             <button
               key={item.id}
               onClick={() => handleAddToSequence(item)}
               onKeyDown={(e) => handleAvailableKeyDown(e, item)}
               className={cn(
-                "min-h-[44px] rounded-lg border-2 px-4 py-2 text-base font-medium text-slate-700",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                "min-h-[56px] rounded-lg border-2 px-4 py-2 text-base font-medium text-slate-text",
+                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
                 "border-slate-300 bg-white hover:border-slate-400",
               )}
             >
@@ -134,10 +134,10 @@ export function Sequencing({
       </div>
 
       <div role="group" aria-label="Your sequence">
-        <p className="mb-3 text-sm font-medium text-slate-500">Your sequence (click to remove, arrow keys to reorder)</p>
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">Your sequence (click to remove, arrow keys to reorder)</p>
         {sequence.length === 0 ? (
           <div className="flex min-h-[52px] items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
-            <span className="text-sm text-slate-400">Select items above to build your sequence</span>
+            <span className="text-sm text-on-surface-variant">Select items above to build your sequence</span>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
@@ -156,8 +156,8 @@ export function Sequencing({
                   onClick={() => handleRemoveFromSequence(item)}
                   onKeyDown={(e) => handleSequenceKeyDown(e, item)}
                   className={cn(
-                    "min-h-[44px] flex-1 text-left text-base font-medium text-slate-700",
-                    "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded",
+                    "min-h-[56px] flex-1 text-left text-base font-medium text-slate-text",
+                    "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 rounded",
                     "px-2",
                   )}
                   aria-label={`${item.label} at position ${index + 1}. Press Enter to remove, Arrow keys to reorder.`}
@@ -171,7 +171,7 @@ export function Sequencing({
                     disabled={index === 0 || isComplete}
                     className={cn(
                       "flex h-5 w-7 items-center justify-center rounded text-xs font-bold",
-                      "focus:outline-none focus:ring-2 focus:ring-blue-500",
+                      "focus:outline-none focus:ring-2 focus:ring-soft-blue",
                       index > 0 && !isComplete
                         ? "bg-slate-200 text-slate-600 hover:bg-slate-300"
                         : "bg-slate-100 text-slate-300",
@@ -186,7 +186,7 @@ export function Sequencing({
                     disabled={index === sequence.length - 1 || isComplete}
                     className={cn(
                       "flex h-5 w-7 items-center justify-center rounded text-xs font-bold",
-                      "focus:outline-none focus:ring-2 focus:ring-blue-500",
+                      "focus:outline-none focus:ring-2 focus:ring-soft-blue",
                       index < sequence.length - 1 && !isComplete
                         ? "bg-slate-200 text-slate-600 hover:bg-slate-300"
                         : "bg-slate-100 text-slate-300",

@@ -24,7 +24,7 @@ export function VisualCounter({
 
   return (
     <div
-      className={cn("flex flex-col items-center", className)}
+      className={cn("flex flex-col", className)}
       role="img"
       aria-label={`${count} items shown`}
     >
@@ -35,7 +35,7 @@ export function VisualCounter({
           </span>
         ))}
       </div>
-      <span className="mt-3 text-lg font-semibold text-slate-700">
+      <span className="mt-3 text-lg font-semibold text-slate-text text-left">
         {count}
       </span>
     </div>

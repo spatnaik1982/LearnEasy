@@ -25,19 +25,19 @@ export function PositiveCompletion({
       <span className="text-6xl" aria-hidden="true">
         {emoji}
       </span>
-      <h2 className="mt-6 text-2xl font-bold text-slate-800 text-center">
+      <h2 className="mt-6 text-2xl font-bold text-slate-text text-center">
         {message}
       </h2>
       {onContinue && (
         <button
           onClick={onContinue}
           className={cn(
-            "mt-8 min-h-[44px] rounded-lg bg-blue-600 px-8 py-3 text-base font-semibold text-white",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
-            "hover:bg-blue-700",
+            "mt-8 min-h-[56px] rounded-lg bg-soft-blue px-8 py-3 text-base font-semibold text-white",
+            "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
+            "hover:bg-primary transition-opacity duration-200",
           )}
         >
-          Continue
+          Continue Lesson
         </button>
       )}
     </div>
