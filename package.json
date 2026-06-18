@@ -6,6 +6,9 @@
     "apps/*",
     "packages/*"
   ],
+  "pnpm": {
+    "onlyBuiltDependencies": ["@nestjs/core", "@prisma/client", "@prisma/engines", "prisma"]
+  },
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm -r dev",

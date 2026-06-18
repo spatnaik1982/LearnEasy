@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Student Profile ───────────────────────────────────────────
+model Student {
+  id       String @id @default(cuid())
+  email    String @unique
+  name     String
+  password String // hashed
+
+  age                Int
+  level              String  // "A" | "B" | "C"
+  autismSupportLevel Int     // 1 | 2 | 3
+  readingLevel       String  // "low" | "medium" | "high"
+  visualSupport      Boolean @default(true)
+  audioSupport       Boolean @default(false)
+  sensorySensitivity Boolean @default(true)
+  attentionSpan      String  // "short" | "medium" | "long"
+
+  parentId String?
+  parent   Parent?  @relation(fields: [parentId], references: [id])
+
+  progress Progress[]
+  attempts ActivityAttempt[]
+  sessions Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ── Parent / Guardian ──────────────────────────────────────────
+model Parent {
+  id       String @id @default(cuid())
+  email    String @unique
+  name     String
+  password String // hashed
+
+  children Student[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ── Curriculum Hierarchy ──────────────────────────────────────
+model Level {
+  id   String @id @default(cuid())
+  code String @unique // "A", "B", "C"
+  name String // "Level A", "Level B", "Level C"
+
+  subjects Subject[]
+}
+
+model Subject {
+  id      String @id @default(cuid())
+  levelId String
+  code    String // e.g. "MATH", "LANG", "EVS"
+  name    String // e.g. "Mathematics"
+
+  level    Level    @relation(fields: [levelId], references: [id])
+  chapters Chapter[]
+}
+
+model Chapter {
+  id        String @id @default(cuid())
+  subjectId String
+  code      String // e.g. "CH1"
+  name      String // e.g. "Numbers"
+  order     Int
+
+  subject  Subject   @relation(fields: [subjectId], references: [id])
+  concepts Concept[]
+}
+
+model Concept {
+  id        String @id @default(cuid())
+  chapterId String
+  code      String // e.g. "COUNTING_1_10"
+  name      String // e.g. "Counting 1 to 10"
+  objective String // e.g. "Count objects from 1 to 10"
+  order     Int
+
+  // Difficulty config (defaults)
+  difficulty String @default("beginner") // "beginner" | "intermediate" | "advanced"
+
+  chapter   Chapter    @relation(fields: [chapterId], references: [id])
+  activities Activity[]
+  progress  Progress[]
+
+  // Embeddings for RAG (pgvector) — added via raw SQL migration
+  // embedding Unsupported("vector")?
+}
+
+// ── Activities ─────────────────────────────────────────────────
+model Activity {
+  id        String @id @default(cuid())
+  conceptId String
+  type      String // "visual_counting" | "matching" | "drag_drop" | "sequencing" | "multiple_choice" | "story_question" | "real_world"
+  step      String // "observe" | "guided_practice" | "independent_practice" | "mastery_check" | "positive_completion"
+  order     Int
+  content   Json   // Activity-specific data (question, options, images, hints, etc.)
+
+  concept  Concept           @relation(fields: [conceptId], references: [id])
+  attempts ActivityAttempt[]
+}
+
+// ── Activity Attempts (for progress tracking) ──────────────────
+model ActivityAttempt {
+  id         String   @id @default(cuid())
+  studentId  String
+  activityId String
+  correct    Boolean
+  response   Json?    // What the student answered
+  hintsUsed  Int      @default(0)
+  retryCount Int      @default(0)
+  timeSpent  Int?     // seconds
+  completed  Boolean  @default(false)
+
+  student  Student  @relation(fields: [studentId], references: [id])
+  activity Activity @relation(fields: [activityId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+// ── Progress Tracking ──────────────────────────────────────────
+model Progress {
+  id        String  @id @default(cuid())
+  studentId String
+  conceptId String
+  mastery   Float   @default(0) // 0.0 – 1.0
+  completed Boolean @default(false)
+
+  student Student @relation(fields: [studentId], references: [id])
+  concept Concept @relation(fields: [conceptId], references: [id])
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, conceptId])
+}
+
+// ── Learning Sessions ──────────────────────────────────────────
+model Session {
+  id        String    @id @default(cuid())
+  studentId String
+  startTime DateTime  @default(now())
+  endTime   DateTime?
+  duration  Int?      // seconds
+
+  student Student @relation(fields: [studentId], references: [id])
+}
