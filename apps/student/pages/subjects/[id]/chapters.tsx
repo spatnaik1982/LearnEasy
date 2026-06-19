@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubject } from "../../../lib/api";
 import type { Subject } from "../../../lib/mockData";
-import { COPY, AppShell } from "@learn-easy/ui";
+import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
 
 const Chapters: NextPage = () => {
   const router = useRouter();
@@ -48,9 +48,12 @@ const Chapters: NextPage = () => {
         >
           &larr; {COPY.backToSubjects}
         </button>
-        <div className="mb-6 text-sm text-on-surface-variant">
-          Subjects &gt; {subject.title}
-        </div>
+        <Breadcrumb
+          items={[
+            { label: "Subjects", href: "/subjects" },
+            { label: subject.title },
+          ]}
+        />
         <h1 className="mb-2 text-2xl font-bold text-slate-text">
           {subject.emoji} {subject.title}
         </h1>

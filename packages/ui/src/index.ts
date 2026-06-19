@@ -19,3 +19,6 @@ export { announceToScreenReader, createAnnouncementRegion, announcementId } from
 export { AppShell, type AppShellProps } from "./app-shell";
 export { StudentFooter, type StudentFooterProps } from "./student-footer";
 export { ParentTabBar, type ParentTabBarProps } from "./parent-tab-bar";
+export { DataState, type DataStateProps } from "./data-state";
+export { Breadcrumb, type BreadcrumbProps, type BreadcrumbItem } from "./breadcrumb";
+export { MasteryChip, type MasteryChipProps, type MasteryState } from "./mastery-chip";

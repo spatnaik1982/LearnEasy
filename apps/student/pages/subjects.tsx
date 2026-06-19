@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubjects } from "../lib/api";
 import type { Subject } from "../lib/mockData";
-import { COPY, AppShell } from "@learn-easy/ui";
+import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
 
 const Subjects: NextPage = () => {
   const router = useRouter();
@@ -30,6 +30,7 @@ const Subjects: NextPage = () => {
   return (
     <AppShell variant="student">
       <div className="mx-auto max-w-content">
+        <Breadcrumb items={[{ label: COPY.chooseSubject }]} />
         <h1 className="mb-2 text-center text-2xl font-bold text-slate-text">
           {COPY.chooseSubject}
         </h1>

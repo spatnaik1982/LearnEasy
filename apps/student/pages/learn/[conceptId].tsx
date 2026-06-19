@@ -182,12 +182,14 @@ const Learn: NextPage = () => {
         </button>
 
         {/* Visual Schedule */}
-        <VisualSchedule
-          steps={STEPS}
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          className="mb-8"
-        />
+        <div className="md:sticky md:top-0 z-10 bg-warm-off-white py-2">
+          <VisualSchedule
+            steps={STEPS}
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            className="mb-8"
+          />
+        </div>
 
         {/* Error state */}
         {recordError && (
@@ -237,7 +239,7 @@ const Learn: NextPage = () => {
               })()}
               <button
                 onClick={handleNext}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
                 {COPY.continueConcept}
               </button>
@@ -294,7 +296,7 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
                 {COPY.continueConcept}
               </button>
@@ -351,7 +353,7 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
                 {COPY.submitAnswer}
               </button>
@@ -408,7 +410,7 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
                 {COPY.continueConcept}
               </button>
@@ -430,7 +432,7 @@ const Learn: NextPage = () => {
           <div className="mt-6 flex justify-center">
             <button
               onClick={handleTakeBreak}
-              className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 transition-colors duration-200"
+              className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 motion-safe:transition-colors motion-safe:duration-200"
             >
               {COPY.takeBreak}
             </button>
