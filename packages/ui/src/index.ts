@@ -5,3 +5,10 @@ export { MultipleChoice, type MultipleChoiceProps, type MultipleChoiceOption } f
 export { Sequencing, type SequencingProps, type SequencingItem } from "./Sequencing";
 export { PositiveCompletion, type PositiveCompletionProps } from "./PositiveCompletion";
 export { ProgressBar, type ProgressBarProps } from "./ProgressBar";
+export { VisualSchedule, type VisualScheduleProps } from "./VisualSchedule";
+export { WorkSystemLayout, type WorkSystemLayoutProps } from "./WorkSystemLayout";
+export { TransitionScreen, type TransitionScreenProps } from "./TransitionScreen";
+export { ActivityRenderer, type ActivityRendererProps } from "./ActivityRenderer";
+export { evaluateActivity, getHint, getActivityFeedback } from "./activity-utils";
+export { StoryQuestion, type StoryQuestionProps } from "./StoryQuestion";
+export { RealWorldTask, type RealWorldTaskProps } from "./RealWorldTask";
