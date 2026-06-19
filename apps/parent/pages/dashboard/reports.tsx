@@ -1,29 +1,29 @@
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentReports } from "../../lib/api";
 import { type WeeklyReport } from "../../lib/mockData";
-import { COPY } from "@learn-easy/ui";
+import { COPY, DataState } from "@learn-easy/ui";
+import { useApi } from "../../lib/use-api";
 
 export default function ReportsPage() {
   const router = useRouter();
   const { child } = router.query;
-  const [report, setReport] = useState<WeeklyReport | null>(null);
-  const [loading, setLoading] = useState(true);
+  const childId = typeof child === "string" ? child : null;
 
-  useEffect(() => {
-    if (!child) return;
-    setLoading(true);
-    getStudentReports(child as string).then((res) => {
-      if (res.data) setReport(res.data);
-      setLoading(false);
-    });
-  }, [child]);
+  const { data: report, loading, error, refetch } = useApi<WeeklyReport | null>(
+    () =>
+      childId
+        ? getStudentReports(childId)
+        : Promise.resolve({ data: null, error: null }),
+    [childId],
+  );
 
   return (
     <DashboardLayout title="Reports">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">{COPY.loadingReports}</p>
+        <DataState status="loading" />
+      ) : error ? (
+        <DataState status="error" onRetry={refetch} title={COPY.errorTitle} body={COPY.errorBody} />
       ) : report ? (
         <>
           <div className="mb-6 grid grid-cols-2 gap-4">
@@ -74,7 +74,13 @@ export default function ReportsPage() {
             </div>
           </div>
         </>
-      ) : null}
+      ) : (
+        <DataState
+          status="empty"
+          title="No reports yet"
+          body="Weekly reports will appear here after a few days of activity."
+        />
+      )}
     </DashboardLayout>
   );
 }

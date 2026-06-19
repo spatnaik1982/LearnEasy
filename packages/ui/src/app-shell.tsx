@@ -1,9 +1,16 @@
 import type { ReactNode } from "react";
+import { StudentFooter } from "./student-footer";
 
 export interface AppShellProps {
   children: ReactNode;
   variant?: "student" | "parent";
-  footer?: ReactNode;
+  /**
+   * Override the default student footer.
+   * - Pass a ReactNode to render custom footer content.
+   * - Pass null to suppress the footer entirely (e.g. for Calm Zone, onboarding).
+   * - Omit to render the default <StudentFooter />.
+   */
+  footer?: ReactNode | null;
   primaryNav?: ReactNode;
 }
 
@@ -13,6 +20,13 @@ export function AppShell({
   footer,
   primaryNav,
 }: AppShellProps) {
+  // For student variant, default to <StudentFooter /> unless caller overrides or suppresses.
+  // The `footer` prop is null when the caller wants no footer (e.g. Calm Zone).
+  // If `footer` is undefined, we use the default.
+  // If `footer` is a ReactNode, we use that custom footer.
+  const resolvedFooter =
+    variant === "student" && footer === undefined ? <StudentFooter /> : footer;
+
   return (
     <div className="min-h-screen bg-warm-off-white flex flex-col motion-safe:transition-colors">
       {/* Primary navigation: used for parent variant tabs */}
@@ -27,11 +41,9 @@ export function AppShell({
         {children}
       </main>
 
-      {/* Footer: used for student variant */}
-      {variant === "student" && footer !== null && (
-        <>
-          {footer}
-        </>
+      {/* Footer: used for student variant. Renders default StudentFooter unless overridden. */}
+      {variant === "student" && resolvedFooter !== null && (
+        <>{resolvedFooter}</>
       )}
     </div>
   );

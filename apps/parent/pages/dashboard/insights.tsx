@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentInsights } from "../../lib/api";
 import { type Insight } from "../../lib/mockData";
-import { COPY } from "@learn-easy/ui";
+import { COPY, DataState } from "@learn-easy/ui";
+import { useApi } from "../../lib/use-api";
 
 const ICON_MAP: Record<Insight["category"], string> = {
   strength: "\u2B50",
@@ -26,32 +26,33 @@ const BORDER_COLORS: Record<Insight["category"], string> = {
 export default function InsightsPage() {
   const router = useRouter();
   const { child } = router.query;
-  const [insights, setInsights] = useState<Insight[]>([]);
-  const [loading, setLoading] = useState(true);
+  const childId = typeof child === "string" ? child : null;
 
-  useEffect(() => {
-    if (!child) return;
-    setLoading(true);
-    getStudentInsights(child as string).then((res) => {
-      if (res.data) setInsights(res.data);
-      setLoading(false);
-    });
-  }, [child]);
+  const { data: insights, loading, error, refetch } = useApi<Insight[]>(
+    () =>
+      childId
+        ? getStudentInsights(childId)
+        : Promise.resolve({ data: null, error: null }),
+    [childId],
+  );
+
+  const insightList = insights ?? [];
 
   return (
     <DashboardLayout title="Insights">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">{COPY.loadingReports}</p>
-      ) : insights.length === 0 ? (
-        <div className="rounded-xl border border-outline-variant bg-white p-8 text-center">
-          <p className="text-4xl">&#x1F9E0;</p>
-          <p className="mt-3 text-lg text-on-surface-variant">
-            AI analysis will appear here
-          </p>
-        </div>
+        <DataState status="loading" />
+      ) : error ? (
+        <DataState status="error" onRetry={refetch} title={COPY.errorTitle} body={COPY.errorBody} />
+      ) : insightList.length === 0 ? (
+        <DataState
+          status="empty"
+          title="No insights yet"
+          body="We're still learning your child's patterns. Check back in a few days."
+        />
       ) : (
         <div className="space-y-4">
-          {insights.map((insight, i) => (
+          {insightList.map((insight, i) => (
             <div
               key={i}
               className="rounded-xl border border-outline-variant bg-white p-5 shadow-sm"

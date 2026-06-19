@@ -1,37 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentProgress } from "../../lib/api";
 import { type ConceptProgress } from "../../lib/mockData";
-import { COPY } from "@learn-easy/ui";
+import { COPY, DataState } from "@learn-easy/ui";
+import { useApi } from "../../lib/use-api";
 
 export default function ProgressPage() {
   const router = useRouter();
   const { child } = router.query;
-  const [data, setData] = useState<ConceptProgress[]>([]);
-  const [loading, setLoading] = useState(true);
+  const childId = typeof child === "string" ? child : null;
   const [activeChapter, setActiveChapter] = useState<string>("All");
 
-  useEffect(() => {
-    if (!child) return;
-    setLoading(true);
-    getStudentProgress(child as string).then((res) => {
-      if (res.data) setData(res.data);
-      setLoading(false);
-    });
-  }, [child]);
+  const { data, loading, error, refetch } = useApi<ConceptProgress[]>(
+    () =>
+      childId
+        ? getStudentProgress(childId)
+        : Promise.resolve({ data: null, error: null }),
+    [childId],
+  );
 
-  const chapters = ["All", ...new Set(data.map((c) => c.chapter))];
+  const progressList = data ?? [];
+  const chapters = ["All", ...new Set(progressList.map((c) => c.chapter))];
 
   const filtered =
     activeChapter === "All"
-      ? data
-      : data.filter((c) => c.chapter === activeChapter);
+      ? progressList
+      : progressList.filter((c) => c.chapter === activeChapter);
 
   return (
     <DashboardLayout title="Progress">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">{COPY.loadingProgress}</p>
+        <DataState status="loading" />
+      ) : error ? (
+        <DataState status="error" onRetry={refetch} title={COPY.errorTitle} body={COPY.errorBody} />
       ) : (
         <>
           <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Filter by chapter">
@@ -52,11 +54,19 @@ export default function ProgressPage() {
             ))}
           </div>
 
-          <div className="space-y-4">
-            {filtered.map((concept, i) => (
-              <ProgressRow key={i} concept={concept} />
-            ))}
-          </div>
+          {filtered.length === 0 ? (
+            <DataState
+              status="empty"
+              title="No progress yet"
+              body="Start a lesson with your child to see progress here."
+            />
+          ) : (
+            <div className="space-y-4">
+              {filtered.map((concept, i) => (
+                <ProgressRow key={i} concept={concept} />
+              ))}
+            </div>
+          )}
         </>
       )}
     </DashboardLayout>

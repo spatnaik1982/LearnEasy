@@ -101,7 +101,6 @@ export default function DashboardPage() {
               <StatCard
                 label="Current Streak"
                 value={`${streakDays} days`}
-                sub="keep it going!"
               />
             )}
           </div>
@@ -190,13 +189,13 @@ function StatCard({
 }: {
   label: string;
   value: string | number;
-  sub: string;
+  sub?: string;
 }) {
   return (
     <div className="rounded-xl border border-outline-variant bg-white p-4">
       <p className="text-sm font-medium text-on-surface-variant">{label}</p>
       <p className="mt-1 text-3xl font-bold text-slate-text">{value}</p>
-      <p className="mt-1 text-xs text-on-surface-variant">{sub}</p>
+      {sub && <p className="mt-1 text-xs text-on-surface-variant">{sub}</p>}
     </div>
   );
 }
