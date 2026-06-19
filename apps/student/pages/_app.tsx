@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "../lib/auth";
+import { SensoryProfileProvider } from "../lib/SensoryProfileContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={inter.variable}>
       <AuthProvider>
-        <Component {...pageProps} />
+        <SensoryProfileProvider>
+          <Component {...pageProps} />
+        </SensoryProfileProvider>
       </AuthProvider>
     </div>
   );

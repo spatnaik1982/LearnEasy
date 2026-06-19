@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-soft-blue: #5D87B1;
+    --color-slate-text: #374151;
+  }
+
   body {
     @apply bg-warm-off-white text-slate-text antialiased;
   }
@@ -26,4 +31,13 @@
 .high-contrast {
   --color-soft-blue: #1a3a5c;
   --color-slate-text: #000000;
+}
+
+.motion-reduce *,
+.motion-reduce *::before,
+.motion-reduce *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }

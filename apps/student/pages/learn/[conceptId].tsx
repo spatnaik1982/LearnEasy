@@ -94,11 +94,26 @@ const Learn: NextPage = () => {
     });
   }, [endSession, router]);
 
+  // Find the activity for a given step based on the mapping
+  const getActivityForStep = useCallback(
+    (step: number) => {
+      if (!concept) return null;
+      const types = STEP_ACTIVITY_TYPES[step];
+      if (!types) return null;
+      return concept.activities.find((a) => types.includes(a.type)) ?? null;
+    },
+    [concept],
+  );
+
   const handleTakeBreak = useCallback(() => {
     if (conceptId) {
-      router.push(`/calm-zone?return=/learn/${conceptId}`);
+      const currentActivity = getActivityForStep(currentStep);
+      const activityId = currentActivity?.id || "";
+      router.push(
+        `/calm-zone?return=/learn/${conceptId}&step=${currentStep}&activity=${activityId}`,
+      );
     }
-  }, [router, conceptId]);
+  }, [router, conceptId, currentStep, getActivityForStep]);
 
   const handleRecordAttempt = useCallback(
     async (
@@ -115,17 +130,6 @@ const Learn: NextPage = () => {
       return res;
     },
     [],
-  );
-
-  // Find the activity for a given step based on the mapping
-  const getActivityForStep = useCallback(
-    (step: number) => {
-      if (!concept) return null;
-      const types = STEP_ACTIVITY_TYPES[step];
-      if (!types) return null;
-      return concept.activities.find((a) => types.includes(a.type)) ?? null;
-    },
-    [concept],
   );
 
   if (loading || !conceptId) {
