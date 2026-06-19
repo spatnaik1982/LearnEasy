@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { useState, useEffect, type ReactNode } from "react";
 import { AppShell, ParentTabBar } from "@learn-easy/ui";
 import { getChildren } from "../lib/api";
