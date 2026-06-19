@@ -3,12 +3,12 @@ import { useApi } from "../lib/use-api";
 import DashboardLayout from "../lib/dashboard-layout";
 import { getStudentProgress, getChildren } from "../lib/api";
 import { type ConceptProgress, type Child } from "../lib/mockData";
-import { DataState } from "@learn-easy/ui";
+import { DataState, COPY } from "@learn-easy/ui";
 
 const QUICK_LINKS = [
-  { href: "/dashboard/progress", label: "View Full Progress" },
-  { href: "/dashboard/reports", label: "Weekly Reports" },
-  { href: "/dashboard/insights", label: "AI Insights" },
+  { href: "/dashboard/progress", label: COPY.viewFullProgress },
+  { href: "/dashboard/reports", label: COPY.weeklyReports },
+  { href: "/dashboard/insights", label: COPY.aiInsights },
 ];
 
 export default function DashboardPage() {
@@ -75,7 +75,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <DashboardLayout title="Overview">
+    <DashboardLayout title={COPY.overview}>
       {loading ? (
         <DataState status="loading" />
       ) : error ? (
@@ -88,18 +88,18 @@ export default function DashboardPage() {
           {/* 3 stat cards */}
           <div className="grid gap-4 sm:grid-cols-3">
             <StatCard
-              label="Concepts Mastered"
+              label={COPY.conceptsMastered}
               value={mastered}
               sub={`out of ${total}`}
             />
             <StatCard
-              label="Average Mastery"
+              label={COPY.averageMastery}
               value={`${avgMastery}%`}
               sub="across all concepts"
             />
             {streakDays > 0 && (
               <StatCard
-                label="Current Streak"
+                label={COPY.currentStreak}
                 value={`${streakDays} days`}
                 sub="keep it going!"
               />
@@ -109,7 +109,7 @@ export default function DashboardPage() {
           {/* This week panel */}
           <section>
             <h3 className="mb-3 text-lg font-semibold text-slate-text">
-              This week
+              {COPY.thisWeek}
             </h3>
             <div className="overflow-hidden rounded-xl border border-outline-variant bg-white">
               {recent.length === 0 ? (
@@ -146,7 +146,7 @@ export default function DashboardPage() {
           {/* Next step for you */}
           <section className="rounded-xl border border-outline-variant bg-white p-6">
             <h3 className="mb-2 text-lg font-semibold text-slate-text">
-              Next step for you
+              {COPY.nextStepForYou}
             </h3>
             <p className="mb-4 text-sm text-on-surface-variant">
               {lowestConcept
@@ -160,8 +160,8 @@ export default function DashboardPage() {
               className="min-h-[56px] rounded-lg bg-soft-blue px-6 py-3 text-sm font-semibold text-white hover:bg-primary motion-safe:transition-colors motion-safe:duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
             >
               {lowestConcept
-                ? "View Practice Recommendations"
-                : "Set Up Schedule"}
+                ? COPY.viewPracticeRecommendations
+                : COPY.setUpSchedule}
             </button>
           </section>
 

@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { AppShell } from "@learn-easy/ui";
+import { AppShell, COPY } from "@learn-easy/ui";
 
 const Welcome: NextPage = () => {
   const router = useRouter();
@@ -17,22 +17,22 @@ const Welcome: NextPage = () => {
           🎓
         </span>
         <h1 className="mb-4 text-2xl font-bold text-slate-text">
-          Welcome to LearnEasy!
+          {COPY.welcomeTitle}
         </h1>
         <p className="mb-8 max-w-md text-base text-on-surface-variant">
-          LearnEasy helps you learn at your own pace.
+          {COPY.welcomeBody}
         </p>
         <button
           onClick={() => router.push("/onboarding/tour")}
           className="mb-4 min-h-[56px] w-full max-w-xs rounded-xl bg-soft-blue px-8 py-3 text-base font-semibold text-white hover:bg-primary motion-safe:transition-colors motion-safe:duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
         >
-          Show me how
+          {COPY.onboardingShowMe}
         </button>
         <button
           onClick={handleIKnowHow}
           className="min-h-[44px] text-sm font-medium text-soft-blue underline"
         >
-          I know how
+          {COPY.onboardingIKnowHow}
         </button>
       </div>
     </AppShell>

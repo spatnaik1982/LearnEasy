@@ -50,7 +50,7 @@ const Chapters: NextPage = () => {
         </button>
         <Breadcrumb
           items={[
-            { label: "Subjects", href: "/subjects" },
+            { label: COPY.subjects, href: "/subjects" },
             { label: subject.title },
           ]}
         />

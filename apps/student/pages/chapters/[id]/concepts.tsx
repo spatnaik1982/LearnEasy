@@ -37,9 +37,9 @@ const Concepts: NextPage = () => {
         {/* TODO: fetch subject/chapter names dynamically in follow-up */}
         <Breadcrumb
           items={[
-            { label: "Subjects", href: "/subjects" },
-            { label: "Progress", href: "#" },
-            { label: "Concepts" },
+            { label: COPY.subjects, href: "/subjects" },
+            { label: COPY.progress, href: "#" },
+            { label: COPY.concepts },
           ]}
         />
         <button

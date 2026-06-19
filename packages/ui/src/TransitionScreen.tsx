@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { cn } from "./utils";
+import { COPY } from "./copy";
 
 export interface TransitionScreenProps {
   fromStep: string;
@@ -97,9 +98,9 @@ export function TransitionScreen({
             "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 rounded",
             "hover:text-muted-teal/80",
           )}
-          aria-label="Take a break"
+          aria-label={COPY.takeBreak}
         >
-          Take a break
+          {COPY.takeBreak}
         </button>
       )}
     </div>

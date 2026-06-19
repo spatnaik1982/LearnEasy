@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { AppShell } from "@learn-easy/ui";
+import { AppShell, COPY } from "@learn-easy/ui";
 import { useSensoryProfile } from "../lib/SensoryProfileContext";
 
 function SettingsContent() {
@@ -14,24 +14,24 @@ function SettingsContent() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-text">Settings</h1>
+      <h1 className="text-2xl font-bold text-slate-text">{COPY.settingsTitle}</h1>
 
       <ToggleRow
-        label="Reduce motion"
+        label={COPY.settingsReduceMotion}
         description="Turn off animations and transitions"
         checked={reduceMotion}
         onChange={setReduceMotion}
       />
 
       <ToggleRow
-        label="Lower contrast"
+        label={COPY.settingsLowerContrast}
         description="Increase text and border contrast for readability"
         checked={lowContrast}
         onChange={setLowContrast}
       />
 
       <ToggleRow
-        label="Sound on/off"
+        label={COPY.settingsSound}
         description="Enable audio feedback during activities"
         checked={soundEnabled}
         onChange={setSoundEnabled}

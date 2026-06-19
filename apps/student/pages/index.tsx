@@ -7,10 +7,10 @@ import { fetchResumeState } from "../lib/api";
 import { useApi } from "../lib/use-api";
 
 const STEP_NAMES = [
-  "Observe",
-  "Guided Practice",
-  "Independent Practice",
-  "Mastery Check",
+  COPY.stepObserve,
+  COPY.stepGuided,
+  COPY.stepIndependent,
+  COPY.stepMastery,
 ];
 
 const Home: NextPage = () => {
@@ -52,7 +52,7 @@ const Home: NextPage = () => {
   // Three states:
   const renderContent = () => {
     if (resumeLoading)
-      return <DataState status="loading" label="Checking for saved progress..." />;
+      return <DataState status="loading" label={COPY.checkingSavedProgress} />;
     if (resumeError)
       return (
         <DataState
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
                 onClick={() => router.push("/subjects")}
                 className="text-sm font-medium text-soft-blue underline"
               >
-                Choose a different lesson
+                {COPY.chooseDifferentLesson}
               </button>
             </div>
           </div>
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
           🎓
         </span>
         <p className="mb-8 text-base text-on-surface-variant">
-          Ready to learn something new today?
+          {COPY.readyToLearn}
         </p>
         <button
           onClick={() => router.push("/subjects")}

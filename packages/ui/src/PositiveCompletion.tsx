@@ -1,4 +1,5 @@
 import { cn } from "./utils";
+import { COPY } from "./copy";
 
 export interface PositiveCompletionProps {
   message: string;
@@ -37,7 +38,7 @@ export function PositiveCompletion({
             "hover:bg-primary transition-opacity duration-200",
           )}
         >
-          Continue Lesson
+          {COPY.continueConcept}
         </button>
       )}
     </div>
