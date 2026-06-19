@@ -4,6 +4,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { CurriculumModule } from './curriculum/curriculum.module';
 import { AiModule } from './ai/ai.module';
+import { ActivitiesModule } from './activities/activities.module';
+import { ProgressModule } from './progress/progress.module';
+import { SessionsModule } from './sessions/sessions.module';
+import { ResumeModule } from './resume/resume.module';
 
 @Module({
   imports: [
@@ -12,6 +16,10 @@ import { AiModule } from './ai/ai.module';
     AuthModule,
     CurriculumModule,
     AiModule,
+    ActivitiesModule,
+    ProgressModule,
+    SessionsModule,
+    ResumeModule,
   ],
 })
 export class AppModule {}

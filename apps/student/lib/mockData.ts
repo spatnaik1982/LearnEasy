@@ -1,6 +1,6 @@
 export interface Activity {
   id: string;
-  type: "visual-counter" | "matching" | "multiple-choice" | "sequencing";
+  type: "visual-counter" | "matching" | "multiple-choice" | "sequencing" | "drag-drop" | "story-question" | "real-world-task";
   title: string;
   config: Record<string, unknown>;
 }

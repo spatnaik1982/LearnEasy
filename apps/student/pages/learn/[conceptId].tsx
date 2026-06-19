@@ -2,34 +2,50 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import {
-  VisualCounter,
-  Matching,
-  MultipleChoice,
-  Sequencing,
   PositiveCompletion,
-  ProgressBar,
+  VisualSchedule,
+  WorkSystemLayout,
+  TransitionScreen,
+  ActivityRenderer,
 } from "@learn-easy/ui";
-import { fetchParentIds, fetchConcept } from "../../lib/api";
+import { useAuth } from "../../lib/auth";
+import { useSession } from "../../lib/session";
+import {
+  fetchParentIds,
+  fetchConcept,
+  recordAttempt,
+} from "../../lib/api";
 import type { Concept } from "../../lib/mockData";
 
-const STEPS = ["Observe", "Guided Practice", "Independent Practice", "Mastery Check", "Completion"];
+const STEPS = [
+  "Observe",
+  "Guided Practice",
+  "Independent Practice",
+  "Mastery Check",
+  "Completion",
+];
 
-const TRANSITIONS: Record<number, { title: string; button: string } | null> = {
-  0: null,
-  1: { title: "Next: Guided Practice", button: "Start Practice" },
-  2: { title: "Next: Independent Practice", button: "Continue Lesson" },
-  3: { title: "Next: Mastery Check", button: "Continue Lesson" },
-  4: null,
+// Maps step index → preferred activity types (first found wins)
+const STEP_ACTIVITY_TYPES: Record<number, string[]> = {
+  0: ["visual-counter", "story-question"],
+  1: ["matching", "story-question"],
+  2: ["sequencing", "drag-drop", "matching"],
+  3: ["multiple-choice"],
 };
 
 const Learn: NextPage = () => {
   const router = useRouter();
   const { conceptId } = router.query;
+  const { user } = useAuth();
+  const { sessionId, endSession } = useSession(user?.id);
+
   const [concept, setConcept] = useState<Concept | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [showTransition, setShowTransition] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
+  const [recordError, setRecordError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!conceptId) return;
@@ -51,13 +67,16 @@ const Learn: NextPage = () => {
 
   const handleNext = useCallback(() => {
     const nextStep = currentStep + 1;
+    const newCompleted = [...completedSteps, currentStep];
+    setCompletedSteps(newCompleted);
+
     if (nextStep >= STEPS.length - 1) {
       setCurrentStep(nextStep);
       return;
     }
     setPendingStep(nextStep);
     setShowTransition(true);
-  }, [currentStep]);
+  }, [currentStep, completedSteps]);
 
   const handleStartTransition = useCallback(() => {
     if (pendingStep !== null) {
@@ -68,8 +87,44 @@ const Learn: NextPage = () => {
   }, [pendingStep]);
 
   const handleComplete = useCallback(() => {
-    router.push("/subjects");
-  }, [router]);
+    endSession().then(() => {
+      router.push("/subjects");
+    });
+  }, [endSession, router]);
+
+  const handleTakeBreak = useCallback(() => {
+    if (conceptId) {
+      router.push(`/calm-zone?return=/learn/${conceptId}`);
+    }
+  }, [router, conceptId]);
+
+  const handleRecordAttempt = useCallback(
+    async (
+      activityId: string,
+      response: Record<string, unknown>,
+      hintsUsed = 0,
+      timeSpent = 0,
+    ) => {
+      setRecordError(null);
+      const res = await recordAttempt(activityId, response, hintsUsed, timeSpent);
+      if (res.error) {
+        setRecordError(res.error);
+      }
+      return res;
+    },
+    [],
+  );
+
+  // Find the activity for a given step based on the mapping
+  const getActivityForStep = useCallback(
+    (step: number) => {
+      if (!concept) return null;
+      const types = STEP_ACTIVITY_TYPES[step];
+      if (!types) return null;
+      return concept.activities.find((a) => types.includes(a.type)) ?? null;
+    },
+    [concept],
+  );
 
   if (loading || !conceptId) {
     return (
@@ -88,26 +143,22 @@ const Learn: NextPage = () => {
   }
 
   const activities = concept.activities;
-  const visualActivity = activities.find((a) => a.type === "visual-counter");
-  const matchingActivity = activities.find((a) => a.type === "matching");
-  const sequencingActivity = activities.find((a) => a.type === "sequencing");
-  const mcActivity = activities.find((a) => a.type === "multiple-choice");
 
-  const transition = TRANSITIONS[currentStep];
-
-  if (showTransition && transition) {
+  // Transition screen
+  if (showTransition && pendingStep !== null) {
+    const fromStep = STEPS[currentStep];
+    const toStep = STEPS[pendingStep];
     return (
       <div className="min-h-screen bg-warm-off-white px-4 py-8">
         <div className="mx-auto max-w-content">
-          <div className="flex flex-col items-center justify-center py-20">
-            <h2 className="mb-6 text-2xl font-bold text-slate-text text-center">{transition.title}</h2>
-            <button
-              onClick={handleStartTransition}
-              className="min-h-[56px] rounded-lg bg-soft-blue px-8 py-3 text-base font-semibold text-white hover:bg-primary transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-            >
-              {transition.button}
-            </button>
-          </div>
+          <TransitionScreen
+            fromStep={fromStep}
+            toStep={toStep}
+            currentStep={currentStep + 1}
+            totalSteps={STEPS.length}
+            onStart={handleStartTransition}
+            onBreak={handleTakeBreak}
+          />
         </div>
       </div>
     );
@@ -116,6 +167,7 @@ const Learn: NextPage = () => {
   return (
     <div className="min-h-screen bg-warm-off-white px-4 py-8">
       <div className="mx-auto max-w-content">
+        {/* Back button */}
         <button
           onClick={() => router.back()}
           className="mb-4 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
@@ -123,127 +175,260 @@ const Learn: NextPage = () => {
           &larr; Back
         </button>
 
-        <h1 className="mb-6 text-2xl font-bold text-slate-text">{concept.title}</h1>
+        {/* Visual Schedule */}
+        <VisualSchedule
+          steps={STEPS}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          className="mb-8"
+        />
 
-        <ProgressBar steps={STEPS} currentStep={currentStep} className="mb-10" />
+        {/* Error state */}
+        {recordError && (
+          <div
+            className="mb-4 rounded-lg bg-soft-coral/10 px-4 py-3 text-sm text-soft-coral"
+            role="alert"
+          >
+            {recordError}
+          </div>
+        )}
 
+        {/* Step 0: Observe */}
         {currentStep === 0 && (
-          <section aria-label="Observe step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-text">Observe</h2>
-            <p className="mb-6 text-base text-on-surface-variant">
-              Look at the visual below. Count what you see.
-            </p>
-            {visualActivity && (
-              <VisualCounter
-                count={visualActivity.config.count as number}
-                emoji={visualActivity.config.emoji as string}
-                size="lg"
-                className="mb-8"
-              />
-            )}
-            <button
-              onClick={handleNext}
-              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-            >
-              Continue Lesson
-            </button>
-          </section>
+          <WorkSystemLayout
+            stepName="Observe"
+            conceptTitle={concept.title}
+            currentStep={currentStep}
+            totalSteps={STEPS.length}
+            nextStep={STEPS[1]}
+          >
+            <section aria-label="Observe step">
+              <p className="mb-6 text-base text-on-surface-variant">
+                Look at the visual below. Count what you see.
+              </p>
+              {(() => {
+                const act = getActivityForStep(0);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Observe"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
+              <button
+                onClick={handleNext}
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+              >
+                Continue Lesson
+              </button>
+            </section>
+          </WorkSystemLayout>
         )}
 
+        {/* Step 1: Guided Practice */}
         {currentStep === 1 && (
-          <section aria-label="Guided Practice step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-text">
-              Guided Practice
-            </h2>
-            <p className="mb-6 text-base text-on-surface-variant">
-              Match the items below. Hints are available to help you.
-            </p>
-            {matchingActivity && (
-              <div className="mb-8">
-                <p className="mb-3 text-sm font-medium text-soft-blue">
-                  💡 Hint: Look carefully at each item before matching
-                </p>
-                <Matching
-                  pairs={matchingActivity.config.pairs as Array<{ id: string; itemA: string; itemB: string }>}
-                  onMatch={() => {}}
-                />
-              </div>
-            )}
-            <button
-              onClick={handleNext}
-              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-            >
-              Continue Lesson
-            </button>
-          </section>
+          <WorkSystemLayout
+            stepName="Guided Practice"
+            conceptTitle={concept.title}
+            currentStep={currentStep}
+            totalSteps={STEPS.length}
+            nextStep={STEPS[2]}
+          >
+            <section aria-label="Guided Practice step">
+              <p className="mb-6 text-base text-on-surface-variant">
+                Match the items below. Hints are available to help you.
+              </p>
+              {(() => {
+                const act = getActivityForStep(1);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Guided Practice"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
+              <button
+                onClick={() => {
+                  const act = getActivityForStep(1);
+                  if (act) {
+                    handleRecordAttempt(
+                      act.id,
+                      { completed: true },
+                      0,
+                      30,
+                    );
+                  }
+                  handleNext();
+                }}
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+              >
+                Continue Lesson
+              </button>
+            </section>
+          </WorkSystemLayout>
         )}
 
+        {/* Step 2: Independent Practice */}
         {currentStep === 2 && (
-          <section aria-label="Independent Practice step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-text">
-              Independent Practice
-            </h2>
-            <p className="mb-6 text-base text-on-surface-variant">
-              Try this on your own. No hints this time!
-            </p>
-            {sequencingActivity ? (
-              <div className="mb-8">
-                <Sequencing
-                  items={sequencingActivity.config.items as Array<{ id: string; label: string; emoji?: string }>}
-                  correctOrder={sequencingActivity.config.correctOrder as string[]}
-                  onComplete={() => {}}
-                />
-              </div>
-            ) : matchingActivity ? (
-              <div className="mb-8">
-                <Matching
-                  pairs={matchingActivity.config.pairs as Array<{ id: string; itemA: string; itemB: string }>}
-                  onMatch={() => {}}
-                />
-              </div>
-            ) : null}
-            <button
-              onClick={handleNext}
-              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-            >
-              Submit Answer
-            </button>
-          </section>
+          <WorkSystemLayout
+            stepName="Independent Practice"
+            conceptTitle={concept.title}
+            currentStep={currentStep}
+            totalSteps={STEPS.length}
+            nextStep={STEPS[3]}
+          >
+            <section aria-label="Independent Practice step">
+              <p className="mb-6 text-base text-on-surface-variant">
+                Try this on your own. No hints this time!
+              </p>
+              {(() => {
+                const act = getActivityForStep(2);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Independent Practice"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
+              <button
+                onClick={() => {
+                  const act = getActivityForStep(2);
+                  if (act) {
+                    handleRecordAttempt(
+                      act.id,
+                      { completed: true },
+                      0,
+                      30,
+                    );
+                  }
+                  handleNext();
+                }}
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+              >
+                Submit Answer
+              </button>
+            </section>
+          </WorkSystemLayout>
         )}
 
+        {/* Step 3: Mastery Check */}
         {currentStep === 3 && (
-          <section aria-label="Mastery Check step">
-            <h2 className="mb-4 text-lg font-semibold text-slate-text">
-              Mastery Check
-            </h2>
-            <p className="mb-6 text-base text-on-surface-variant">
-              Show what you've learned!
-            </p>
-            {mcActivity && (
-              <div className="mb-8">
-                <MultipleChoice
-                  question={mcActivity.config.question as string}
-                  options={mcActivity.config.options as Array<{ id: string; label: string; emoji?: string }>}
-                  correctIndex={mcActivity.config.correctIndex as number}
-                  onSelect={() => {}}
-                />
-              </div>
-            )}
-            <button
-              onClick={handleNext}
-              className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-            >
-              Continue Lesson
-            </button>
-          </section>
+          <WorkSystemLayout
+            stepName="Mastery Check"
+            conceptTitle={concept.title}
+            currentStep={currentStep}
+            totalSteps={STEPS.length}
+            nextStep={STEPS[4]}
+          >
+            <section aria-label="Mastery Check step">
+              <p className="mb-6 text-base text-on-surface-variant">
+                Show what you've learned!
+              </p>
+              {(() => {
+                const act = getActivityForStep(3);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Mastery Check"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
+              <button
+                onClick={() => {
+                  const act = getActivityForStep(3);
+                  if (act) {
+                    handleRecordAttempt(
+                      act.id,
+                      { selectedIndex: 0 },
+                      0,
+                      30,
+                    );
+                  }
+                  handleNext();
+                }}
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+              >
+                Continue Lesson
+              </button>
+            </section>
+          </WorkSystemLayout>
         )}
 
+        {/* Step 4: Completion */}
         {currentStep === 4 && (
           <PositiveCompletion
             message={`Great job completing "${concept.title}"!`}
             emoji={"🎉"}
             onContinue={handleComplete}
           />
+        )}
+
+        {/* Take a Break button (shown during steps, not on completion) */}
+        {currentStep < 4 && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={handleTakeBreak}
+              className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 transition-colors duration-200"
+            >
+              Take a Break
+            </button>
+          </div>
         )}
       </div>
     </div>

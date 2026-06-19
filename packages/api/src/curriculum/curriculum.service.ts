@@ -40,4 +40,28 @@ export class CurriculumService {
       orderBy: { order: 'asc' },
     });
   }
+
+  async getSubject(id: string) {
+    return this.prisma.subject.findUnique({
+      where: { id },
+      include: { _count: { select: { chapters: true } } },
+    });
+  }
+
+  async getChapter(id: string) {
+    return this.prisma.chapter.findUnique({
+      where: { id },
+      include: { _count: { select: { concepts: true } } },
+    });
+  }
+
+  async getConcept(id: string) {
+    return this.prisma.concept.findUnique({
+      where: { id },
+      include: {
+        _count: { select: { activities: true } },
+        chapter: { select: { id: true, subjectId: true, name: true } },
+      },
+    });
+  }
 }
