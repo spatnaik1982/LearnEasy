@@ -3,10 +3,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import {
   PositiveCompletion,
-  VisualSchedule,
+  ProgressBar,
   WorkSystemLayout,
   TransitionScreen,
   ActivityRenderer,
+  LearningCard,
+  LessonTopBar,
+  LessonSidebar,
+  LessonBottomNav,
   COPY,
   AppShell,
 } from "@learn-easy/ui";
@@ -48,6 +52,7 @@ const Learn: NextPage = () => {
   const [showTransition, setShowTransition] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
   const [recordError, setRecordError] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     if (!conceptId) return;
@@ -173,23 +178,25 @@ const Learn: NextPage = () => {
   }
 
   return (
-    <AppShell variant="student">
-      <div className="mx-auto max-w-content">
-        {/* Back button */}
-        <button
-          onClick={() => router.back()}
-          className="mb-4 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
-        >
-          &larr; {COPY.back}
-        </button>
+    <AppShell variant="student" footer={null}>
+      <LessonTopBar
+        subjectName={concept.title}
+        onBack={() => router.back()}
+        onHome={() => router.push("/subjects")}
+      />
 
-        {/* Visual Schedule */}
+      <LessonSidebar
+        steps={STEPS}
+        currentStep={currentStep}
+        completedSteps={completedSteps}
+      />
+
+      <div className="mx-auto max-w-content md:ml-64 pt-24 xl:pt-28">
+        {/* Progress Bar */}
         <div className="md:sticky md:top-0 z-10 bg-warm-off-white py-2">
-          <VisualSchedule
+          <ProgressBar
             steps={STEPS}
             currentStep={currentStep}
-            completedSteps={completedSteps}
-            className="mb-8"
           />
         </div>
 
@@ -211,41 +218,46 @@ const Learn: NextPage = () => {
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[1]}
+            taskDescription={concept.title}
+            workAmount={"1 activity"}
+            completionDescription={COPY.completionVisualCounting}
           >
-            <section aria-label={`${COPY.stepObserve} step`}>
-              <p className="mb-6 text-base text-on-surface-variant">
-                Look at the visual below. Count what you see.
-              </p>
-              {(() => {
-                const act = getActivityForStep(0);
-                return act ? (
-                  <div className="mb-8">
-                    <ActivityRenderer
-                      activity={{
-                        id: act.id,
-                        type: act.type,
-                        content: act.config,
-                      }}
-                      step={STEPS[0]}
-                      onComplete={(result) => {
-                        handleRecordAttempt(
-                          act.id,
-                          result.response,
-                          result.hintsUsed,
-                          result.timeSpent,
-                        );
-                      }}
-                    />
-                  </div>
-                ) : null;
-              })()}
-              <button
-                onClick={handleNext}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-              >
-                {COPY.continueConcept}
-              </button>
-            </section>
+            <LearningCard>
+              <section aria-label={`${COPY.stepObserve} step`}>
+                <p className="mb-6 text-base text-on-surface-variant">
+                  Look at the visual below. Count what you see.
+                </p>
+                {(() => {
+                  const act = getActivityForStep(0);
+                  return act ? (
+                    <div className="mb-8">
+                      <ActivityRenderer
+                        activity={{
+                          id: act.id,
+                          type: act.type,
+                          content: act.config,
+                        }}
+                        step={STEPS[0]}
+                        onComplete={(result) => {
+                          handleRecordAttempt(
+                            act.id,
+                            result.response,
+                            result.hintsUsed,
+                            result.timeSpent,
+                          );
+                        }}
+                      />
+                    </div>
+                  ) : null;
+                })()}
+                <button
+                  onClick={handleNext}
+                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                >
+                  {COPY.continueConcept}
+                </button>
+              </section>
+            </LearningCard>
           </WorkSystemLayout>
         )}
 
@@ -257,52 +269,57 @@ const Learn: NextPage = () => {
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[2]}
+            taskDescription={"Match the items below. Hints are available to help you."}
+            workAmount={"Match all pairs"}
+            completionDescription={COPY.completionMatching}
           >
-            <section aria-label={`${COPY.stepGuided} step`}>
-              <p className="mb-6 text-base text-on-surface-variant">
-                Match the items below. Hints are available to help you.
-              </p>
-              {(() => {
-                const act = getActivityForStep(1);
-                return act ? (
-                  <div className="mb-8">
-                    <ActivityRenderer
-                      activity={{
-                        id: act.id,
-                        type: act.type,
-                        content: act.config,
-                      }}
-                      step={STEPS[1]}
-                      onComplete={(result) => {
-                        handleRecordAttempt(
-                          act.id,
-                          result.response,
-                          result.hintsUsed,
-                          result.timeSpent,
-                        );
-                      }}
-                    />
-                  </div>
-                ) : null;
-              })()}
-              <button
-                onClick={() => {
+            <LearningCard>
+              <section aria-label={`${COPY.stepGuided} step`}>
+                <p className="mb-6 text-base text-on-surface-variant">
+                  Match the items below. Hints are available to help you.
+                </p>
+                {(() => {
                   const act = getActivityForStep(1);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { completed: true },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-              >
-                {COPY.continueConcept}
-              </button>
-            </section>
+                  return act ? (
+                    <div className="mb-8">
+                      <ActivityRenderer
+                        activity={{
+                          id: act.id,
+                          type: act.type,
+                          content: act.config,
+                        }}
+                        step={STEPS[1]}
+                        onComplete={(result) => {
+                          handleRecordAttempt(
+                            act.id,
+                            result.response,
+                            result.hintsUsed,
+                            result.timeSpent,
+                          );
+                        }}
+                      />
+                    </div>
+                  ) : null;
+                })()}
+                <button
+                  onClick={() => {
+                    const act = getActivityForStep(1);
+                    if (act) {
+                      handleRecordAttempt(
+                        act.id,
+                        { completed: true },
+                        0,
+                        30,
+                      );
+                    }
+                    handleNext();
+                  }}
+                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                >
+                  {COPY.continueConcept}
+                </button>
+              </section>
+            </LearningCard>
           </WorkSystemLayout>
         )}
 
@@ -314,52 +331,57 @@ const Learn: NextPage = () => {
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[3]}
+            taskDescription={concept.title}
+            workAmount={"Complete the activity"}
+            completionDescription={"Try on your own"}
           >
-            <section aria-label={`${COPY.stepIndependent} step`}>
-              <p className="mb-6 text-base text-on-surface-variant">
-                Try this on your own. No hints this time!
-              </p>
-              {(() => {
-                const act = getActivityForStep(2);
-                return act ? (
-                  <div className="mb-8">
-                    <ActivityRenderer
-                      activity={{
-                        id: act.id,
-                        type: act.type,
-                        content: act.config,
-                      }}
-                      step={STEPS[2]}
-                      onComplete={(result) => {
-                        handleRecordAttempt(
-                          act.id,
-                          result.response,
-                          result.hintsUsed,
-                          result.timeSpent,
-                        );
-                      }}
-                    />
-                  </div>
-                ) : null;
-              })()}
-              <button
-                onClick={() => {
+            <LearningCard>
+              <section aria-label={`${COPY.stepIndependent} step`}>
+                <p className="mb-6 text-base text-on-surface-variant">
+                  Try this on your own. No hints this time!
+                </p>
+                {(() => {
                   const act = getActivityForStep(2);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { completed: true },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-              >
-                {COPY.submitAnswer}
-              </button>
-            </section>
+                  return act ? (
+                    <div className="mb-8">
+                      <ActivityRenderer
+                        activity={{
+                          id: act.id,
+                          type: act.type,
+                          content: act.config,
+                        }}
+                        step={STEPS[2]}
+                        onComplete={(result) => {
+                          handleRecordAttempt(
+                            act.id,
+                            result.response,
+                            result.hintsUsed,
+                            result.timeSpent,
+                          );
+                        }}
+                      />
+                    </div>
+                  ) : null;
+                })()}
+                <button
+                  onClick={() => {
+                    const act = getActivityForStep(2);
+                    if (act) {
+                      handleRecordAttempt(
+                        act.id,
+                        { completed: true },
+                        0,
+                        30,
+                      );
+                    }
+                    handleNext();
+                  }}
+                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                >
+                  {COPY.submitAnswer}
+                </button>
+              </section>
+            </LearningCard>
           </WorkSystemLayout>
         )}
 
@@ -371,52 +393,57 @@ const Learn: NextPage = () => {
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[4]}
+            taskDescription={"Show what you've learned"}
+            workAmount={"Answer all questions"}
+            completionDescription={COPY.completionMultipleChoice}
           >
-            <section aria-label={`${COPY.stepMastery} step`}>
-              <p className="mb-6 text-base text-on-surface-variant">
-                Show what you've learned!
-              </p>
-              {(() => {
-                const act = getActivityForStep(3);
-                return act ? (
-                  <div className="mb-8">
-                    <ActivityRenderer
-                      activity={{
-                        id: act.id,
-                        type: act.type,
-                        content: act.config,
-                      }}
-                      step={STEPS[3]}
-                      onComplete={(result) => {
-                        handleRecordAttempt(
-                          act.id,
-                          result.response,
-                          result.hintsUsed,
-                          result.timeSpent,
-                        );
-                      }}
-                    />
-                  </div>
-                ) : null;
-              })()}
-              <button
-                onClick={() => {
+            <LearningCard>
+              <section aria-label={`${COPY.stepMastery} step`}>
+                <p className="mb-6 text-base text-on-surface-variant">
+                  Show what you've learned!
+                </p>
+                {(() => {
                   const act = getActivityForStep(3);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { selectedIndex: 0 },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-              >
-                {COPY.continueConcept}
-              </button>
-            </section>
+                  return act ? (
+                    <div className="mb-8">
+                      <ActivityRenderer
+                        activity={{
+                          id: act.id,
+                          type: act.type,
+                          content: act.config,
+                        }}
+                        step={STEPS[3]}
+                        onComplete={(result) => {
+                          handleRecordAttempt(
+                            act.id,
+                            result.response,
+                            result.hintsUsed,
+                            result.timeSpent,
+                          );
+                        }}
+                      />
+                    </div>
+                  ) : null;
+                })()}
+                <button
+                  onClick={() => {
+                    const act = getActivityForStep(3);
+                    if (act) {
+                      handleRecordAttempt(
+                        act.id,
+                        { selectedIndex: 0 },
+                        0,
+                        30,
+                      );
+                    }
+                    handleNext();
+                  }}
+                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                >
+                  {COPY.continueConcept}
+                </button>
+              </section>
+            </LearningCard>
           </WorkSystemLayout>
         )}
 
@@ -426,6 +453,16 @@ const Learn: NextPage = () => {
             message={`Great job completing "${concept.title}"!`}
             emoji={"🎉"}
             onContinue={handleComplete}
+          />
+        )}
+
+        {/* Lesson Bottom Navigation */}
+        {currentStep < 4 && (
+          <LessonBottomNav
+            onContinue={handleNext}
+            onMute={() => setIsMuted(!isMuted)}
+            onReplay={() => {}}
+            isMuted={isMuted}
           />
         )}
 

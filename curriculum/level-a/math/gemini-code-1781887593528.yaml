@@ -1,0 +1,81 @@
+# ─── Concept Metadata ─────────────────────────────────────────────
+
+conceptId: place_value_tens_ones
+chapter:
+  code: CH1
+  name: "Reading, Understanding, Forming and Writing Numbers"
+
+learningObjective: "Identify tens and ones in two-digit numbers"
+coreIdea: "A two-digit number has tens on the left and ones on the right"
+
+examples:
+  - "In 25, there are 2 tens and 5 ones: 🎒🎒 + 🍎🍎🍎🍎🍎"
+  - "In 10, there is 1 ten and 0 ones."
+
+misconceptions:
+  - "Confusing the tens and ones place"
+  - "Thinking 1 ten is just 1 item instead of 10 items"
+
+supports:
+  visual: true
+
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies: 
+  - numbers_1_9
+
+# ─── Activities (5 required steps) ─────────────────────────────────
+
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: "Observe tens and ones"
+      items: ["📦"] # Using boxes to represent blocks of ten
+      count: 14
+      text: "The number 14 has 1 ten and 4 ones."
+
+  - step: guided_practice
+    type: matching
+    order: 2
+    content:
+      description: "Match number to tens and ones"
+      pairs:
+        - itemA: "32"
+          itemB: "3 tens and 2 ones"
+        - itemA: "45"
+          itemB: "4 tens and 5 ones"
+      hints:
+        - "Look at the first number for tens."
+        - "You're doing great! Try again."
+        - ""
+
+  - step: independent_practice
+    type: multiple_choice
+    order: 3
+    content:
+      questions:
+        - question: "Which place is the 5 in 54?"
+          options: ["Ones", "Tens", "Hundreds", "Thousands"]
+          correctIndex: 1
+        - question: "Which place is the 7 in 27?"
+          options: ["Ones", "Tens", "Hundreds", "Thousands"]
+          correctIndex: 0
+
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: "How many tens in 68?"
+          options: ["6", "8", "1", "0"]
+          correctIndex: 0
+
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: "Amazing! You understand tens and ones perfectly!"
+      encouragement: true

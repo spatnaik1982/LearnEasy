@@ -92,7 +92,7 @@ const CalmZone: NextPage = () => {
         <div className="flex justify-center">
           <button
             onClick={handleReturn}
-            className="min-h-[56px] min-w-[200px] rounded-xl bg-muted-teal px-8 py-4 text-base font-semibold text-white hover:bg-muted-teal/90 focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2 transition-colors duration-200"
+            className="min-h-[56px] min-w-[200px] rounded-full bg-muted-teal px-8 py-4 text-base font-semibold text-white motion-safe:active:scale-[0.98] hover:bg-muted-teal/90 focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2 transition-colors duration-200"
           >
             {buttonLabel}
           </button>

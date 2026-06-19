@@ -79,7 +79,7 @@ export function TransitionScreen({
         ref={startButtonRef}
         onClick={onStart}
         className={cn(
-          "min-h-[56px] w-full max-w-xs rounded-xl bg-soft-blue px-8 py-4 text-lg font-semibold text-white",
+          "min-h-[56px] w-full max-w-xs rounded-full bg-soft-blue px-8 py-4 text-lg font-semibold text-white motion-safe:active:scale-[0.98]",
           "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
           "hover:bg-soft-blue/90 active:bg-soft-blue/80",
           "transition-colors duration-200",

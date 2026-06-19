@@ -33,7 +33,7 @@ export function PositiveCompletion({
         <button
           onClick={onContinue}
           className={cn(
-            "mt-8 min-h-[56px] rounded-lg bg-soft-blue px-8 py-3 text-base font-semibold text-white",
+            "mt-8 min-h-[56px] rounded-full bg-soft-blue px-8 py-3 text-base font-semibold text-white motion-safe:active:scale-[0.98]",
             "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
             "hover:bg-primary transition-opacity duration-200",
           )}
