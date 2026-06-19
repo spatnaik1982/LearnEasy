@@ -12,11 +12,13 @@
  */
 
 import { runCurriculumPipeline } from '../curriculum-pipeline';
+import { ConceptDependencyGraph } from '../dependency-graph';
 import type {
   ConceptCurriculumEntry,
   PipelineResult,
   PipelineError,
 } from '../curriculum-pipeline';
+import type { ConceptSpec } from '../concept-schema';
 import { join, dirname } from 'path';
 import { statSync } from 'fs';
 
@@ -298,6 +300,48 @@ export function runValidation(argv?: string[]): number {
 
   const allErrors = [...pipelineErrorStrings, ...alx.errors];
   const allWarnings = alx.warnings;
+
+  // ── Graph dependency validation ─────────────────────────────────
+  if (result.data.length > 0) {
+    const concepts: ConceptSpec[] = result.data.map((e) => e.concept);
+    const graph = new ConceptDependencyGraph(concepts);
+
+    // 1. Missing dependency references
+    const allConceptIds = new Set(concepts.map((c) => c.conceptId));
+    for (const entry of result.data) {
+      const deps = entry.concept.dependencies || [];
+      for (const dep of deps) {
+        if (!allConceptIds.has(dep)) {
+          allErrors.push(
+            `Missing dependency: concept '${entry.concept.conceptId}' requires '${dep}' but '${dep}' not found`,
+          );
+        }
+      }
+    }
+
+    // 2. Cycle detection
+    const cycles = graph.detectCycles();
+    for (const cycle of cycles) {
+      const cycleStr = cycle.join(' → ');
+      allErrors.push(`Cycle detected: ${cycleStr}`);
+    }
+
+    // 3. Unreachable concepts (concepts with no path from any entry point)
+    const entryPoints = concepts
+      .filter((c) => !c.dependencies || c.dependencies.length === 0)
+      .map((c) => c.conceptId);
+
+    if (entryPoints.length > 0) {
+      const reachableSet = new Set(graph.getLearningPath(entryPoints));
+      for (const concept of concepts) {
+        if (!reachableSet.has(concept.conceptId)) {
+          allWarnings.push(
+            `Unreachable concept: '${concept.conceptId}' has no path from any entry point (concept with no dependencies)`,
+          );
+        }
+      }
+    }
+  }
 
   // Print output
   if (verbose) {
