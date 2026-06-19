@@ -106,7 +106,31 @@ const Home: NextPage = () => {
     }
 
     // State 2: Session complete today
-    // (Detectable via resumeInfo.completedAt or similar; falls through to default for now)
+    if (resumeInfo?.hasCompletedToday) {
+      return (
+        <div className="flex flex-col items-center text-center">
+          <p className="mb-4 text-2xl font-bold text-slate-text">
+            Hi {firstName}!
+          </p>
+          <span className="mb-6 text-8xl" aria-hidden="true">🎉</span>
+          <button
+            disabled
+            className="min-h-[56px] w-full max-w-xs rounded-xl bg-muted-green/50 px-8 py-3 text-base font-semibold text-white cursor-not-allowed"
+          >
+            {COPY.sessionComplete}
+          </button>
+          <p className="mt-3 text-sm text-on-surface-variant">
+            {COPY.sessionCompleteBody}
+          </p>
+          <button
+            onClick={() => router.push("/subjects")}
+            className="mt-4 text-sm font-medium text-soft-blue underline"
+          >
+            {COPY.practiceAgain}
+          </button>
+        </div>
+      );
+    }
 
     // State 3: Default / no progress (show Start Today's Lesson)
     return (
