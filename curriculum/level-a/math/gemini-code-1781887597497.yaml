@@ -1,0 +1,80 @@
+# ─── Concept Metadata ─────────────────────────────────────────────
+
+conceptId: comparing_numbers
+chapter:
+  code: CH1
+  name: "Reading, Understanding, Forming and Writing Numbers"
+
+learningObjective: "Compare numbers to find smaller, bigger, or equal values"
+coreIdea: "We look at the digits to see which number is larger"
+
+examples:
+  - "9 is bigger than 4: 🍏🍏🍏🍏🍏🍏🍏🍏🍏 > 🍏🍏🍏🍏"
+  - "2 is smaller than 5: 🚗🚗 < 🚗🚗🚗🚗🚗"
+
+misconceptions:
+  - "Thinking taller objects mean a larger number, regardless of count"
+  - "Confusing the greater-than and less-than symbols"
+
+supports:
+  visual: true
+
+masteryCriteria: 0.8
+difficulty: intermediate
+estimatedDuration: 15
+dependencies: 
+  - numbers_1_9
+  - place_value_tens_ones
+
+# ─── Activities (5 required steps) ─────────────────────────────────
+
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: "Observe the sizes"
+      left: ["🎈", "🎈", "🎈", "🎈"] 
+      right: ["🎈", "🎈"]
+      sum: 6
+      text: "Four balloons is bigger than two balloons."
+
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      description: "Sort into smaller and bigger than 10"
+      groups:
+        - label: "Smaller than 10"
+          target: ["8", "3"]
+        - label: "Bigger than 10"
+          target: ["15", "22"]
+      items: ["8", "15", "3", "22"]
+
+  - step: independent_practice
+    type: multiple_choice
+    order: 3
+    content:
+      questions:
+        - question: "Which number is bigger?"
+          options: ["12", "21"]
+          correctIndex: 1
+
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: "Which shows equal numbers?"
+          options: ["4 and 5", "7 and 7", "9 and 8", "1 and 2"]
+          correctIndex: 1
+        - question: "Which number is smaller?"
+          options: ["35", "53"]
+          correctIndex: 0
+
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: "Fantastic job! You are a number master!"
+      encouragement: true

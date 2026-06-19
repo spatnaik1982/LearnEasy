@@ -27,7 +27,6 @@ export const LessonSidebar: React.FC<LessonSidebarProps> = ({
         {steps.map((step, index) => {
           const isCurrent = index === currentStep;
           const isCompleted = completedSteps.includes(index);
-          const isFuture = !isCurrent && !isCompleted;
 
           let circleClasses =
             "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0";
