@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubject } from "../../../lib/api";
 import type { Subject } from "../../../lib/mockData";
-import { COPY } from "@learn-easy/ui";
+import { COPY, AppShell } from "@learn-easy/ui";
 
 const Chapters: NextPage = () => {
   const router = useRouter();
@@ -21,22 +21,26 @@ const Chapters: NextPage = () => {
 
   if (loading || !id) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">{COPY.loadingChapters}</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingChapters}</p>
+        </div>
+      </AppShell>
     );
   }
 
   if (!subject) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         <button
           onClick={() => router.push("/subjects")}
@@ -64,7 +68,7 @@ const Chapters: NextPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

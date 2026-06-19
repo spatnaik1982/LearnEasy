@@ -8,6 +8,7 @@ import {
   TransitionScreen,
   ActivityRenderer,
   COPY,
+  AppShell,
 } from "@learn-easy/ui";
 import { useAuth } from "../../lib/auth";
 import { useSession } from "../../lib/session";
@@ -129,17 +130,21 @@ const Learn: NextPage = () => {
 
   if (loading || !conceptId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">{COPY.loadingLesson}</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingLesson}</p>
+        </div>
+      </AppShell>
     );
   }
 
   if (!concept) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
+        </div>
+      </AppShell>
     );
   }
 
@@ -150,7 +155,7 @@ const Learn: NextPage = () => {
     const fromStep = STEPS[currentStep];
     const toStep = STEPS[pendingStep];
     return (
-      <div className="min-h-screen bg-warm-off-white px-4 py-8">
+      <AppShell variant="student">
         <div className="mx-auto max-w-content">
           <TransitionScreen
             fromStep={fromStep}
@@ -161,12 +166,12 @@ const Learn: NextPage = () => {
             onBreak={handleTakeBreak}
           />
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         {/* Back button */}
         <button
@@ -432,7 +437,7 @@ const Learn: NextPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 };
 

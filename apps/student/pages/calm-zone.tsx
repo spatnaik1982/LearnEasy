@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { CalmBreathing } from "../components/CalmBreathing";
 import { CalmTimer } from "../components/CalmTimer";
-import { COPY } from "@learn-easy/ui";
+import { COPY, AppShell } from "@learn-easy/ui";
 
 const CalmZone: NextPage = () => {
   const router = useRouter();
@@ -11,8 +11,8 @@ const CalmZone: NextPage = () => {
     typeof returnUrl === "string" ? returnUrl : "/subjects";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E8F4F8] to-[#F0F7FA] px-4 py-8">
-      <div className="mx-auto max-w-content">
+    <AppShell variant="student" footer={null}>
+      <div className="bg-gradient-to-b from-[#E8F4F8] to-[#F0F7FA] px-4 py-8 mx-auto max-w-content rounded-2xl">
         {/* Title */}
         <h1 className="mb-2 text-center text-2xl font-bold text-muted-teal">
           {COPY.takeBreak}
@@ -59,7 +59,7 @@ const CalmZone: NextPage = () => {
           </button>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

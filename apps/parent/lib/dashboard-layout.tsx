@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState, useEffect, type ReactNode } from "react";
+import { AppShell, ParentTabBar } from "@learn-easy/ui";
 import { getChildren } from "../lib/api";
 import { type Child } from "../lib/mockData";
 
@@ -73,35 +74,18 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
         </div>
       </header>
 
-      <nav className="border-b border-outline-variant bg-white">
-        <div className="mx-auto max-w-5xl px-4">
-          <div className="flex gap-1 py-2" role="tablist">
-            {NAV_ITEMS.map((item) => {
-              const isActive = router.pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={`${item.href}?child=${selectedChild}`}
-                  role="tab"
-                  aria-selected={isActive}
-                  className={`min-h-[56px] rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-soft-blue inline-flex items-center ${
-                    isActive
-                      ? "bg-soft-blue/10 text-soft-blue"
-                      : "text-on-surface-variant hover:bg-slate-100 hover:text-slate-text"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
-
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <AppShell
+        variant="parent"
+        primaryNav={
+          <ParentTabBar
+            tabs={NAV_ITEMS}
+            activeHref={router.pathname}
+          />
+        }
+      >
         <h2 className="mb-6 text-2xl font-bold text-slate-text">{title}</h2>
         {children}
-      </main>
+      </AppShell>
     </div>
   );
 }

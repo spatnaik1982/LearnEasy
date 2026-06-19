@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth";
 import { fetchResumeState } from "../lib/api";
-import { COPY } from "@learn-easy/ui";
+import { COPY, AppShell } from "@learn-easy/ui";
 
 interface ResumeInfo {
   hasResumableSession: boolean;
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
   }, [user?.id]);
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         <h1 className="mb-2 text-center text-2xl font-bold text-slate-text">
           LearnEasy - Student App
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

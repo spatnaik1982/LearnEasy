@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchConcepts } from "../../../lib/api";
 import type { Concept, Activity } from "../../../lib/mockData";
-import { COPY } from "@learn-easy/ui";
+import { COPY, AppShell } from "@learn-easy/ui";
 
 const Concepts: NextPage = () => {
   const router = useRouter();
@@ -23,14 +23,16 @@ const Concepts: NextPage = () => {
 
   if (loading || !id) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">{COPY.loadingConcepts}</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingConcepts}</p>
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         <button
           onClick={() => router.back()}
@@ -63,7 +65,7 @@ const Concepts: NextPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

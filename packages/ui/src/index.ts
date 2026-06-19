@@ -16,3 +16,6 @@ export { AccessibilityWrapper, type AccessibilityWrapperProps } from "./Accessib
 export { COPY } from "./copy";
 export { useAccessibility } from "./useAccessibility";
 export { announceToScreenReader, createAnnouncementRegion, announcementId } from "./accessibility-utils";
+export { AppShell, type AppShellProps } from "./app-shell";
+export { StudentFooter, type StudentFooterProps } from "./student-footer";
+export { ParentTabBar, type ParentTabBarProps } from "./parent-tab-bar";
