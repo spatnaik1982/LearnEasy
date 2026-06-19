@@ -1,0 +1,61 @@
+conceptId: transport_basics
+chapter:
+  code: CH5
+  name: My Surroundings
+learningObjective: "Identify common modes of transport: car, bus, bicycle"
+coreIdea: "Transport helps people move from place to place"
+examples:
+  - "A car takes a family to the shop"
+  - "A bus carries many people at once"
+misconceptions:
+  - "Thinking bicycles need fuel to move"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: []
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at different transport"
+      items: ["🚗", "🚌", "🚲", "🚂"]
+      count: 4
+      text: "Car, Bus, Bicycle, Train."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match transport to its name"
+      pairs:
+        - itemA: "🚗"
+          itemB: "Car"
+        - itemA: "🚲"
+          itemB: "Bicycle"
+  - step: "independent_practice"
+    type: "multiple_choice"
+    order: 3
+    content:
+      questions:
+        - question: "Which has two wheels?"
+          options: ["🚗", "🚌", "🚲"]
+          correctIndex: 2
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Which carries many people?"
+          options: ["🚗", "🚌", "🚲"]
+          correctIndex: 1
+        - question: "What does a bicycle need to move?"
+          options: ["Petrol", "Pedaling", "Electricity"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great! You know different ways to travel."
+      encouragement: true

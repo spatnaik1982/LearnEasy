@@ -1,0 +1,61 @@
+conceptId: weather_types
+chapter:
+  code: CH3
+  name: Seasons and Weather
+learningObjective: "Identify different types of weather: sunny, rainy, cloudy"
+coreIdea: "Weather changes each day and we see it outside"
+examples:
+  - "Sunny weather has bright sunshine"
+  - "Rainy weather has falling raindrops"
+misconceptions:
+  - "Thinking cloudy means it will always rain"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: []
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at different weather"
+      items: ["☀️", "🌧️", "☁️", "🌤️"]
+      count: 4
+      text: "Sunny, Rainy, Cloudy, Partly cloudy."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match weather to its name"
+      pairs:
+        - itemA: "☀️"
+          itemB: "Sunny"
+        - itemA: "🌧️"
+          itemB: "Rainy"
+  - step: "independent_practice"
+    type: "multiple_choice"
+    order: 3
+    content:
+      questions:
+        - question: "Which shows rainy weather?"
+          options: ["☀️", "🌧️", "☁️"]
+          correctIndex: 1
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "What do you see in sunny weather?"
+          options: ["Rain", "Bright sun", "Snow"]
+          correctIndex: 1
+        - question: "What do clouds bring?"
+          options: ["Candy", "Rain or shade", "Toys"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Awesome! You know different types of weather."
+      encouragement: true

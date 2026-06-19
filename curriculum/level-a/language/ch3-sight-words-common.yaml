@@ -1,0 +1,66 @@
+conceptId: sight_words_common
+chapter:
+  code: CH3
+  name: Sight Words
+learningObjective: "Read common sight words: and, to, in, you, that"
+coreIdea: "Some words you know just by looking"
+examples:
+  - "The word 'and' joins two things"
+  - "The word 'you' means the person"
+misconceptions:
+  - "Reading 'and' as 'an'"
+  - "Confusing 'in' and 'on'"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["sight_words_basic"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at these sight words"
+      items: ["and", "to", "in", "you", "that"]
+      count: 5
+      text: "These are more words you see often."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match sight word to its sentence"
+      pairs:
+        - itemA: "and"
+          itemB: "You and me"
+        - itemA: "you"
+          itemB: "You are kind"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Match sight words on your own"
+      pairs:
+        - itemA: "to"
+          itemB: "Go to school"
+        - itemA: "in"
+          itemB: "In the box"
+        - itemA: "that"
+          itemB: "That is big"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Which word says 'and'?"
+          options: ["and", "in", "you"]
+          correctIndex: 0
+        - question: "Which word says 'you'?"
+          options: ["and", "in", "you"]
+          correctIndex: 2
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work with sight words!"
+      encouragement: true

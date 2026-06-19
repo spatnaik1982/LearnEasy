@@ -1,0 +1,66 @@
+conceptId: number_recognition_1_10
+chapter:
+  code: CH1
+  name: Numbers
+learningObjective: "Recognize numbers from 1 to 10"
+coreIdea: "Each written number has a name and represents a quantity"
+examples:
+  - "The number 5 is written as 5 and said as five"
+  - "The number 10 is written as 10 and said as ten"
+misconceptions:
+  - "Confusing 6 and 9"
+  - "Skipping numbers in sequence"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["counting_1_10"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "See the number 5"
+      display: "5"
+      count: 5
+      text: "This is the number five."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match the number to its name"
+      pairs:
+        - number: "3"
+          name: "Three"
+        - number: "7"
+          name: "Seven"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Match numbers independently"
+      pairs:
+        - number: "1"
+          name: "One"
+        - number: "5"
+          name: "Five"
+        - number: "10"
+          name: "Ten"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Which number is five?"
+          options: ["4", "5", "6", "7"]
+          correctIndex: 1
+        - question: "Which number is eight?"
+          options: ["6", "7", "8", "9"]
+          correctIndex: 2
+  - step: "positive_completion"
+    type: "matching"
+    order: 5
+    content:
+      message: "Great work! You know your numbers."
+      encouragement: true

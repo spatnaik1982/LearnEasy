@@ -1,0 +1,68 @@
+conceptId: position_words
+chapter:
+  code: CH2
+  name: Shapes
+learningObjective: "Understand positional words: above, below, next to, between"
+coreIdea: "Words tell us where objects are in relation to each other"
+examples:
+  - "The circle is above the square"
+  - "The triangle is next to the rectangle"
+misconceptions:
+  - "Confusing above and below"
+  - "Confusing next to and between"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["basic_shapes"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "See positions of shapes"
+      items: ["⬤", "■", "▲", "▬"]
+      positions:
+        - shape: "⬤"
+          position: "above"
+        - shape: "■"
+          position: "below"
+      text: "The circle is above the square."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match position word to picture"
+      pairs:
+        - word: "above"
+          picture: "Circle above square"
+        - word: "next to"
+          picture: "Triangle next to rectangle"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Identify positions on your own"
+      pairs:
+        - shape: "●"
+          position: "below"
+        - shape: "◆"
+          position: "between"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "If a circle is above a square, where is the square?"
+          options: ["Above the circle", "Below the circle", "Next to the circle"]
+          correctIndex: 1
+        - question: "If a triangle is between two squares, how many squares are there?"
+          options: ["One", "Two", "Three"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work! You know position words."
+      encouragement: true

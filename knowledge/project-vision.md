@@ -83,18 +83,39 @@ Existing NIOS resources are not optimized for these needs. LearnEasy fills this 
 
 ---
 
-## Curriculum Scope — MVP
+## Curriculum Scope — Level A (NIOS OBE equivalent to Grades 1-3)
 
-### Level A Mathematics (NIOS OBE equivalent to Grade 3)
+### Mathematics
 
 | Chapter | Concepts | Activities |
 |---------|----------|------------|
-| Numbers | Counting 1-10, Number Recognition 1-10 | Visual Counting, Matching, Multiple Choice |
-| Shapes | Basic Shapes (circle, square, triangle, rectangle) | Visual Counting, Matching, Multiple Choice |
+| Numbers | Counting 1-10, Number Recognition 1-10, Comparing Quantities | Visual Counting, Matching, Multiple Choice |
+| Shapes | Basic Shapes, Position Words | Visual Counting, Matching, Multiple Choice |
 | Addition | Addition within 10 | Visual Counting, Multiple Choice |
 | Subtraction | Subtraction within 10 | Visual Counting, Multiple Choice |
 
-Total: **4 chapters, 5 concepts, 16 activities** (seeded in database)
+### Language
+
+| Chapter | Concepts | Activities |
+|---------|----------|------------|
+| Letter Recognition | Letters A-E, Letters F-J | Visual Counting, Matching, Multiple Choice |
+| Phonics | Initial Sounds, Rhyming Words | Visual Counting, Matching, Multiple Choice |
+| Sight Words | Basic Words, Common Words | Visual Counting, Matching, Multiple Choice |
+| Reading Readiness | Print Awareness | Visual Counting, Matching, Multiple Choice |
+| Writing Readiness | Pre-Writing Shapes, Letter Formation | Visual Counting, Matching, Multiple Choice |
+| Basic Comprehension | Picture Story Order, Simple Instructions | Visual Counting, Matching, Multiple Choice |
+
+### Environmental Science
+
+| Chapter | Concepts | Activities |
+|---------|----------|------------|
+| Living Things | Living vs Non-Living, Plants & Animals | Visual Counting, Matching, Multiple Choice |
+| My Family | Family Members, My Home | Visual Counting, Matching, Multiple Choice |
+| Seasons & Weather | Weather Types, Seasons, Dressing for Weather | Visual Counting, Matching, Multiple Choice |
+| Water & Air | Water Sources, Uses of Water | Visual Counting, Matching, Multiple Choice |
+| My Surroundings | Neighborhood Places, Transport Basics | Visual Counting, Matching, Multiple Choice |
+
+Total: **29 concepts** across 3 subjects (all defined as validated YAML curriculum files)
 
 ---
 
@@ -133,11 +154,11 @@ Every concept follows the same 5-step structure:
 
 | Phase | Scope | Status |
 |-------|-------|--------|
-| **Phase 1** | Level A Mathematics MVP | ✅ MVP scope implemented |
-| **Phase 2** | Level A Complete Curriculum (Language, EVS) | ⬜ Future |
-| **Phase 3** | Levels B and C | ⬜ Future |
-| **Phase 4** | Educator Platform | ⬜ Future |
-| **Phase 5** | Therapy Integration (OT, Speech, Behavior) | ⬜ Future |
+| **Phase 1** | Level A Complete Curriculum (Math, Language, EVS) + Curriculum Infrastructure | ✅ Complete |
+| **Phase 2** | Learning Experience (TEACCH framework, Activity Engine, Accessibility) | ⬜ Next |
+| **Phase 3** | Adaptive Learning (ABA engine, Learning Profiles) | ⬜ Future |
+| **Phase 4** | AI Layer (AI Tutor UI, Curriculum Generation) | ⬜ Future |
+| **Phase 5** | Parent Experience & Authoring Tools | ⬜ Future |
 
 ---
 

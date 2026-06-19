@@ -27,14 +27,18 @@ learn-easy/
 ├── packages/
 │   ├── api/               # ⚙️ NestJS REST API
 │   │   └── src/           #   Auth, Curriculum, AI modules
-│   ├── db/                # 🗄️ Prisma schema, migrations, seed data
+│   ├── db/                # 🗄️ Prisma schema, migrations, seed, curriculum tools
+│   │   ├── src/           #   Concept schema, pipeline, dependency graph, CLI
 │   │   └── prisma/        #   schema.prisma, seed.ts
 │   ├── ui/                # 🎨 Shared React component library (low-sensory)
 │   │   └── src/           #   VisualCounter, Matching, MultipleChoice, etc.
 │   ├── ai/                # 🤖 OpenAI tutor wrapper (gpt-4o-mini)
 │   │   └── src/           #   AiTutorService with Zod structured outputs
 │   └── config/            # 📐 Centralized TypeScript config
+├── curriculum/            # 📚 Curriculum-as-code: YAML concept definitions
+│   └── level-a/           #   Level A: math/, language/, evs/
 ├── knowledge/             # 📖 Project documentation
+│   ├── curriculum/        #   Concept schema, validation CLI, dependency graph
 │   ├── project-vision.md  #   Vision, mission, roadmap
 │   └── architecture.md    #   System architecture, data flow
 ├── AGENTS.md              # 🤖 Agent instructions for AI coding tools
@@ -91,6 +95,7 @@ pnpm --filter @learn-easy/parent dev
 | `pnpm dev` | Run all apps in development mode |
 | `pnpm lint` | Lint all workspaces |
 | `pnpm test` | Run tests across workspaces |
+| `pnpm curriculum:validate` | Validate all curriculum YAML files |
 | `pnpm --filter @learn-easy/api start:dev` | Start NestJS API (watch mode, port 3000) |
 | `pnpm --filter @learn-easy/student dev` | Start student frontend (port 3001) |
 | `pnpm --filter @learn-easy/parent dev` | Start parent dashboard (port 3002) |
@@ -98,22 +103,57 @@ pnpm --filter @learn-easy/parent dev
 
 ---
 
+## Curriculum Infrastructure
+
+Curriculum content is defined as YAML files under `curriculum/level-a/` and loaded via a validation pipeline:
+
+```
+YAML → Validation (ConceptSpec Schema) → Dependency Resolution → Database Seed
+```
+
+### Validation
+
+```bash
+# Validate all curriculum content
+pnpm curriculum:validate
+
+# Verbose per-file output
+pnpm curriculum:validate -- --verbose
+```
+
+Validation checks:
+- **Schema validation**: All required fields present, correct types (Zod)
+- **Activity steps**: Each concept has all 5 required steps (observe, guided_practice, independent_practice, mastery_check, positive_completion)
+- **Dependency graph**: No circular dependencies, all references resolve
+- **ALX compliance**: Sentence length ≤12 words, visual-first, literal language
+
+### Current Curriculum (Level A)
+
+| Subject | Chapters | Concepts |
+|---------|----------|----------|
+| **Mathematics** | Numbers, Shapes, Addition, Subtraction | 7 concepts (Counting, Number Recognition, Shapes, Addition, Subtraction, Comparing Quantities, Position Words) |
+| **Language** | Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension | 11 concepts |
+| **Environmental Science** | Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings | 11 concepts |
+
+---
+
 ## MVP Scope (Implemented)
 
-### Level A Mathematics — NIOS OBE Grade 3 Equivalent
+### Level A — NIOS OBE (Grades 1-3 Equivalent)
 
-| Chapter | Concepts |
-|---------|----------|
-| **Numbers** | Counting 1-10, Number Recognition 1-10 |
-| **Shapes** | Basic Shapes (circle, square, triangle, rectangle) |
-| **Addition** | Addition within 10 |
-| **Subtraction** | Subtraction within 10 |
+| Subject | Chapters | Concepts | Activities |
+|---------|----------|----------|------------|
+| **Mathematics** | Numbers, Shapes, Addition, Subtraction | 7 concepts | Visual Counting, Matching, Multiple Choice, Sequencing |
+| **Language** | Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension | 11 concepts | Visual Counting, Matching, Multiple Choice |
+| **Environmental Science** | Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings | 11 concepts | Visual Counting, Matching, Multiple Choice |
 
 ### Features
 
 | Feature | Status | Description |
 |---------|--------|-------------|
 | Student Learning Flow | ✅ | 5-step experience: Observe → Guided Practice → Independent Practice → Mastery Check → Positive Completion |
+| Curriculum-as-Code | ✅ | 29 concepts across Math + Language + EVS as validated YAML files |
+| Curriculum Validation | ✅ | CLI validation (Zod schema, activity steps, dependency graph, ALX compliance) |
 | Parent Dashboard | ✅ | Progress tracking, weekly reports, AI insights |
 | AI Tutor | ✅ | GPT-4o-mini powered explanations, hints, encouragement |
 | JWT Authentication | ✅ | Student and Parent registration/login |

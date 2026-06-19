@@ -1,10 +1,165 @@
 import { PrismaClient } from '@prisma/client';
+import { runCurriculumPipeline, ConceptCurriculumEntry } from '../src/curriculum-pipeline';
 
 const prisma = new PrismaClient();
+
+async function seedFromPipeline(entries: ConceptCurriculumEntry[]): Promise<number> {
+  let totalSeeded = 0;
+
+  // Group by level -> subject -> chapter
+  const levelMap = new Map<string, { code: string; name: string; entries: ConceptCurriculumEntry[] }>();
+
+  for (const entry of entries) {
+    const key = entry.levelCode;
+    if (!levelMap.has(key)) {
+      levelMap.set(key, { code: entry.levelCode, name: entry.levelName, entries: [] });
+    }
+    levelMap.get(key)!.entries.push(entry);
+  }
+
+  for (const [, levelInfo] of levelMap) {
+    // Create/upsert Level
+    const level = await prisma.level.upsert({
+      where: { code: levelInfo.code },
+      update: { name: levelInfo.name },
+      create: { code: levelInfo.code, name: levelInfo.name },
+    });
+    console.log(`  ✓ Level: ${level.name}`);
+
+    // Group entries in this level by subject
+    const subjectMap = new Map<string, { code: string; name: string; entries: ConceptCurriculumEntry[] }>();
+    for (const entry of levelInfo.entries) {
+      const key = entry.subjectCode;
+      if (!subjectMap.has(key)) {
+        subjectMap.set(key, { code: entry.subjectCode, name: entry.subjectName, entries: [] });
+      }
+      subjectMap.get(key)!.entries.push(entry);
+    }
+
+    for (const [, subjectInfo] of subjectMap) {
+      // Create/upsert Subject
+      const subjectId = `${levelInfo.code.toLowerCase()}-${subjectInfo.code.toLowerCase()}`;
+      const subject = await prisma.subject.upsert({
+        where: { id: subjectId },
+        update: { name: subjectInfo.name },
+        create: {
+          id: subjectId,
+          levelId: level.id,
+          code: subjectInfo.code,
+          name: subjectInfo.name,
+        },
+      });
+      console.log(`  ✓ Subject: ${subject.name}`);
+
+      // Group entries by chapter
+      const chapterMap = new Map<string, { code: string; name: string; entries: ConceptCurriculumEntry[] }>();
+      for (const entry of subjectInfo.entries) {
+        const key = entry.chapterCode;
+        if (!chapterMap.has(key)) {
+          chapterMap.set(key, { code: entry.chapterCode, name: entry.chapterName, entries: [] });
+        }
+        chapterMap.get(key)!.entries.push(entry);
+      }
+
+      let chapterOrder = 0;
+      for (const [, chapterInfo] of chapterMap) {
+        chapterOrder++;
+        const chapterId = `${subject.id}-${chapterInfo.code.toLowerCase()}`;
+
+        // Create/upsert Chapter
+        const chapter = await prisma.chapter.upsert({
+          where: { id: chapterId },
+          update: { name: chapterInfo.name, order: chapterOrder },
+          create: {
+            id: chapterId,
+            subjectId: subject.id,
+            code: chapterInfo.code,
+            name: chapterInfo.name,
+            order: chapterOrder,
+          },
+        });
+        console.log(`    ✓ Chapter: ${chapter.name}`);
+
+        // Create concepts and activities
+        let conceptOrder = 0;
+        for (const entry of chapterInfo.entries) {
+          conceptOrder++;
+          const conceptId = `${chapter.id}-c${conceptOrder}`;
+          const conceptCode = entry.concept.conceptId.toUpperCase();
+
+          const concept = await prisma.concept.upsert({
+            where: { id: conceptId },
+            update: {
+              name: entry.concept.coreIdea.substring(0, 100),
+              objective: entry.concept.learningObjective,
+              order: conceptOrder,
+              difficulty: entry.concept.difficulty || 'beginner',
+            },
+            create: {
+              id: conceptId,
+              chapterId: chapter.id,
+              code: conceptCode,
+              name: entry.concept.coreIdea.substring(0, 100),
+              objective: entry.concept.learningObjective,
+              order: conceptOrder,
+              difficulty: entry.concept.difficulty || 'beginner',
+            },
+          });
+          console.log(`      ✓ Concept: ${entry.concept.conceptId}`);
+
+          // Create activities
+          if (entry.activities.length > 0) {
+            const activityData = entry.activities.map((act, idx) => ({
+              id: `${conceptId}-a${idx + 1}`,
+              conceptId: concept.id,
+              type: act.type,
+              step: act.step,
+              order: act.order,
+              content: act.content,
+            }));
+
+            await prisma.activity.createMany({
+              data: activityData,
+            });
+          }
+
+          totalSeeded++;
+        }
+      }
+    }
+  }
+
+  return totalSeeded;
+}
 
 async function main() {
   console.log('Seeding curriculum data...');
 
+  // Try to use the curriculum pipeline
+  const pipelineResult = runCurriculumPipeline();
+
+  if (pipelineResult.success && pipelineResult.data.length > 0) {
+    console.log(`Curriculum pipeline found ${pipelineResult.data.length} concept(s) from curriculum files.`);
+    console.log('Seeding from curriculum pipeline...');
+
+    const seeded = await seedFromPipeline(pipelineResult.data);
+    console.log(`\n✅ Pipeline seeding complete!`);
+    console.log(`   ${seeded} concept(s) and their activities seeded from curriculum/ directory.`);
+    return;
+  }
+
+  // If pipeline had errors, log them
+  if (pipelineResult.errors.length > 0) {
+    console.warn('Curriculum pipeline encountered issues:');
+    for (const err of pipelineResult.errors) {
+      console.warn(`  [${err.type}]${err.conceptId ? ` concept='${err.conceptId}'` : ''}${err.file ? ` file='${err.file}'` : ''}: ${err.message}`);
+    }
+    console.warn('Falling back to hardcoded seed data...\n');
+  } else {
+    console.log('No curriculum files found. Using hardcoded seed data...\n');
+  }
+
+  // ── Fallback: hardcoded seed ─────────────────────
   // ── Level A ──────────────────────────────────────
   const levelA = await prisma.level.upsert({
     where: { code: 'A' },

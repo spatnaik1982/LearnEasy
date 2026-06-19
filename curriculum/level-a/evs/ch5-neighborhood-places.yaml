@@ -1,0 +1,61 @@
+conceptId: neighborhood_places
+chapter:
+  code: CH5
+  name: My Surroundings
+learningObjective: "Identify places in the neighborhood: school, park, shop"
+coreIdea: "Our neighborhood has many useful places"
+examples:
+  - "School is a place to learn"
+  - "Park is a place to play"
+misconceptions:
+  - "Thinking the school is only for sports"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: []
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at neighborhood places"
+      items: ["🏫", "🌳", "🏪", "🏥"]
+      count: 4
+      text: "School, Park, Shop, Hospital."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match place to its use"
+      pairs:
+        - itemA: "🏫"
+          itemB: "Learn"
+        - itemA: "🌳"
+          itemB: "Play"
+  - step: "independent_practice"
+    type: "multiple_choice"
+    order: 3
+    content:
+      questions:
+        - question: "Where do you buy things?"
+          options: ["🏫", "🏪", "🌳"]
+          correctIndex: 1
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Where do children learn?"
+          options: ["Park", "School", "Shop"]
+          correctIndex: 1
+        - question: "Where can you play with friends?"
+          options: ["Park", "Hospital", "Bank"]
+          correctIndex: 0
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great! You know places in your neighborhood."
+      encouragement: true
