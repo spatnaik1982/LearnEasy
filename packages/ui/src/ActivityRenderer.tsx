@@ -6,6 +6,8 @@ import { Matching } from "./Matching";
 import { DragDrop } from "./DragDrop";
 import { Sequencing } from "./Sequencing";
 import { MultipleChoice } from "./MultipleChoice";
+import { StoryQuestion } from "./StoryQuestion";
+import { RealWorldTask } from "./RealWorldTask";
 
 export interface ActivityRendererProps {
   activity: {
@@ -170,22 +172,39 @@ export function ActivityRenderer({
 
       case "story_question":
         return (
-          <div className="rounded-lg border-2 border-soft-amber/30 bg-soft-amber/5 p-4 text-center">
-            <p className="text-slate-text">📖 Story question activity loaded</p>
-            <p className="mt-2 text-sm text-muted-teal">
-              Answer the question to continue
-            </p>
-          </div>
+          <StoryQuestion
+            scenario={(activity.content.scenario as string) ?? ""}
+            questions={
+              (activity.content.questions as Array<{
+                question: string;
+                options: string[];
+                correctIndex: number;
+              }>) ?? []
+            }
+            visual={(activity.content.visual as string) ?? undefined}
+            onComplete={(responses) => {
+              const lastResponse = responses[responses.length - 1];
+              handleComplete({
+                selectedIndex: lastResponse?.selectedIndex ?? -1,
+                correct: lastResponse?.correct ?? false,
+                responses,
+              });
+            }}
+          />
         );
 
       case "real_world":
+      case "real_world_task":
         return (
-          <div className="rounded-lg border-2 border-muted-green/30 bg-muted-green/5 p-4 text-center">
-            <p className="text-slate-text">🌍 Real-world task loaded</p>
-            <p className="mt-2 text-sm text-muted-teal">
-              Complete the task to continue
-            </p>
-          </div>
+          <RealWorldTask
+            scenario={(activity.content.scenario as string) ?? ""}
+            taskDescription={(activity.content.taskDescription as string) ?? ""}
+            visualExample={(activity.content.visualExample as string) ?? undefined}
+            hint={(activity.content.hint as string) ?? undefined}
+            onComplete={() => {
+              handleComplete({ completed: true });
+            }}
+          />
         );
 
       default:

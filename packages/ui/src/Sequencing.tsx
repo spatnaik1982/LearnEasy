@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { cn } from "./utils";
+import { useAccessibility } from "./useAccessibility";
 
 export interface SequencingItem {
   id: string;
@@ -23,6 +24,7 @@ export function Sequencing({
   const [available, setAvailable] = useState<SequencingItem[]>(items);
   const [sequence, setSequence] = useState<SequencingItem[]>([]);
   const [isComplete, setIsComplete] = useState(false);
+  const { announce } = useAccessibility();
 
   const handleAddToSequence = useCallback(
     (item: SequencingItem) => {
@@ -32,16 +34,22 @@ export function Sequencing({
       const newAvailable = available.filter((a) => a.id !== item.id);
       setSequence(newSequence);
       setAvailable(newAvailable);
+      announce(`${item.label} added to sequence at position ${newSequence.length}`);
 
       if (newSequence.length === items.length) {
         setIsComplete(true);
         const correct = newSequence.every(
           (s, i) => s.id === correctOrder[i],
         );
+        announce(
+          correct
+            ? "Sequence complete! All items in correct order."
+            : "Sequence complete. Some items may be out of order.",
+        );
         onComplete(correct);
       }
     },
-    [sequence, available, items.length, correctOrder, onComplete, isComplete],
+    [sequence, available, items.length, correctOrder, onComplete, isComplete, announce],
   );
 
   const handleRemoveFromSequence = useCallback(
@@ -50,8 +58,9 @@ export function Sequencing({
 
       setSequence((prev) => prev.filter((s) => s.id !== item.id));
       setAvailable((prev) => [...prev, item]);
+      announce(`${item.label} removed from sequence`);
     },
-    [isComplete],
+    [isComplete, announce],
   );
 
   const handleMoveUp = useCallback(
@@ -63,8 +72,11 @@ export function Sequencing({
         newSequence[index - 1],
       ];
       setSequence(newSequence);
+      announce(
+        `${sequence[index].label} moved up to position ${index}`,
+      );
     },
-    [sequence, isComplete],
+    [sequence, isComplete, announce],
   );
 
   const handleMoveDown = useCallback(
@@ -76,8 +88,11 @@ export function Sequencing({
         newSequence[index],
       ];
       setSequence(newSequence);
+      announce(
+        `${sequence[index].label} moved down to position ${index + 2}`,
+      );
     },
-    [sequence, isComplete],
+    [sequence, isComplete, announce],
   );
 
   const handleAvailableKeyDown = useCallback(
@@ -113,13 +128,18 @@ export function Sequencing({
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div role="group" aria-label="Available items">
-        <p className="mb-3 text-sm font-medium text-on-surface-variant">Click items to add to sequence</p>
-        <div className="flex flex-wrap gap-4">
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">
+          Click items to add to sequence
+        </p>
+        <div className="flex flex-wrap gap-4" role="list" aria-label="Items to choose from">
           {available.map((item) => (
             <button
               key={item.id}
               onClick={() => handleAddToSequence(item)}
               onKeyDown={(e) => handleAvailableKeyDown(e, item)}
+              role="listitem"
+              aria-grabbed="false"
+              aria-describedby="sequencing-instructions-available"
               className={cn(
                 "min-h-[56px] rounded-lg border-2 px-4 py-2 text-base font-medium text-slate-text",
                 "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
@@ -131,19 +151,29 @@ export function Sequencing({
             </button>
           ))}
         </div>
+        <div id="sequencing-instructions-available" className="sr-only">
+          Press Enter or Space to add an item to your sequence.
+        </div>
       </div>
 
       <div role="group" aria-label="Your sequence">
-        <p className="mb-3 text-sm font-medium text-on-surface-variant">Your sequence (click to remove, arrow keys to reorder)</p>
+        <p className="mb-3 text-sm font-medium text-on-surface-variant">
+          Your sequence (click to remove, arrow keys to reorder)
+        </p>
         {sequence.length === 0 ? (
           <div className="flex min-h-[52px] items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
-            <span className="text-sm text-on-surface-variant">Select items above to build your sequence</span>
+            <span className="text-sm text-on-surface-variant">
+              Select items above to build your sequence
+            </span>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2" role="list" aria-label="Your ordered sequence">
             {sequence.map((item, index) => (
               <div
                 key={item.id}
+                role="listitem"
+                aria-grabbed={!isComplete ? "true" : "false"}
+                aria-dropeffect={!isComplete ? "move" : "none"}
                 className={cn(
                   "flex items-center gap-2 rounded-lg border-2 px-4 py-2",
                   "border-slate-300 bg-white",

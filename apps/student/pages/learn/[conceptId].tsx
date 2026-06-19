@@ -2,14 +2,11 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import {
-  VisualCounter,
-  Matching,
-  MultipleChoice,
-  Sequencing,
   PositiveCompletion,
   VisualSchedule,
   WorkSystemLayout,
   TransitionScreen,
+  ActivityRenderer,
 } from "@learn-easy/ui";
 import { useAuth } from "../../lib/auth";
 import { useSession } from "../../lib/session";
@@ -27,6 +24,14 @@ const STEPS = [
   "Mastery Check",
   "Completion",
 ];
+
+// Maps step index → preferred activity types (first found wins)
+const STEP_ACTIVITY_TYPES: Record<number, string[]> = {
+  0: ["visual-counter", "story-question"],
+  1: ["matching", "story-question"],
+  2: ["sequencing", "drag-drop", "matching"],
+  3: ["multiple-choice"],
+};
 
 const Learn: NextPage = () => {
   const router = useRouter();
@@ -110,6 +115,17 @@ const Learn: NextPage = () => {
     [],
   );
 
+  // Find the activity for a given step based on the mapping
+  const getActivityForStep = useCallback(
+    (step: number) => {
+      if (!concept) return null;
+      const types = STEP_ACTIVITY_TYPES[step];
+      if (!types) return null;
+      return concept.activities.find((a) => types.includes(a.type)) ?? null;
+    },
+    [concept],
+  );
+
   if (loading || !conceptId) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
@@ -127,10 +143,6 @@ const Learn: NextPage = () => {
   }
 
   const activities = concept.activities;
-  const visualActivity = activities.find((a) => a.type === "visual-counter");
-  const matchingActivity = activities.find((a) => a.type === "matching");
-  const sequencingActivity = activities.find((a) => a.type === "sequencing");
-  const mcActivity = activities.find((a) => a.type === "multiple-choice");
 
   // Transition screen
   if (showTransition && pendingStep !== null) {
@@ -194,14 +206,29 @@ const Learn: NextPage = () => {
               <p className="mb-6 text-base text-on-surface-variant">
                 Look at the visual below. Count what you see.
               </p>
-              {visualActivity && (
-                <VisualCounter
-                  count={visualActivity.config.count as number}
-                  emoji={visualActivity.config.emoji as string}
-                  size="lg"
-                  className="mb-8"
-                />
-              )}
+              {(() => {
+                const act = getActivityForStep(0);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Observe"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
               <button
                 onClick={handleNext}
                 className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
@@ -225,28 +252,35 @@ const Learn: NextPage = () => {
               <p className="mb-6 text-base text-on-surface-variant">
                 Match the items below. Hints are available to help you.
               </p>
-              {matchingActivity && (
-                <div className="mb-8">
-                  <p className="mb-3 text-sm font-medium text-soft-blue">
-                    💡 Hint: Look carefully at each item before matching
-                  </p>
-                  <Matching
-                    pairs={
-                      matchingActivity.config.pairs as Array<{
-                        id: string;
-                        itemA: string;
-                        itemB: string;
-                      }>
-                    }
-                    onMatch={() => {}}
-                  />
-                </div>
-              )}
+              {(() => {
+                const act = getActivityForStep(1);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Guided Practice"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
               <button
                 onClick={() => {
-                  if (matchingActivity) {
+                  const act = getActivityForStep(1);
+                  if (act) {
                     handleRecordAttempt(
-                      matchingActivity.id,
+                      act.id,
                       { completed: true },
                       0,
                       30,
@@ -275,39 +309,32 @@ const Learn: NextPage = () => {
               <p className="mb-6 text-base text-on-surface-variant">
                 Try this on your own. No hints this time!
               </p>
-              {sequencingActivity ? (
-                <div className="mb-8">
-                  <Sequencing
-                    items={
-                      sequencingActivity.config.items as Array<{
-                        id: string;
-                        label: string;
-                        emoji?: string;
-                      }>
-                    }
-                    correctOrder={
-                      sequencingActivity.config.correctOrder as string[]
-                    }
-                    onComplete={() => {}}
-                  />
-                </div>
-              ) : matchingActivity ? (
-                <div className="mb-8">
-                  <Matching
-                    pairs={
-                      matchingActivity.config.pairs as Array<{
-                        id: string;
-                        itemA: string;
-                        itemB: string;
-                      }>
-                    }
-                    onMatch={() => {}}
-                  />
-                </div>
-              ) : null}
+              {(() => {
+                const act = getActivityForStep(2);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Independent Practice"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
               <button
                 onClick={() => {
-                  const act = sequencingActivity || matchingActivity;
+                  const act = getActivityForStep(2);
                   if (act) {
                     handleRecordAttempt(
                       act.id,
@@ -339,28 +366,36 @@ const Learn: NextPage = () => {
               <p className="mb-6 text-base text-on-surface-variant">
                 Show what you've learned!
               </p>
-              {mcActivity && (
-                <div className="mb-8">
-                  <MultipleChoice
-                    question={mcActivity.config.question as string}
-                    options={
-                      mcActivity.config.options as Array<{
-                        id: string;
-                        label: string;
-                        emoji?: string;
-                      }>
-                    }
-                    correctIndex={mcActivity.config.correctIndex as number}
-                    onSelect={() => {}}
-                  />
-                </div>
-              )}
+              {(() => {
+                const act = getActivityForStep(3);
+                return act ? (
+                  <div className="mb-8">
+                    <ActivityRenderer
+                      activity={{
+                        id: act.id,
+                        type: act.type,
+                        content: act.config,
+                      }}
+                      step="Mastery Check"
+                      onComplete={(result) => {
+                        handleRecordAttempt(
+                          act.id,
+                          result.response,
+                          result.hintsUsed,
+                          result.timeSpent,
+                        );
+                      }}
+                    />
+                  </div>
+                ) : null;
+              })()}
               <button
                 onClick={() => {
-                  if (mcActivity) {
+                  const act = getActivityForStep(3);
+                  if (act) {
                     handleRecordAttempt(
-                      mcActivity.id,
-                      { selectedIndex: mcActivity.config.correctIndex },
+                      act.id,
+                      { selectedIndex: 0 },
                       0,
                       30,
                     );

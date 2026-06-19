@@ -12,3 +12,6 @@ export { ActivityRenderer, type ActivityRendererProps } from "./ActivityRenderer
 export { evaluateActivity, getHint, getActivityFeedback } from "./activity-utils";
 export { StoryQuestion, type StoryQuestionProps } from "./StoryQuestion";
 export { RealWorldTask, type RealWorldTaskProps } from "./RealWorldTask";
+export { AccessibilityWrapper, type AccessibilityWrapperProps } from "./AccessibilityWrapper";
+export { useAccessibility } from "./useAccessibility";
+export { announceToScreenReader, createAnnouncementRegion, announcementId } from "./accessibility-utils";

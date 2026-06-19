@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { cn } from "./utils";
+import { useAccessibility } from "./useAccessibility";
 
 export interface MultipleChoiceOption {
   id: string;
@@ -25,6 +26,12 @@ export function MultipleChoice({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const { announce } = useAccessibility();
+
+  // Announce question changes to screen readers
+  useEffect(() => {
+    announce(`Question: ${question}. ${options.length} options available.`);
+  }, [question, options.length, announce]);
 
   const handleSelect = useCallback(
     (index: number) => {
@@ -34,9 +41,10 @@ export function MultipleChoice({
       setSelectedId(options[index].id);
       setHasAnswered(true);
       setIsCorrect(correct);
+      announce(correct ? "Correct! Well done." : "Let's try again");
       onSelect(correct);
     },
-    [hasAnswered, correctIndex, options, onSelect],
+    [hasAnswered, correctIndex, options, onSelect, announce],
   );
 
   const handleKeyDown = useCallback(
@@ -88,7 +96,7 @@ export function MultipleChoice({
               <span>{option.label}</span>
               {hasAnswered && isSelected && (
                 <span className="ml-auto text-sm font-semibold" aria-live="polite">
-                  {isCorrect ? "Correct!" : "Incorrect"}
+                  {isCorrect ? "Correct!" : "Let's try again"}
                 </span>
               )}
             </button>
