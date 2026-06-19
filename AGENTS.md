@@ -23,13 +23,19 @@ learn-easy/
 ├── packages/
 │   ├── api/            # NestJS backend — REST API
 │   │   └── src/        # Auth, Curriculum, AI modules
-│   ├── db/             # Prisma schema, migrations, seed
+│   ├── db/             # Prisma schema, migrations, seed, curriculum tools
+│   │   ├── src/        # Concept schema, pipeline, dependency graph, validation CLI
 │   │   └── prisma/     # schema.prisma, seed.ts
 │   ├── ui/             # Shared React components (low-sensory)
 │   │   └── src/        # VisualCounter, Matching, DragDrop, MCQ, etc.
 │   ├── ai/             # OpenAI wrapper (gpt-4o-mini, Zod structured outputs)
 │   └── config/         # Centralized TypeScript configs
+├── curriculum/         # Curriculum-as-code: validated YAML concept definitions
+│   └── level-a/        # Level A: math/, language/, evs/
 ├── knowledge/          # Project documentation
+│   ├── curriculum/     # Concept schema, validation CLI, dependency graph docs
+│   ├── design/         # ALX design guidelines
+│   ├── project-management/  # Backlog, issue templates
 │   ├── project-vision.md
 │   └── architecture.md
 ├── AGENTS.md           # This file — agent instructions
@@ -89,6 +95,7 @@ learn-easy/
 | `pnpm dev` | all | Run dev servers for all apps |
 | `pnpm lint` | all | Lint all workspaces |
 | `pnpm test` | all | Run tests across workspaces |
+| `pnpm curriculum:validate` | root | Validate all curriculum YAML files |
 | `pnpm --filter @learn-easy/api start:dev` | api | Start NestJS in watch mode |
 | `pnpm --filter @learn-easy/student dev` | student | Start student Next.js app |
 | `pnpm --filter @learn-easy/parent dev` | parent | Start parent Next.js app |
