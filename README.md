@@ -26,7 +26,7 @@ learn-easy/
 │       └── lib/           #   Auth context, API client, mock data
 ├── packages/
 │   ├── api/               # ⚙️ NestJS REST API
-│   │   └── src/           #   Auth, Curriculum, AI modules
+│   │   └── src/           #   Auth, Curriculum, AI, Activities, Progress, Sessions, Resume
 │   ├── db/                # 🗄️ Prisma schema, migrations, seed, curriculum tools
 │   │   ├── src/           #   Concept schema, pipeline, dependency graph, CLI
 │   │   └── prisma/        #   schema.prisma, seed.ts
@@ -151,9 +151,15 @@ Validation checks:
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| Student Learning Flow | ✅ | 5-step experience: Observe → Guided Practice → Independent Practice → Mastery Check → Positive Completion |
+| Student Learning Flow | ✅ | 5-step experience with TEACCH work system |
+| TEACCH Structured Learning | ✅ | Visual schedule, work system layout, transition screens |
+| Activity Engine | ✅ | 7 activity types with centralized renderer (VisualCounter, Matching, DragDrop, Sequencing, MultipleChoice, StoryQuestion, RealWorldTask) |
+| Calm Zone | ✅ | Self-regulation break space with timer + breathing exercise |
+| Resume Learning | ✅ | Continue from exact activity after returning |
+| Accessibility Framework | ✅ | Keyboard reorder, aria-live announcements, focus management |
 | Curriculum-as-Code | ✅ | 29 concepts across Math + Language + EVS as validated YAML files |
 | Curriculum Validation | ✅ | CLI validation (Zod schema, activity steps, dependency graph, ALX compliance) |
+| Progress Tracking | ✅ | Activity attempt recording, concept mastery, session tracking |
 | Parent Dashboard | ✅ | Progress tracking, weekly reports, AI insights |
 | AI Tutor | ✅ | GPT-4o-mini powered explanations, hints, encouragement |
 | JWT Authentication | ✅ | Student and Parent registration/login |
@@ -190,8 +196,19 @@ Validation checks:
 ### Progress
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| POST | `/api/activities/:id/attempt` | JWT | Submit an activity attempt |
-| GET | `/api/students/:id/progress` | JWT | Get student progress |
+| POST | `/api/activities/:id/attempt` | JWT | Submit an activity attempt with evaluation |
+| GET | `/api/students/:id/progress` | JWT | Get all concept progress for a student |
+| GET | `/api/students/:id/progress/by-chapter/:chapterId` | JWT | Get chapter-aggregated progress |
+| GET | `/api/students/:id/progress/by-subject/:subjectId` | JWT | Get subject-aggregated progress |
+
+### Sessions
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/sessions` | JWT | Start a learning session |
+| PATCH | `/api/sessions/:id/end` | JWT | End a learning session |
+| GET | `/api/students/:id/sessions` | JWT | List recent sessions |
+| GET | `/api/students/:id/sessions/latest` | JWT | Get latest incomplete session |
+| GET | `/api/students/:id/resume-state` | JWT | Get resume state for continued learning |
 
 ---
 
