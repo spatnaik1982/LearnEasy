@@ -1,0 +1,57 @@
+conceptId: simple_instructions
+chapter:
+  code: CH6
+  name: Basic Comprehension
+learningObjective: "Follow simple two-step instructions"
+coreIdea: "Listen and do two things in the right order"
+examples:
+  - "First clap your hands then stomp your feet"
+  - "First stand up then turn around"
+misconceptions:
+  - "Doing the second step before the first"
+  - "Only remembering one of the two steps"
+supports:
+  visual: true
+  audio: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["picture_story_order"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Watch two instructions together"
+      items: ["👏", "🦶"]
+      text: "Clap your hands. Stomp your feet."
+  - step: "guided_practice"
+    type: "story_question"
+    order: 2
+    content:
+      description: "Follow these two steps"
+      steps: ["Touch your nose", "Point to the door"]
+      hint: "Do the first step, then the second."
+  - step: "independent_practice"
+    type: "story_question"
+    order: 3
+    content:
+      description: "Follow two steps on your own"
+      steps: ["Stand up", "Wave hello"]
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "First clap, then stomp. What do you do first?"
+          options: ["Clap", "Stomp", "Jump"]
+          correctIndex: 0
+        - question: "First touch nose, then point. What do you do second?"
+          options: ["Touch nose", "Point", "Clap"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work following instructions!"
+      encouragement: true

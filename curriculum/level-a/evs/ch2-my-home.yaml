@@ -1,0 +1,61 @@
+conceptId: my_home
+chapter:
+  code: CH2
+  name: My Family
+learningObjective: "Describe different rooms in a home and their uses"
+coreIdea: "Each room in a home has a special use"
+examples:
+  - "The kitchen is for cooking food"
+  - "The bedroom is for sleeping"
+misconceptions:
+  - "Thinking the bathroom is only for bathing"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: []
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at rooms in a home"
+      items: ["🛏️", "🍳", "🛁", "🛋️"]
+      count: 4
+      text: "Bedroom, Kitchen, Bathroom, Living room."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match room to its use"
+      pairs:
+        - itemA: "🍳"
+          itemB: "Kitchen"
+        - itemA: "🛏️"
+          itemB: "Bedroom"
+  - step: "independent_practice"
+    type: "multiple_choice"
+    order: 3
+    content:
+      questions:
+        - question: "Which room is for cooking?"
+          options: ["🛏️", "🍳", "🛁"]
+          correctIndex: 1
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Where do you sleep?"
+          options: ["Kitchen", "Bedroom", "Garden"]
+          correctIndex: 1
+        - question: "Where do you eat dinner?"
+          options: ["Bathroom", "Dining room", "Garage"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Good job! You know the rooms in a home."
+      encouragement: true

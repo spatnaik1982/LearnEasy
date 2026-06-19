@@ -1,0 +1,63 @@
+conceptId: prewriting_shapes
+chapter:
+  code: CH5
+  name: Writing Readiness
+learningObjective: "Trace basic shapes and lines used in writing"
+coreIdea: "Writing starts with making shapes and lines"
+examples:
+  - "Draw a straight line from top to bottom"
+  - "Draw a circle like the letter O"
+misconceptions:
+  - "Tracing outside the lines"
+  - "Starting at the wrong direction"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: []
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at shapes for writing"
+      items: ["|", "⎯", "○", "△"]
+      text: "Lines and shapes help us write."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match shape to its name"
+      pairs:
+        - itemA: "|"
+          itemB: "Straight line"
+        - itemA: "○"
+          itemB: "Circle"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Match shapes on your own"
+      pairs:
+        - itemA: "⎯"
+          itemB: "Flat line"
+        - itemA: "△"
+          itemB: "Triangle"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Which shape is a straight line?"
+          options: ["|", "○", "△"]
+          correctIndex: 0
+        - question: "Which shape is a circle?"
+          options: ["|", "○", "△"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work with prewriting shapes!"
+      encouragement: true

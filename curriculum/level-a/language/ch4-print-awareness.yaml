@@ -1,0 +1,63 @@
+conceptId: print_awareness
+chapter:
+  code: CH4
+  name: Reading Readiness
+learningObjective: "Understand that text carries meaning and is read left to right"
+coreIdea: "We read words from left to right across the page"
+examples:
+  - "We start reading at the left side"
+  - "We move our eyes to the right"
+misconceptions:
+  - "Reading from right to left"
+  - "Thinking pictures tell the whole story"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["sight_words_basic"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Watch how we read a sentence"
+      items: ["➡️", "I", "see", "a", "cat", "."]
+      text: "We read from left to right."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match each word in order"
+      pairs:
+        - itemA: "First word"
+          itemB: "I"
+        - itemA: "Last word"
+          itemB: "cat"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Order the words left to right"
+      pairs:
+        - itemA: "Start here"
+          itemB: "left"
+        - itemA: "End here"
+          itemB: "right"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Where do you start reading?"
+          options: ["Left side", "Right side", "Middle"]
+          correctIndex: 0
+        - question: "Which way do you read?"
+          options: ["Left to right", "Right to left", "Top to bottom"]
+          correctIndex: 0
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work learning to read words!"
+      encouragement: true

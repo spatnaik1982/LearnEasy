@@ -1,0 +1,66 @@
+conceptId: letter_formation
+chapter:
+  code: CH5
+  name: Writing Readiness
+learningObjective: "Trace uppercase letters A through J"
+coreIdea: "Each letter has a special shape to trace"
+examples:
+  - "Letter A has two slanted lines and a cross"
+  - "Letter B has a line and two bumps"
+misconceptions:
+  - "Starting at the bottom of the letter"
+  - "Making letters too small or too big"
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: "beginner"
+estimatedDuration: 15
+dependencies: ["letter_recognition_a_e", "letter_recognition_f_j", "prewriting_shapes"]
+activities:
+  - step: "observe"
+    type: "visual_counting"
+    order: 1
+    content:
+      description: "Look at letters A through J"
+      items: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+      count: 10
+      text: "These are letters A to J."
+  - step: "guided_practice"
+    type: "matching"
+    order: 2
+    content:
+      description: "Match letter to its shape"
+      pairs:
+        - itemA: "A"
+          itemB: "△ with a line"
+        - itemA: "B"
+          itemB: "| and two bumps"
+  - step: "independent_practice"
+    type: "matching"
+    order: 3
+    content:
+      description: "Match letters on your own"
+      pairs:
+        - itemA: "C"
+          itemB: "Open curve"
+        - itemA: "D"
+          itemB: "| and one bump"
+        - itemA: "E"
+          itemB: "| with three lines"
+  - step: "mastery_check"
+    type: "multiple_choice"
+    order: 4
+    content:
+      questions:
+        - question: "Which letter has two slanted lines?"
+          options: ["A", "B", "C"]
+          correctIndex: 0
+        - question: "Which letter has a line and two bumps?"
+          options: ["A", "B", "C"]
+          correctIndex: 1
+  - step: "positive_completion"
+    type: "visual_counting"
+    order: 5
+    content:
+      message: "Great work learning letter shapes!"
+      encouragement: true
