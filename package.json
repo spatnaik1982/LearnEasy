@@ -13,7 +13,8 @@
     "build": "pnpm -r build",
     "dev": "pnpm -r dev",
     "lint": "pnpm -r lint",
-    "test": "pnpm -r test"
+    "test": "pnpm -r test",
+    "curriculum:validate": "pnpm --filter @learn-easy/db curriculum:validate"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
