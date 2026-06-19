@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchConcepts } from "../../../lib/api";
 import type { Concept, Activity } from "../../../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 const Concepts: NextPage = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const Concepts: NextPage = () => {
   if (loading || !id) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading concepts...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingConcepts}</p>
       </div>
     );
   }
@@ -35,15 +36,15 @@ const Concepts: NextPage = () => {
           onClick={() => router.back()}
           className="mb-6 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
-          &larr; Back to chapters
+          &larr; {COPY.backToChapters}
         </button>
         <h1 className="mb-2 text-2xl font-bold text-slate-text">
-          Choose a Concept
+          {COPY.chooseConcept}
         </h1>
-        <p className="mb-8 text-base text-on-surface-variant">Select a concept to start learning</p>
+        <p className="mb-8 text-base text-on-surface-variant">{COPY.selectConcept}</p>
         <div className="flex flex-col gap-4">
           {concepts.length === 0 && (
-            <p className="text-base text-on-surface-variant">No concepts available in this chapter.</p>
+            <p className="text-base text-on-surface-variant">{COPY.noConcepts}</p>
           )}
           {concepts.map((concept, index) => (
             <button

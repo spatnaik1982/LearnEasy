@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentReports } from "../../lib/api";
 import { type WeeklyReport } from "../../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 export default function ReportsPage() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function ReportsPage() {
   return (
     <DashboardLayout title="Reports">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">Loading reports...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingReports}</p>
       ) : report ? (
         <>
           <div className="mb-6 grid grid-cols-2 gap-4">

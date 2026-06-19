@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubject } from "../../../lib/api";
 import type { Subject } from "../../../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 const Chapters: NextPage = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Chapters: NextPage = () => {
   if (loading || !id) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading chapters...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingChapters}</p>
       </div>
     );
   }
@@ -29,7 +30,7 @@ const Chapters: NextPage = () => {
   if (!subject) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Subject not found</p>
+        <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
       </div>
     );
   }
@@ -41,7 +42,7 @@ const Chapters: NextPage = () => {
           onClick={() => router.push("/subjects")}
           className="mb-6 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
-          &larr; Back to subjects
+          &larr; {COPY.backToSubjects}
         </button>
         <div className="mb-6 text-sm text-on-surface-variant">
           Subjects &gt; {subject.title}

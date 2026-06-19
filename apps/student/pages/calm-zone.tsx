@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { CalmBreathing } from "../components/CalmBreathing";
 import { CalmTimer } from "../components/CalmTimer";
+import { COPY } from "@learn-easy/ui";
 
 const CalmZone: NextPage = () => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const CalmZone: NextPage = () => {
       <div className="mx-auto max-w-content">
         {/* Title */}
         <h1 className="mb-2 text-center text-2xl font-bold text-muted-teal">
-          Take a Break
+          {COPY.takeBreak}
         </h1>
         <p className="mb-10 text-center text-base text-on-surface-variant">
           Use these calming tools whenever you need a moment to relax
@@ -54,7 +55,7 @@ const CalmZone: NextPage = () => {
             onClick={() => router.push(returnPath)}
             className="min-h-[56px] min-w-[200px] rounded-xl bg-muted-teal px-8 py-4 text-base font-semibold text-white hover:bg-muted-teal/90 focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2 transition-colors duration-200"
           >
-            Return to Lesson
+            {COPY.returnToLesson}
           </button>
         </div>
       </div>

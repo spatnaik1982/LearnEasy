@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import DashboardLayout from "../lib/dashboard-layout";
 import { getStudentProgress } from "../lib/api";
 import { type ConceptProgress } from "../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -38,13 +39,13 @@ export default function DashboardPage() {
   return (
     <DashboardLayout title="Overview">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">Loading dashboard...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingProgress}</p>
       ) : (
         <div className="space-y-8">
           <div className="grid gap-4 sm:grid-cols-3">
             <StatCard label="Concepts Mastered" value={mastered} sub={`out of ${totalActivities}`} />
             <StatCard label="Average Mastery" value={`${avgMastery}%`} sub="across all concepts" />
-            <StatCard label="Current Streak" value="3 days" sub="keep it going!" />
+            <StatCard label="Current Streak" value="3 days" sub="keep it going!" /> {/* REMOVED in Story 9 */}
           </div>
 
           <section>

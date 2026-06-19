@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth";
 import { fetchResumeState } from "../lib/api";
+import { COPY } from "@learn-easy/ui";
 
 interface ResumeInfo {
   hasResumableSession: boolean;
@@ -65,7 +66,7 @@ const Home: NextPage = () => {
                 📚 Resume Learning
               </h2>
               <p className="mb-1 text-sm text-on-surface-variant">
-                You have a lesson in progress
+                {COPY.resumableSession}
               </p>
               {resumeInfo.step !== undefined && resumeInfo.step < 4 && (
                 <p className="mb-4 text-sm text-muted-teal">
@@ -80,7 +81,7 @@ const Home: NextPage = () => {
                 }
                 className="inline-flex min-h-[56px] items-center rounded-lg bg-muted-teal px-8 py-3 text-base font-semibold text-white hover:bg-muted-teal/90 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2"
               >
-                Resume Lesson
+                {COPY.resumeLesson}
               </Link>
             </div>
           </div>
@@ -92,7 +93,7 @@ const Home: NextPage = () => {
             href="/subjects"
             className="min-h-[56px] rounded-lg bg-soft-blue px-8 py-3 text-base font-semibold text-white hover:bg-primary transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 inline-flex items-center"
           >
-            Start Learning
+            {COPY.startTodaysLesson}
           </Link>
         </div>
       </div>

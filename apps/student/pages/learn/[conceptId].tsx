@@ -7,6 +7,7 @@ import {
   WorkSystemLayout,
   TransitionScreen,
   ActivityRenderer,
+  COPY,
 } from "@learn-easy/ui";
 import { useAuth } from "../../lib/auth";
 import { useSession } from "../../lib/session";
@@ -129,7 +130,7 @@ const Learn: NextPage = () => {
   if (loading || !conceptId) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading lesson...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingLesson}</p>
       </div>
     );
   }
@@ -137,7 +138,7 @@ const Learn: NextPage = () => {
   if (!concept) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Concept not found</p>
+        <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
       </div>
     );
   }
@@ -233,7 +234,7 @@ const Learn: NextPage = () => {
                 onClick={handleNext}
                 className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -290,7 +291,7 @@ const Learn: NextPage = () => {
                 }}
                 className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -347,7 +348,7 @@ const Learn: NextPage = () => {
                 }}
                 className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Submit Answer
+                {COPY.submitAnswer}
               </button>
             </section>
           </WorkSystemLayout>
@@ -404,7 +405,7 @@ const Learn: NextPage = () => {
                 }}
                 className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -426,7 +427,7 @@ const Learn: NextPage = () => {
               onClick={handleTakeBreak}
               className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 transition-colors duration-200"
             >
-              Take a Break
+              {COPY.takeBreak}
             </button>
           </div>
         )}
