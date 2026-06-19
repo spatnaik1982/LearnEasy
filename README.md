@@ -167,6 +167,12 @@ Validation checks:
 | Curriculum API | ✅ | REST endpoints for levels, subjects, chapters, concepts, activities |
 | Low-Sensory UI | ✅ | Muted palette, large touch targets, keyboard navigable, ARIA support |
 | Database Schema | ✅ | Prisma with PostgreSQL, 10 models, seed data |
+| UX Coherence (Phase 3) | ✅ | Shared AppShell, persistent footer nav, breadcrumbs, mastery chips |
+| Beginner Onboarding | ✅ | 3-screen onboarding for first-time learners |
+| Sensory Controls | ✅ | Settings page with reduce motion, lower contrast, sound toggles |
+| Centralized Copy | ✅ | All action strings from single copy.ts, consistent terminology |
+| Loading/Error States | ✅ | DataState component with loading, empty, error, ready states |
+| Parent Narrative Dashboard | ✅ | Headline-driven overview with this-week panel and next-step card |
 
 ---
 

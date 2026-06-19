@@ -27,7 +27,8 @@ learn-easy/
 │   │   ├── src/        # Concept schema, pipeline, dependency graph, validation CLI
 │   │   └── prisma/     # schema.prisma, seed.ts
 │   ├── ui/             # Shared React components (low-sensory)
-│   │   └── src/        # VisualCounter, Matching, DragDrop, MCQ, etc.
+│   │   ├── src/        # VisualCounter, Matching, DragDrop, MCQ, AppShell, etc.
+│   │   └── dist/       # Built output
 │   ├── ai/             # OpenAI wrapper (gpt-4o-mini, Zod structured outputs)
 │   └── config/         # Centralized TypeScript configs
 ├── curriculum/         # Curriculum-as-code: validated YAML concept definitions
