@@ -7,6 +7,8 @@ import {
   WorkSystemLayout,
   TransitionScreen,
   ActivityRenderer,
+  COPY,
+  AppShell,
 } from "@learn-easy/ui";
 import { useAuth } from "../../lib/auth";
 import { useSession } from "../../lib/session";
@@ -37,7 +39,7 @@ const Learn: NextPage = () => {
   const router = useRouter();
   const { conceptId } = router.query;
   const { user } = useAuth();
-  const { sessionId, endSession } = useSession(user?.id);
+  const { endSession } = useSession(user?.id);
 
   const [concept, setConcept] = useState<Concept | null>(null);
   const [loading, setLoading] = useState(true);
@@ -92,11 +94,26 @@ const Learn: NextPage = () => {
     });
   }, [endSession, router]);
 
+  // Find the activity for a given step based on the mapping
+  const getActivityForStep = useCallback(
+    (step: number) => {
+      if (!concept) return null;
+      const types = STEP_ACTIVITY_TYPES[step];
+      if (!types) return null;
+      return concept.activities.find((a) => types.includes(a.type)) ?? null;
+    },
+    [concept],
+  );
+
   const handleTakeBreak = useCallback(() => {
     if (conceptId) {
-      router.push(`/calm-zone?return=/learn/${conceptId}`);
+      const currentActivity = getActivityForStep(currentStep);
+      const activityId = currentActivity?.id || "";
+      router.push(
+        `/calm-zone?return=/learn/${conceptId}&step=${currentStep}&activity=${activityId}`,
+      );
     }
-  }, [router, conceptId]);
+  }, [router, conceptId, currentStep, getActivityForStep]);
 
   const handleRecordAttempt = useCallback(
     async (
@@ -115,41 +132,32 @@ const Learn: NextPage = () => {
     [],
   );
 
-  // Find the activity for a given step based on the mapping
-  const getActivityForStep = useCallback(
-    (step: number) => {
-      if (!concept) return null;
-      const types = STEP_ACTIVITY_TYPES[step];
-      if (!types) return null;
-      return concept.activities.find((a) => types.includes(a.type)) ?? null;
-    },
-    [concept],
-  );
-
   if (loading || !conceptId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading lesson...</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingLesson}</p>
+        </div>
+      </AppShell>
     );
   }
 
   if (!concept) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Concept not found</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
+        </div>
+      </AppShell>
     );
   }
-
-  const activities = concept.activities;
 
   // Transition screen
   if (showTransition && pendingStep !== null) {
     const fromStep = STEPS[currentStep];
     const toStep = STEPS[pendingStep];
     return (
-      <div className="min-h-screen bg-warm-off-white px-4 py-8">
+      <AppShell variant="student">
         <div className="mx-auto max-w-content">
           <TransitionScreen
             fromStep={fromStep}
@@ -160,12 +168,12 @@ const Learn: NextPage = () => {
             onBreak={handleTakeBreak}
           />
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         {/* Back button */}
         <button
@@ -176,12 +184,14 @@ const Learn: NextPage = () => {
         </button>
 
         {/* Visual Schedule */}
-        <VisualSchedule
-          steps={STEPS}
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          className="mb-8"
-        />
+        <div className="md:sticky md:top-0 z-10 bg-warm-off-white py-2">
+          <VisualSchedule
+            steps={STEPS}
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            className="mb-8"
+          />
+        </div>
 
         {/* Error state */}
         {recordError && (
@@ -231,9 +241,9 @@ const Learn: NextPage = () => {
               })()}
               <button
                 onClick={handleNext}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -288,9 +298,9 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -345,9 +355,9 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Submit Answer
+                {COPY.submitAnswer}
               </button>
             </section>
           </WorkSystemLayout>
@@ -402,9 +412,9 @@ const Learn: NextPage = () => {
                   }
                   handleNext();
                 }}
-                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white transition-opacity duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                className="min-h-[56px] w-full rounded-xl bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               >
-                Continue Lesson
+                {COPY.continueConcept}
               </button>
             </section>
           </WorkSystemLayout>
@@ -424,14 +434,14 @@ const Learn: NextPage = () => {
           <div className="mt-6 flex justify-center">
             <button
               onClick={handleTakeBreak}
-              className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 transition-colors duration-200"
+              className="min-h-[56px] rounded-lg px-6 py-3 text-sm font-medium text-muted-teal underline hover:text-muted-teal/80 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 motion-safe:transition-colors motion-safe:duration-200"
             >
-              Take a Break
+              {COPY.takeBreak}
             </button>
           </div>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 };
 

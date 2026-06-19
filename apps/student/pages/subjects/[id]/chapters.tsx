@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubject } from "../../../lib/api";
 import type { Subject } from "../../../lib/mockData";
+import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
 
 const Chapters: NextPage = () => {
   const router = useRouter();
@@ -20,32 +21,39 @@ const Chapters: NextPage = () => {
 
   if (loading || !id) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading chapters...</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingChapters}</p>
+        </div>
+      </AppShell>
     );
   }
 
   if (!subject) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Subject not found</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
         <button
           onClick={() => router.push("/subjects")}
           className="mb-6 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
-          &larr; Back to subjects
+          &larr; {COPY.backToSubjects}
         </button>
-        <div className="mb-6 text-sm text-on-surface-variant">
-          Subjects &gt; {subject.title}
-        </div>
+        <Breadcrumb
+          items={[
+            { label: "Subjects", href: "/subjects" },
+            { label: subject.title },
+          ]}
+        />
         <h1 className="mb-2 text-2xl font-bold text-slate-text">
           {subject.emoji} {subject.title}
         </h1>
@@ -63,7 +71,7 @@ const Chapters: NextPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

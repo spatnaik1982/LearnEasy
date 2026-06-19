@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchSubjects } from "../lib/api";
 import type { Subject } from "../lib/mockData";
+import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
 
 const Subjects: NextPage = () => {
   const router = useRouter();
@@ -18,20 +19,23 @@ const Subjects: NextPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Loading subjects...</p>
-      </div>
+      <AppShell variant="student">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-lg text-on-surface-variant">{COPY.loadingSubjects}</p>
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-warm-off-white px-4 py-8">
+    <AppShell variant="student">
       <div className="mx-auto max-w-content">
+        <Breadcrumb items={[{ label: COPY.chooseSubject }]} />
         <h1 className="mb-2 text-center text-2xl font-bold text-slate-text">
-          Choose a Subject
+          {COPY.chooseSubject}
         </h1>
         <p className="mb-8 text-center text-base text-on-surface-variant">
-          Select a subject to start learning
+          {COPY.selectSubject}
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {subjects.map((subject) => (
@@ -49,7 +53,7 @@ const Subjects: NextPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentProgress } from "../../lib/api";
 import { type ConceptProgress } from "../../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 export default function ProgressPage() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function ProgressPage() {
   return (
     <DashboardLayout title="Progress">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">Loading progress...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingProgress}</p>
       ) : (
         <>
           <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Filter by chapter">

@@ -13,5 +13,12 @@ export { evaluateActivity, getHint, getActivityFeedback } from "./activity-utils
 export { StoryQuestion, type StoryQuestionProps } from "./StoryQuestion";
 export { RealWorldTask, type RealWorldTaskProps } from "./RealWorldTask";
 export { AccessibilityWrapper, type AccessibilityWrapperProps } from "./AccessibilityWrapper";
+export { COPY } from "./copy";
 export { useAccessibility } from "./useAccessibility";
 export { announceToScreenReader, createAnnouncementRegion, announcementId } from "./accessibility-utils";
+export { AppShell, type AppShellProps } from "./app-shell";
+export { StudentFooter, type StudentFooterProps } from "./student-footer";
+export { ParentTabBar, type ParentTabBarProps } from "./parent-tab-bar";
+export { DataState, type DataStateProps } from "./data-state";
+export { Breadcrumb, type BreadcrumbProps, type BreadcrumbItem } from "./breadcrumb";
+export { MasteryChip, type MasteryChipProps, type MasteryState } from "./mastery-chip";

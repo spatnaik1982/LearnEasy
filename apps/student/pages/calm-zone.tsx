@@ -1,20 +1,60 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { CalmBreathing } from "../components/CalmBreathing";
 import { CalmTimer } from "../components/CalmTimer";
+import { COPY, AppShell } from "@learn-easy/ui";
+import { pauseSession, resumeSession } from "../lib/session";
+
+const STEPS = [
+  "Observe",
+  "Guided Practice",
+  "Independent Practice",
+  "Mastery Check",
+];
 
 const CalmZone: NextPage = () => {
   const router = useRouter();
-  const { return: returnUrl } = router.query;
+  const { return: returnUrl, step, activity: activityId } = router.query;
   const returnPath =
     typeof returnUrl === "string" ? returnUrl : "/subjects";
+  const stepNum = step ? parseInt(step as string, 10) : 0;
+  const actId = typeof activityId === "string" ? activityId : undefined;
+
+  const [paused, setPaused] = useState(false);
+  const [sessionId] = useState<string>(
+    typeof window !== "undefined"
+      ? localStorage.getItem("learn-easy.currentSessionId") || ""
+      : "",
+  );
+
+  // Pause session on mount if we have a sessionId
+  useEffect(() => {
+    if (!paused && sessionId) {
+      pauseSession(sessionId, stepNum, actId).then(() => {
+        setPaused(true);
+      });
+    }
+  }, [sessionId, stepNum, actId, paused]);
+
+  const handleReturn = async () => {
+    if (sessionId) {
+      await resumeSession(sessionId);
+    }
+    router.push(returnPath);
+  };
+
+  const stepName = STEPS[stepNum] || "";
+  const buttonLabel = stepName
+    ? `Return to Step ${stepNum + 1}: ${stepName}`
+    : COPY.returnToLesson;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#E8F4F8] to-[#F0F7FA] px-4 py-8">
-      <div className="mx-auto max-w-content">
+    <AppShell variant="student" footer={null}>
+      <div className="bg-gradient-to-b from-[#E8F4F8] to-[#F0F7FA] px-4 py-8 mx-auto max-w-content rounded-2xl">
         {/* Title */}
         <h1 className="mb-2 text-center text-2xl font-bold text-muted-teal">
-          Take a Break
+          {COPY.takeBreak}
         </h1>
         <p className="mb-10 text-center text-base text-on-surface-variant">
           Use these calming tools whenever you need a moment to relax
@@ -51,14 +91,14 @@ const CalmZone: NextPage = () => {
         {/* Return to lesson */}
         <div className="flex justify-center">
           <button
-            onClick={() => router.push(returnPath)}
+            onClick={handleReturn}
             className="min-h-[56px] min-w-[200px] rounded-xl bg-muted-teal px-8 py-4 text-base font-semibold text-white hover:bg-muted-teal/90 focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2 transition-colors duration-200"
           >
-            Return to Lesson
+            {buttonLabel}
           </button>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import DashboardLayout from "../../lib/dashboard-layout";
 import { getStudentInsights } from "../../lib/api";
 import { type Insight } from "../../lib/mockData";
+import { COPY } from "@learn-easy/ui";
 
 const ICON_MAP: Record<Insight["category"], string> = {
   strength: "\u2B50",
@@ -40,7 +41,7 @@ export default function InsightsPage() {
   return (
     <DashboardLayout title="Insights">
       {loading ? (
-        <p className="text-lg text-on-surface-variant">Loading insights...</p>
+        <p className="text-lg text-on-surface-variant">{COPY.loadingReports}</p>
       ) : insights.length === 0 ? (
         <div className="rounded-xl border border-outline-variant bg-white p-8 text-center">
           <p className="text-4xl">&#x1F9E0;</p>
