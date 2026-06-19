@@ -1,40 +1,32 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useApi } from "../../../lib/use-api";
 import { fetchSubject } from "../../../lib/api";
 import type { Subject } from "../../../lib/mockData";
-import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
+import { COPY, AppShell, Breadcrumb, DataState } from "@learn-easy/ui";
 
 const Chapters: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [subject, setSubject] = useState<Subject | null>(null);
-  const [loading, setLoading] = useState(true);
+  const subjectId = typeof id === "string" ? id : null;
 
-  useEffect(() => {
-    if (!id) return;
-    fetchSubject(id as string).then((res) => {
-      if (res.data) setSubject(res.data);
-      setLoading(false);
-    });
-  }, [id]);
+  const { data: subject, loading, error, refetch } = useApi<Subject | null>(
+    () => (subjectId ? fetchSubject(subjectId) : Promise.resolve({ data: null, error: null })),
+    [subjectId],
+  );
 
-  if (loading || !id) {
+  if (loading || !subjectId) {
     return (
       <AppShell variant="student">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <p className="text-lg text-on-surface-variant">{COPY.loadingChapters}</p>
-        </div>
+        <DataState status="loading" />
       </AppShell>
     );
   }
 
-  if (!subject) {
+  if (!subject || error) {
     return (
       <AppShell variant="student">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <p className="text-lg text-on-surface-variant">{COPY.conceptNotFound}</p>
-        </div>
+        <DataState status="error" onRetry={refetch} title={COPY.errorTitle} body={error ?? COPY.conceptNotFound} />
       </AppShell>
     );
   }
