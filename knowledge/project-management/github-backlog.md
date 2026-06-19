@@ -1021,6 +1021,28 @@ EPIC-12
 
 ---
 
+# UX Coherence & Predictability Pass (Complete)
+
+Goal:
+
+Align every screen across the student and parent apps with the ALX 2.0 framework. Introduces shared AppShell, persistent navigation, centralized copy, loading/error states, breadcrumbs, mastery chips, Calm Zone return contract, settings page with sensory controls, beginner onboarding, and narrative-driven parent overview.
+
+| Issue | Title | Status |
+|-------|-------|--------|
+| #60 | UX Plan — Design Contract | ✅ Complete |
+| #61 | copy.ts constants + button sweep | ✅ Complete |
+| #62 | AppShell + integrate on every page | ✅ Complete |
+| #63 | DataState + useApi hooks | ✅ Complete |
+| #64 | Three-state Home redesign | ✅ Complete |
+| #65 | Breadcrumb + MasteryChip | ✅ Complete |
+| #66 | Calm Zone return contract | ✅ Complete |
+| #67 | Settings page + sensory profile | ✅ Complete |
+| #68 | 3-screen onboarding flow | ✅ Complete |
+| #69 | Parent Overview narrative redesign | ✅ Complete |
+| #70 | VisualSchedule sticky + F11 deltas | ✅ Complete |
+
+---
+
 # Success Criteria
 
 A special educator should be able to:
