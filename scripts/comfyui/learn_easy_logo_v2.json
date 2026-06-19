@@ -1,0 +1,82 @@
+{
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 7777,
+      "steps": 30,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "v1-5-pruned-emaonly.safetensors"}
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {"width": 512, "height": 512, "batch_size": 1}
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "minimalist flat vector logo for LearnEasy autism-friendly educational app, stylized open book with brain and gears, clean geometric shapes, solid flat colors, soft calming blue and teal palette, simple elegant lines, white background, highly simplified icon design, no text, no letters",
+      "clip": ["4", 1]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photograph, realistic, 3D, complex details, gradients, shadows, text, letters, words, cluttered, ugly, blurry, low quality, deformed, noise",
+      "clip": ["4", 1]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["3", 0], "vae": ["4", 2]}
+  },
+  "10": {
+    "class_type": "TS_ImageToSVGStringColor_Vtracer",
+    "inputs": {
+      "image": ["8", 0],
+      "hierarchical": "stacked",
+      "mode": "spline",
+      "filter_speckle": 10,
+      "color_precision": 4,
+      "layer_difference": 16,
+      "corner_threshold": 60,
+      "length_threshold": 4.0,
+      "max_iterations": 10,
+      "splice_threshold": 45,
+      "path_precision": 6
+    }
+  },
+  "14": {
+    "class_type": "TS_SVGPathSimplify",
+    "inputs": {
+      "SVG_String": ["10", 0],
+      "tolerance": 1.0,
+      "preserve_curves": true
+    }
+  },
+  "11": {
+    "class_type": "TS_SaveSVGString",
+    "inputs": {
+      "SVG_String": ["14", 0],
+      "filename_prefix": "learn_easy_logo",
+      "append_timestamp": true
+    }
+  },
+  "13": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "learn_easy_raster",
+      "images": ["8", 0]
+    }
+  }
+}

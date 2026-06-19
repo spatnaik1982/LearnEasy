@@ -28,4 +28,4 @@ prisma/*.sql
 .DS_Store
 Thumbs.db
 coverage/
-*.tsbuildinfo
+*.tsbuildinfocomfy_outputs/
