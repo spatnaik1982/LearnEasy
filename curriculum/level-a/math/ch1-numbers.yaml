@@ -25,6 +25,12 @@ activities:
       display: "5"
       count: 5
       text: "This is the number five."
+      hints:
+        - "This is the number 5. It's called 'five'."
+        - "Look at the shape of the number 5 carefully."
+        - "You're close! Remember, the number 5 looks like this."
+        - "Try saying the number out loud: five."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -35,6 +41,12 @@ activities:
           name: "Three"
         - number: "7"
           name: "Seven"
+      hints:
+        - "The number 3 matches with 'Three'. Let me show you."
+        - "Look at the first pair: 3 → Three."
+        - "You're close! Check which number says 'Three'."
+        - "Try reading each number and finding its name."
+        - ""
   - step: "independent_practice"
     type: "matching"
     order: 3

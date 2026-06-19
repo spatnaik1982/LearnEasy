@@ -2,10 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RecordAttemptDto } from './dto/record-attempt.dto';
 import { AttemptResponseDto } from './dto/attempt-response.dto';
+import { PromptFadingService } from '../prompts/prompt-fading.service';
+import { PromptsService } from '../prompts/prompts.service';
+import { MasteryService } from '../mastery/mastery.service';
 
 @Injectable()
 export class ActivitiesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private promptFadingService: PromptFadingService,
+    private promptsService: PromptsService,
+    private masteryService: MasteryService,
+  ) {}
 
   async recordAttempt(activityId: string, dto: RecordAttemptDto): Promise<AttemptResponseDto> {
     const activity = await this.prisma.activity.findUnique({
@@ -31,15 +39,93 @@ export class ActivitiesService {
       },
     });
 
-    // On first correct attempt, upsert progress
-    if (correct) {
-      await this.upsertProgress(dto.studentId, activity.conceptId);
+    // --- Prompt Fading Integration ---
+    // Check inactivity reset first
+    await this.promptFadingService.checkInactivityReset(
+      dto.studentId,
+      activity.conceptId,
+    );
+
+    // Get current prompt level
+    const { promptLevel: currentLevel } =
+      await this.promptsService.getPromptLevel(
+        dto.studentId,
+        activity.conceptId,
+      );
+
+    // Get consecutive correct count
+    const consecutiveCorrect =
+      await this.promptFadingService.getConsecutiveCorrect(
+        dto.studentId,
+        activity.conceptId,
+      );
+
+    // Evaluate whether to fade or revert
+    const fadeResult = await this.promptFadingService.evaluatePromptFade(
+      {
+        correct,
+        studentId: dto.studentId,
+        conceptId: activity.conceptId,
+        createdAt: attempt.createdAt,
+      },
+      currentLevel,
+      consecutiveCorrect,
+    );
+
+    // Update prompt level if changed
+    if (fadeResult.newLevel !== currentLevel) {
+      await this.promptsService.setPromptLevel(
+        dto.studentId,
+        activity.conceptId,
+        fadeResult.newLevel,
+      );
+    }
+
+    // --- Mastery Calculation Integration ---
+    const masteryResult = await this.masteryService.calculateMastery(
+      dto.studentId,
+      activity.conceptId,
+    );
+
+    // Update the Progress record with full mastery calculation (best-mastery: never decrease)
+    const existingProgress = await this.prisma.progress.findUnique({
+      where: {
+        studentId_conceptId: { studentId: dto.studentId, conceptId: activity.conceptId },
+      },
+    });
+
+    if (!existingProgress) {
+      // Create new progress record
+      await this.prisma.progress.create({
+        data: {
+          studentId: dto.studentId,
+          conceptId: activity.conceptId,
+          mastery: masteryResult.mastery,
+          completed: masteryResult.completed,
+        },
+      });
+    } else if (masteryResult.mastery > existingProgress.mastery) {
+      // Only update if mastery has increased (best-mastery approach)
+      await this.prisma.progress.update({
+        where: {
+          studentId_conceptId: { studentId: dto.studentId, conceptId: activity.conceptId },
+        },
+        data: {
+          mastery: masteryResult.mastery,
+          completed: masteryResult.completed,
+        },
+      });
     }
 
     return {
       attemptId: attempt.id,
       correct,
       feedback,
+      promptLevel: fadeResult.newLevel,
+      independentlyMastered: fadeResult.independentlyMastered,
+      mastery: masteryResult.mastery,
+      completed: masteryResult.completed,
+      mastered: masteryResult.mastered,
     };
   }
 
@@ -96,38 +182,6 @@ export class ActivitiesService {
       default:
         // Unknown activity type — mark as correct to avoid blocking
         return true;
-    }
-  }
-
-  private async upsertProgress(studentId: string, conceptId: string) {
-    // Check if there's already a correct attempt for any activity in this concept
-    const existingProgress = await this.prisma.progress.findUnique({
-      where: {
-        studentId_conceptId: { studentId, conceptId },
-      },
-    });
-
-    if (!existingProgress) {
-      // First correct activity in this concept — set mastery to 0.25
-      await this.prisma.progress.create({
-        data: {
-          studentId,
-          conceptId,
-          mastery: 0.25,
-        },
-      });
-    } else {
-      // Increment mastery by 0.25, cap at 1.0
-      const newMastery = Math.min(existingProgress.mastery + 0.25, 1.0);
-      await this.prisma.progress.update({
-        where: {
-          studentId_conceptId: { studentId, conceptId },
-        },
-        data: {
-          mastery: newMastery,
-          completed: newMastery >= 1.0,
-        },
-      });
     }
   }
 }

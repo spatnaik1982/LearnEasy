@@ -153,7 +153,8 @@ Validation checks:
 |---------|--------|-------------|
 | Student Learning Flow | ✅ | 5-step experience with TEACCH work system |
 | TEACCH Structured Learning | ✅ | Visual schedule, work system layout, transition screens |
-| Activity Engine | ✅ | 7 activity types with centralized renderer (VisualCounter, Matching, DragDrop, Sequencing, MultipleChoice, StoryQuestion, RealWorldTask) |
+| Activity Engine | ✅ | 7 activity types with centralized renderer |
+| ABA Learning Engine | ✅ | Prompt hierarchy (5 levels), auto-fading, mastery calculation |
 | Calm Zone | ✅ | Self-regulation break space with timer + breathing exercise |
 | Resume Learning | ✅ | Continue from exact activity after returning |
 | Accessibility Framework | ✅ | Keyboard reorder, aria-live announcements, focus management |

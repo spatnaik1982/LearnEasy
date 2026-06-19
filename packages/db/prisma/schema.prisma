@@ -27,6 +27,7 @@ model Student {
   parent   Parent?  @relation(fields: [parentId], references: [id])
 
   progress Progress[]
+  promptStates PromptState[]
   attempts ActivityAttempt[]
   sessions Session[]
 
@@ -91,6 +92,7 @@ model Concept {
   chapter   Chapter    @relation(fields: [chapterId], references: [id])
   activities Activity[]
   progress  Progress[]
+  promptStates PromptState[]
 
   // Embeddings for RAG (pgvector) — added via raw SQL migration
   // embedding Unsupported("vector")?
@@ -134,6 +136,21 @@ model Progress {
   conceptId String
   mastery   Float   @default(0) // 0.0 – 1.0
   completed Boolean @default(false)
+
+  student Student @relation(fields: [studentId], references: [id])
+  concept Concept @relation(fields: [conceptId], references: [id])
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, conceptId])
+}
+
+// ── Prompt State (ABA Prompt Hierarchy) ───────────────────────
+model PromptState {
+  id          String   @id @default(cuid())
+  studentId   String
+  conceptId   String
+  promptLevel Int      @default(1) // 1-5
 
   student Student @relation(fields: [studentId], references: [id])
   concept Concept @relation(fields: [conceptId], references: [id])

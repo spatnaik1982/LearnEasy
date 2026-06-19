@@ -24,6 +24,12 @@ activities:
       items: ["🌳", "🌻", "🐱", "🐦"]
       count: 4
       text: "These are living things."
+      hints:
+        - "Plants like trees 🌳 and flowers 🌻 are living. Animals like cats 🐱 and birds 🐦 are living too."
+        - "Look at which ones are plants and which are animals."
+        - "You're close! Remember: plants grow in soil, animals move around."
+        - "Try sorting: trees and flowers = plants, cats and birds = animals."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -34,6 +40,12 @@ activities:
           itemB: "Plant"
         - itemA: "🐱"
           itemB: "Animal"
+      hints:
+        - "The tree 🌳 is a Plant. The cat 🐱 is an Animal."
+        - "Look at the first item 🌳 — it grows in the ground."
+        - "You're close! Check if 🌳 matches with 'Plant'."
+        - "Try thinking: what category does each belong to?"
+        - ""
   - step: "independent_practice"
     type: "multiple_choice"
     order: 3

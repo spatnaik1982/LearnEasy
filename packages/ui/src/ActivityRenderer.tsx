@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "./utils";
-import { evaluateActivity, getHint, getActivityFeedback } from "./activity-utils";
+import { evaluateActivity, getHint, getLeveledHint, PROMPT_LEVELS, getActivityFeedback } from "./activity-utils";
 import { VisualCounter } from "./VisualCounter";
 import { Matching } from "./Matching";
 import { DragDrop } from "./DragDrop";
@@ -23,6 +23,8 @@ export interface ActivityRendererProps {
     timeSpent: number;
   }) => void;
   className?: string;
+  /** Current ABA prompt level (1-5) for this student+concept */
+  promptLevel?: number;
 }
 
 export function ActivityRenderer({
@@ -30,6 +32,7 @@ export function ActivityRenderer({
   step,
   onComplete,
   className,
+  promptLevel = 1,
 }: ActivityRendererProps) {
   const startTimeRef = useRef<number>(Date.now());
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -73,9 +76,29 @@ export function ActivityRenderer({
     [type, activity.content, hintsUsed, onComplete, completed],
   );
 
-  const handleHintClick = useCallback(() => {
+  const handleHintClick = useCallback(async () => {
     const nextLevel = hintsUsed + 1;
-    const hint = getHint(activity, nextLevel);
+
+    // First try to get a prompt from the API
+    try {
+      const response = await fetch(`/api/activities/${activity.id}/prompts?level=${nextLevel}`, {
+        headers: { Authorization: `Bearer ${localStorage?.getItem('token') ?? ''}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.hint) {
+          setHintsUsed(nextLevel);
+          setHintText(data.hint);
+          setShowHint(true);
+          return;
+        }
+      }
+    } catch {
+      // API not available — fall back to local hints
+    }
+
+    // Fallback to local hint resolution
+    const hint = getLeveledHint(activity, nextLevel + promptLevel - 1) ?? getHint(activity, nextLevel);
     if (hint) {
       setHintsUsed(nextLevel);
       setHintText(hint);
@@ -84,7 +107,7 @@ export function ActivityRenderer({
       // If no more hints, just toggle
       setShowHint((prev) => !prev);
     }
-  }, [hintsUsed, activity]);
+  }, [hintsUsed, activity, promptLevel]);
 
   // Reset timer when activity id changes
   useEffect(() => {
@@ -230,6 +253,16 @@ export function ActivityRenderer({
       >
         Step: {step}
       </div>
+
+      {/* ABA Prompt Level indicator */}
+      {promptLevel > 0 && promptLevel <= 5 && (
+        <div
+          className="text-xs font-medium text-soft-coral"
+          aria-label={`Prompt level: ${PROMPT_LEVELS[promptLevel - 1]}`}
+        >
+          Prompt: {PROMPT_LEVELS[promptLevel - 1]}
+        </div>
+      )}
 
       {/* Activity content */}
       <div aria-label={`Activity: ${type}`}>

@@ -25,6 +25,12 @@ activities:
       description: "See and hear first sounds"
       items: ["🍎", "⚽", "🐱"]
       text: "Apple starts with /a/. Ball starts with /b/."
+      hints:
+        - "Apple 🍎 begins with the /a/ sound. Ball ⚽ begins with /b/."
+        - "Listen carefully to the first sound of each word."
+        - "You're close! Say the word slowly — what's the first sound?"
+        - "Try saying: A-apple, B-ball, C-cat."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -35,6 +41,12 @@ activities:
           itemB: "/a/"
         - itemA: "⚽"
           itemB: "/b/"
+      hints:
+        - "🍎 apple starts with /a/. ⚽ ball starts with /b/."
+        - "Look at the picture and think about its first sound."
+        - "You're close! Apple starts with /a/ — match them."
+        - "Try saying the word out loud to hear the first sound."
+        - ""
   - step: "independent_practice"
     type: "matching"
     order: 3
