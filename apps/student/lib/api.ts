@@ -455,6 +455,7 @@ export async function fetchResumeState(
 ): Promise<
   ApiResponse<{
     hasResumableSession: boolean;
+    hasCompletedToday?: boolean;
     conceptId?: string;
     chapterId?: string;
     subjectId?: string;
@@ -467,6 +468,20 @@ export async function fetchResumeState(
   }
 
   return apiFetch(`/students/${studentId}/resume-state`);
+}
+
+// ── Onboarding ──────────────────────────────────────────────────
+
+export async function completeOnboarding(
+  studentId: string,
+): Promise<ApiResponse<{ completed: boolean }>> {
+  if (USE_MOCK) {
+    await new Promise((r) => setTimeout(r, 100));
+    return { data: { completed: true }, error: null };
+  }
+  return apiFetch(`/students/${studentId}/onboarding/complete`, {
+    method: "PATCH",
+  });
 }
 
 // ── Utility ─────────────────────────────────────────────────────

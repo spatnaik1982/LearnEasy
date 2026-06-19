@@ -7,10 +7,10 @@ import { COPY, AppShell } from "@learn-easy/ui";
 import { pauseSession, resumeSession } from "../lib/session";
 
 const STEPS = [
-  "Observe",
-  "Guided Practice",
-  "Independent Practice",
-  "Mastery Check",
+  COPY.stepObserve,
+  COPY.stepGuided,
+  COPY.stepIndependent,
+  COPY.stepMastery,
 ];
 
 const CalmZone: NextPage = () => {
@@ -57,7 +57,7 @@ const CalmZone: NextPage = () => {
           {COPY.takeBreak}
         </h1>
         <p className="mb-10 text-center text-base text-on-surface-variant">
-          Use these calming tools whenever you need a moment to relax
+          {COPY.calmZoneDescription}
         </p>
 
         {/* Breathing exercise */}

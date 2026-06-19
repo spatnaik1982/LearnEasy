@@ -10,6 +10,7 @@ export interface Concept {
   title: string;
   description: string;
   activities: Activity[];
+  mastery?: number;
 }
 
 export interface Chapter {

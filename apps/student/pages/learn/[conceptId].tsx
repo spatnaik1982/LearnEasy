@@ -20,10 +20,10 @@ import {
 import type { Concept } from "../../lib/mockData";
 
 const STEPS = [
-  "Observe",
-  "Guided Practice",
-  "Independent Practice",
-  "Mastery Check",
+  COPY.stepObserve,
+  COPY.stepGuided,
+  COPY.stepIndependent,
+  COPY.stepMastery,
   "Completion",
 ];
 
@@ -180,7 +180,7 @@ const Learn: NextPage = () => {
           onClick={() => router.back()}
           className="mb-4 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
-          &larr; Back
+          &larr; {COPY.back}
         </button>
 
         {/* Visual Schedule */}
@@ -206,13 +206,13 @@ const Learn: NextPage = () => {
         {/* Step 0: Observe */}
         {currentStep === 0 && (
           <WorkSystemLayout
-            stepName="Observe"
+            stepName={STEPS[0]}
             conceptTitle={concept.title}
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[1]}
           >
-            <section aria-label="Observe step">
+            <section aria-label={`${COPY.stepObserve} step`}>
               <p className="mb-6 text-base text-on-surface-variant">
                 Look at the visual below. Count what you see.
               </p>
@@ -226,7 +226,7 @@ const Learn: NextPage = () => {
                         type: act.type,
                         content: act.config,
                       }}
-                      step="Observe"
+                      step={STEPS[0]}
                       onComplete={(result) => {
                         handleRecordAttempt(
                           act.id,
@@ -252,13 +252,13 @@ const Learn: NextPage = () => {
         {/* Step 1: Guided Practice */}
         {currentStep === 1 && (
           <WorkSystemLayout
-            stepName="Guided Practice"
+            stepName={STEPS[1]}
             conceptTitle={concept.title}
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[2]}
           >
-            <section aria-label="Guided Practice step">
+            <section aria-label={`${COPY.stepGuided} step`}>
               <p className="mb-6 text-base text-on-surface-variant">
                 Match the items below. Hints are available to help you.
               </p>
@@ -272,7 +272,7 @@ const Learn: NextPage = () => {
                         type: act.type,
                         content: act.config,
                       }}
-                      step="Guided Practice"
+                      step={STEPS[1]}
                       onComplete={(result) => {
                         handleRecordAttempt(
                           act.id,
@@ -309,13 +309,13 @@ const Learn: NextPage = () => {
         {/* Step 2: Independent Practice */}
         {currentStep === 2 && (
           <WorkSystemLayout
-            stepName="Independent Practice"
+            stepName={STEPS[2]}
             conceptTitle={concept.title}
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[3]}
           >
-            <section aria-label="Independent Practice step">
+            <section aria-label={`${COPY.stepIndependent} step`}>
               <p className="mb-6 text-base text-on-surface-variant">
                 Try this on your own. No hints this time!
               </p>
@@ -329,7 +329,7 @@ const Learn: NextPage = () => {
                         type: act.type,
                         content: act.config,
                       }}
-                      step="Independent Practice"
+                      step={STEPS[2]}
                       onComplete={(result) => {
                         handleRecordAttempt(
                           act.id,
@@ -366,13 +366,13 @@ const Learn: NextPage = () => {
         {/* Step 3: Mastery Check */}
         {currentStep === 3 && (
           <WorkSystemLayout
-            stepName="Mastery Check"
+            stepName={STEPS[3]}
             conceptTitle={concept.title}
             currentStep={currentStep}
             totalSteps={STEPS.length}
             nextStep={STEPS[4]}
           >
-            <section aria-label="Mastery Check step">
+            <section aria-label={`${COPY.stepMastery} step`}>
               <p className="mb-6 text-base text-on-surface-variant">
                 Show what you've learned!
               </p>
@@ -386,7 +386,7 @@ const Learn: NextPage = () => {
                         type: act.type,
                         content: act.config,
                       }}
-                      step="Mastery Check"
+                      step={STEPS[3]}
                       onComplete={(result) => {
                         handleRecordAttempt(
                           act.id,

@@ -1,4 +1,5 @@
 import { cn } from "./utils";
+import { COPY } from "./copy";
 
 export interface WorkSystemLayoutProps {
   stepName: string;
@@ -43,7 +44,7 @@ export function WorkSystemLayout({
           id="what-doing-label"
           className="text-sm font-semibold uppercase tracking-wide text-slate-text"
         >
-          What am I doing?
+          {COPY.whatAmIDoing}
         </h2>
         <p className="mt-1 text-lg font-medium text-slate-text">
           {stepName}
@@ -59,7 +60,7 @@ export function WorkSystemLayout({
           id="work-progress-label"
           className="text-sm font-semibold uppercase tracking-wide text-slate-text"
         >
-          How much work?
+          {COPY.howMuchWork}
         </h2>
         <p
           className="mt-1 text-base font-medium text-muted-teal"
@@ -78,12 +79,12 @@ export function WorkSystemLayout({
           id="completion-label"
           className="text-sm font-semibold uppercase tracking-wide text-slate-text"
         >
-          How do I know I'm done?
+          {COPY.howDoIKnowImDone}
         </h2>
         <p className="mt-1 text-base font-medium text-muted-teal">
           {isComplete
-            ? "All steps completed!"
-            : `Complete this step to move forward`}
+            ? COPY.allStepsCompleted
+            : COPY.completeThisStep}
         </p>
       </section>
 
@@ -100,8 +101,8 @@ export function WorkSystemLayout({
         >
           <p className="text-sm font-medium text-muted-teal">
             {isLastStep
-              ? "This is the last step"
-              : `Next: ${nextStep}`}
+              ? COPY.thisIsTheLastStep
+              : COPY.nextUp.replace("{title}", nextStep)}
           </p>
         </footer>
       )}
