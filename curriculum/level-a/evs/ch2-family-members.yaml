@@ -24,6 +24,12 @@ activities:
       items: ["👩", "👨", "👧", "👦"]
       count: 4
       text: "Mother, Father, Sister, Brother."
+      hints:
+        - "Mother 👩 takes care of you. Father 👨 works. Sister 👧 and Brother 👦 are your siblings."
+        - "Look at each person — what role do they have?"
+        - "You're close! Notice: mother and father are parents, sister and brother are children."
+        - "Try saying the names: Mother, Father, Sister, Brother."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -34,6 +40,12 @@ activities:
           itemB: "Mother"
         - itemA: "👨"
           itemB: "Father"
+      hints:
+        - "The woman 👩 is the Mother. The man 👨 is the Father."
+        - "Look at the first person 👩 — that is your mother."
+        - "You're close! Match 👩 with 'Mother' and 👨 with 'Father'."
+        - "Think about who takes care of you at home."
+        - ""
   - step: "independent_practice"
     type: "multiple_choice"
     order: 3

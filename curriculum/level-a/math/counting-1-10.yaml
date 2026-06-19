@@ -25,6 +25,12 @@ activities:
       items: ["🍎"]
       count: 3
       text: "There are three apples."
+      hints:
+        - "The correct answer is 3. Let me show you: 🍎🍎🍎"
+        - "Look at each apple one by one."
+        - "You're close! Count the apples again from left to right."
+        - "Try counting: 1, 2, 3 — that's how many apples there are."
+        - ""
   - step: "guided_practice"
     type: "visual_counting"
     order: 2
@@ -33,6 +39,12 @@ activities:
       items: ["⭐"]
       count: 5
       hint: "Count each star one by one."
+      hints:
+        - "The correct answer is 5. Let me show you: ⭐⭐⭐⭐⭐"
+        - "Point to each star as you count."
+        - "You're close! Check if you counted all five stars."
+        - "Try counting: 1, 2, 3, 4, 5."
+        - ""
   - step: "independent_practice"
     type: "visual_counting"
     order: 3

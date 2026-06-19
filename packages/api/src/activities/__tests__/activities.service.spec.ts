@@ -3,6 +3,22 @@ import { ActivitiesService } from '../activities.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 
+// Mock the three services injected into ActivitiesService constructor
+const mockPromptFadingService = {
+  evaluatePromptFade: jest.fn().mockReturnValue({ newLevel: 1, independentlyMastered: false }),
+  getConsecutiveCorrect: jest.fn().mockResolvedValue(0),
+  checkInactivityReset: jest.fn().mockResolvedValue(false),
+};
+
+const mockPromptsService = {
+  getPromptLevel: jest.fn().mockResolvedValue(1),
+  setPromptLevel: jest.fn().mockResolvedValue(undefined),
+};
+
+const mockMasteryService = {
+  calculateMastery: jest.fn().mockResolvedValue({ mastery: 0.25, completed: false, mastered: false }),
+};
+
 describe('ActivitiesService', () => {
   let service: ActivitiesService;
   let prisma: any;
@@ -21,13 +37,24 @@ describe('ActivitiesService', () => {
       create: jest.fn(),
       update: jest.fn(),
     },
+    promptState: {
+      findUnique: jest.fn(),
+      upsert: jest.fn(),
+    },
   };
 
   beforeEach(async () => {
+    const { PromptFadingService } = require('../../prompts/prompt-fading.service');
+    const { PromptsService } = require('../../prompts/prompts.service');
+    const { MasteryService } = require('../../mastery/mastery.service');
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ActivitiesService,
         { provide: PrismaService, useValue: mockPrisma },
+        { provide: PromptFadingService, useValue: mockPromptFadingService },
+        { provide: PromptsService, useValue: mockPromptsService },
+        { provide: MasteryService, useValue: mockMasteryService },
       ],
     }).compile();
 

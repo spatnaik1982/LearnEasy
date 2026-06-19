@@ -24,6 +24,12 @@ activities:
       description: "Look at the shapes"
       shapes: ["⬤", "■", "▲", "▬"]
       text: "Circle, Square, Triangle, Rectangle"
+      hints:
+        - "The circle is round ⬤. The square has four sides ■."
+        - "Look at each shape and its name carefully."
+        - "You're close! Notice which shapes are round and which have corners."
+        - "Try saying each shape's name out loud."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -34,6 +40,12 @@ activities:
           name: "Circle"
         - shape: "■"
           name: "Square"
+      hints:
+        - "The round ⬤ matches with 'Circle'. Let me show you."
+        - "Look at the round shape first — that's a circle."
+        - "You're close! Match the round shape to its name."
+        - "Try saying the names: round = circle, four sides = square."
+        - ""
   - step: "independent_practice"
     type: "matching"
     order: 3

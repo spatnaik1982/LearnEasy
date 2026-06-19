@@ -8,6 +8,8 @@ import { ActivitiesModule } from './activities/activities.module';
 import { ProgressModule } from './progress/progress.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { ResumeModule } from './resume/resume.module';
+import { PromptsModule } from './prompts/prompts.module';
+import { MasteryModule } from './mastery/mastery.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ResumeModule } from './resume/resume.module';
     ProgressModule,
     SessionsModule,
     ResumeModule,
+    PromptsModule,
+    MasteryModule,
   ],
 })
 export class AppModule {}

@@ -26,6 +26,12 @@ activities:
       items: ["A", "B", "C", "D", "E"]
       count: 5
       text: "These are the first five letters."
+      hints:
+        - "These are letters A, B, C, D, E. A is the first letter."
+        - "Look at each letter's shape carefully."
+        - "You're close! Notice how each letter looks different."
+        - "Try saying each letter's name out loud."
+        - ""
   - step: "guided_practice"
     type: "matching"
     order: 2
@@ -36,6 +42,12 @@ activities:
           itemB: "Ay"
         - itemA: "B"
           itemB: "Bee"
+      hints:
+        - "The letter A matches with 'Ay'. Let me show you."
+        - "Look at the letter A — its name is 'Ay'."
+        - "You're close! Match the first letter A to 'Ay'."
+        - "Try saying the names: A says 'Ay', B says 'Bee'."
+        - ""
   - step: "independent_practice"
     type: "matching"
     order: 3

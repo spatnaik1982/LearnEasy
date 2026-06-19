@@ -143,6 +143,45 @@ export function getHint(
   return hints[index];
 }
 
+/**
+ * ABA Prompt Levels
+ */
+export const PROMPT_LEVELS = [
+  'demonstration',
+  'visual_hint',
+  'partial_hint',
+  'verbal_cue',
+  'independent',
+] as const;
+
+/**
+ * Get a leveled hint from the activity's hints array.
+ * Returns the hint at the requested level (1-5), with fallback
+ * to the next available level if the requested level doesn't exist.
+ */
+export function getLeveledHint(
+  activity: { content?: { hints?: string[] } },
+  level: number,
+): string | null {
+  const hints = activity.content?.hints;
+  if (!hints || hints.length === 0) return null;
+
+  const index = level - 1;
+  if (index >= 0 && index < hints.length) {
+    return hints[index];
+  }
+
+  // Fallback to closest available level
+  if (hints.length > 0) {
+    if (level > hints.length) {
+      return hints[hints.length - 1];
+    }
+    return hints[0];
+  }
+
+  return null;
+}
+
 const correctMessages = [
   "That's right! Well done!",
   "Great job! You got it!",
