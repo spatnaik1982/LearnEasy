@@ -15,6 +15,7 @@ function concept(
     examples: [`Example of ${conceptId}`],
     misconceptions: [],
     masteryCriteria: 0.8,
+    difficulty: "beginner",
     dependencies,
   };
 }

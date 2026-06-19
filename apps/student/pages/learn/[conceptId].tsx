@@ -27,10 +27,10 @@ const STEPS = [
 
 // Maps step index → preferred activity types (first found wins)
 const STEP_ACTIVITY_TYPES: Record<number, string[]> = {
-  0: ["visual-counter", "story-question"],
-  1: ["matching", "story-question"],
-  2: ["sequencing", "drag-drop", "matching"],
-  3: ["multiple-choice"],
+  0: ["visual_counter", "visual_counting", "story_question"],
+  1: ["matching", "story_question"],
+  2: ["sequencing", "drag_drop", "matching"],
+  3: ["multiple_choice"],
 };
 
 const Learn: NextPage = () => {

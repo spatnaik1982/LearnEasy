@@ -1,29 +1,21 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { fetchChapter, fetchSubject } from "../../../lib/api";
-import type { Chapter, Subject } from "../../../lib/mockData";
+import { fetchConcepts } from "../../../lib/api";
+import type { Concept, Activity } from "../../../lib/mockData";
 
 const Concepts: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [chapter, setChapter] = useState<Chapter | null>(null);
-  const [subject, setSubject] = useState<Subject | null>(null);
+  const [concepts, setConcepts] = useState<Concept[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
     const chapterId = id as string;
 
-    fetchChapter(chapterId, "").then((res) => {
-      if (res.data) setChapter(res.data as unknown as Chapter);
-    });
-    fetchSubject(chapterId).then((res) => {
-      if (res.data) {
-        const foundChapter = res.data.chapters.find((c) => c.id === chapterId);
-        if (foundChapter) setChapter(foundChapter);
-        setSubject(res.data);
-      }
+    fetchConcepts("", chapterId).then((res) => {
+      if (res.data) setConcepts(res.data);
       setLoading(false);
     });
   }, [id]);
@@ -36,36 +28,24 @@ const Concepts: NextPage = () => {
     );
   }
 
-  if (!chapter) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-off-white">
-        <p className="text-lg text-on-surface-variant">Chapter not found</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-warm-off-white px-4 py-8">
       <div className="mx-auto max-w-content">
         <button
-          onClick={() =>
-            router.push(
-              subject ? `/subjects/${subject.id}/chapters` : "/subjects",
-            )
-          }
+          onClick={() => router.back()}
           className="mb-6 min-h-[56px] text-left text-base text-on-surface-variant hover:text-slate-text focus:outline-none focus:underline"
         >
           &larr; Back to chapters
         </button>
-        <div className="mb-6 text-sm text-on-surface-variant">
-          {subject ? `${subject.title} > ` : ""}{chapter.title}
-        </div>
         <h1 className="mb-2 text-2xl font-bold text-slate-text">
-          {chapter.title}
+          Choose a Concept
         </h1>
-        <p className="mb-8 text-base text-on-surface-variant">{chapter.description}</p>
+        <p className="mb-8 text-base text-on-surface-variant">Select a concept to start learning</p>
         <div className="flex flex-col gap-4">
-          {chapter.concepts.map((concept, index) => (
+          {concepts.length === 0 && (
+            <p className="text-base text-on-surface-variant">No concepts available in this chapter.</p>
+          )}
+          {concepts.map((concept, index) => (
             <button
               key={concept.id}
               onClick={() => router.push(`/learn/${concept.id}`)}
