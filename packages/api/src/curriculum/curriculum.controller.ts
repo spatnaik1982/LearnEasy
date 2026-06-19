@@ -23,6 +23,11 @@ export class CurriculumController {
 export class SubjectController {
   constructor(private curriculumService: CurriculumService) {}
 
+  @Get(':id')
+  getSubject(@Param('id') id: string) {
+    return this.curriculumService.getSubject(id);
+  }
+
   @Get(':id/chapters')
   getChaptersBySubject(@Param('id') id: string) {
     return this.curriculumService.getChaptersBySubject(id);
@@ -34,6 +39,11 @@ export class SubjectController {
 export class ChapterController {
   constructor(private curriculumService: CurriculumService) {}
 
+  @Get(':id')
+  getChapter(@Param('id') id: string) {
+    return this.curriculumService.getChapter(id);
+  }
+
   @Get(':id/concepts')
   getConceptsByChapter(@Param('id') id: string) {
     return this.curriculumService.getConceptsByChapter(id);
@@ -44,6 +54,11 @@ export class ChapterController {
 @UseGuards(JwtAuthGuard)
 export class ConceptController {
   constructor(private curriculumService: CurriculumService) {}
+
+  @Get(':id')
+  getConcept(@Param('id') id: string) {
+    return this.curriculumService.getConcept(id);
+  }
 
   @Get(':id/activities')
   getActivitiesByConcept(@Param('id') id: string) {
