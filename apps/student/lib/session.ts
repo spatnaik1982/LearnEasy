@@ -25,6 +25,7 @@ export function useSession(studentId?: string) {
       try {
         const res = await startSession(studentId!);
         if (res.data && !cancelled) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response shape is unknown
           setSessionId(res.data.id ?? (res.data as any).id);
         } else if (res.error && !cancelled) {
           setError(res.error);

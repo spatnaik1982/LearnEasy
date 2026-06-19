@@ -76,17 +76,7 @@ async function apiFetch<T>(
 
 // ── Subject helpers ─────────────────────────────────────────────
 
-const SUBJECT_EMOJI: Record<string, string> = {
-  math: "🔢",
-  language: "📖",
-  evs: "🌍",
-};
-
-const SUBJECT_DESCRIPTION: Record<string, string> = {
-  math: "Foundational math concepts for early learners",
-  language: "Language and literacy skills",
-  evs: "Environmental studies and science",
-};
+// Unused subject-helper constants removed to fix lint error
 
 function guessEmoji(idOrCode: string): string {
   const lower = idOrCode.toLowerCase();
@@ -177,6 +167,7 @@ function toMockActivity(from: ApiActivity): MockActivity {
   return {
     id: from.id,
     type: from.type as MockActivity["type"] || "visual-counter",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response shape is unknown
     title: (from.content as any)?.description || "",
     config: from.content || {},
   };

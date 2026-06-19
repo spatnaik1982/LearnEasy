@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchConcepts } from "../../../lib/api";
-import type { Concept, Activity } from "../../../lib/mockData";
+import type { Concept } from "../../../lib/mockData";
 import { COPY, AppShell, Breadcrumb, MasteryChip } from "@learn-easy/ui";
 
 const Concepts: NextPage = () => {
@@ -56,7 +56,7 @@ const Concepts: NextPage = () => {
           {concepts.length === 0 && (
             <p className="text-base text-on-surface-variant">{COPY.noConcepts}</p>
           )}
-          {concepts.map((concept, index) => (
+          {concepts.map((concept) => (
             <button
               key={concept.id}
               onClick={() => router.push(`/learn/${concept.id}`)}

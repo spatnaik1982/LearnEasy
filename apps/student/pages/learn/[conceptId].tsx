@@ -39,7 +39,7 @@ const Learn: NextPage = () => {
   const router = useRouter();
   const { conceptId } = router.query;
   const { user } = useAuth();
-  const { sessionId, endSession } = useSession(user?.id);
+  const { endSession } = useSession(user?.id);
 
   const [concept, setConcept] = useState<Concept | null>(null);
   const [loading, setLoading] = useState(true);
@@ -151,8 +151,6 @@ const Learn: NextPage = () => {
       </AppShell>
     );
   }
-
-  const activities = concept.activities;
 
   // Transition screen
   if (showTransition && pendingStep !== null) {
