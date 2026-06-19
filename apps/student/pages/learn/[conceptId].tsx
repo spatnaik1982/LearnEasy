@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
+import { ArrowRight } from "lucide-react";
 import {
   PositiveCompletion,
-  ProgressBar,
   WorkSystemLayout,
   TransitionScreen,
   ActivityRenderer,
@@ -178,7 +178,7 @@ const Learn: NextPage = () => {
   }
 
   return (
-    <AppShell variant="student" footer={null}>
+    <div className="min-h-screen bg-surface">
       <LessonTopBar
         subjectName={concept.title}
         onBack={() => router.back()}
@@ -186,29 +186,33 @@ const Learn: NextPage = () => {
       />
 
       <LessonSidebar
-        steps={STEPS}
         currentStep={currentStep}
-        completedSteps={completedSteps}
+        totalSteps={STEPS.length}
       />
 
-      <div className="mx-auto max-w-content md:ml-64 pt-24 xl:pt-28">
-        {/* Progress Bar */}
-        <div className="md:sticky md:top-0 z-10 bg-warm-off-white py-2">
-          <ProgressBar
-            steps={STEPS}
-            currentStep={currentStep}
-          />
+      {/* Error state */}
+      {recordError && (
+        <div
+          className="mb-4 rounded-lg bg-soft-coral/10 px-4 py-3 text-sm text-soft-coral"
+          role="alert"
+        >
+          {recordError}
         </div>
+      )}
 
-        {/* Error state */}
-        {recordError && (
-          <div
-            className="mb-4 rounded-lg bg-soft-coral/10 px-4 py-3 text-sm text-soft-coral"
-            role="alert"
-          >
-            {recordError}
+      <main className="w-full max-w-[1024px] mt-[96px] mb-[128px] px-margin-mobile md:px-margin-desktop md:ml-[256px] min-h-[calc(100vh-96px-128px)] flex flex-col items-center justify-center">
+        {/* Progress bar - matching prototype */}
+        <div className="w-full max-w-2xl mb-12 flex items-center justify-between">
+          <div className="flex-grow h-2 bg-warm-off-white rounded-full overflow-hidden border border-outline-variant/30">
+            <div
+              className="h-full bg-muted-green rounded-full transition-all duration-300"
+              style={{ width: `${Math.round(((currentStep + 1) / (STEPS.length - 1)) * 100)}%` }}
+            />
           </div>
-        )}
+          <span className="ml-4 text-xs font-semibold tracking-wider uppercase text-on-surface-variant">
+            Step {Math.min(currentStep + 1, STEPS.length - 1)} of {STEPS.length - 1}
+          </span>
+        </div>
 
         {/* Step 0: Observe */}
         {currentStep === 0 && (
@@ -250,14 +254,15 @@ const Learn: NextPage = () => {
                     </div>
                   ) : null;
                 })()}
-                <button
-                  onClick={handleNext}
-                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-                >
-                  {COPY.continueConcept}
-                </button>
               </section>
             </LearningCard>
+            <button
+              onClick={handleNext}
+              className="mt-16 h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+            >
+              {COPY.continueConcept}
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </WorkSystemLayout>
         )}
 
@@ -301,25 +306,26 @@ const Learn: NextPage = () => {
                     </div>
                   ) : null;
                 })()}
-                <button
-                  onClick={() => {
-                    const act = getActivityForStep(1);
-                    if (act) {
-                      handleRecordAttempt(
-                        act.id,
-                        { completed: true },
-                        0,
-                        30,
-                      );
-                    }
-                    handleNext();
-                  }}
-                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-                >
-                  {COPY.continueConcept}
-                </button>
               </section>
             </LearningCard>
+            <button
+              onClick={() => {
+                const act = getActivityForStep(1);
+                if (act) {
+                  handleRecordAttempt(
+                    act.id,
+                    { completed: true },
+                    0,
+                    30,
+                  );
+                }
+                handleNext();
+              }}
+              className="mt-16 h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+            >
+              {COPY.continueConcept}
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </WorkSystemLayout>
         )}
 
@@ -363,25 +369,26 @@ const Learn: NextPage = () => {
                     </div>
                   ) : null;
                 })()}
-                <button
-                  onClick={() => {
-                    const act = getActivityForStep(2);
-                    if (act) {
-                      handleRecordAttempt(
-                        act.id,
-                        { completed: true },
-                        0,
-                        30,
-                      );
-                    }
-                    handleNext();
-                  }}
-                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-                >
-                  {COPY.submitAnswer}
-                </button>
               </section>
             </LearningCard>
+            <button
+              onClick={() => {
+                const act = getActivityForStep(2);
+                if (act) {
+                  handleRecordAttempt(
+                    act.id,
+                    { completed: true },
+                    0,
+                    30,
+                  );
+                }
+                handleNext();
+              }}
+              className="mt-16 h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+            >
+              {COPY.submitAnswer}
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </WorkSystemLayout>
         )}
 
@@ -425,25 +432,26 @@ const Learn: NextPage = () => {
                     </div>
                   ) : null;
                 })()}
-                <button
-                  onClick={() => {
-                    const act = getActivityForStep(3);
-                    if (act) {
-                      handleRecordAttempt(
-                        act.id,
-                        { selectedIndex: 0 },
-                        0,
-                        30,
-                      );
-                    }
-                    handleNext();
-                  }}
-                  className="min-h-[56px] w-full rounded-full bg-soft-blue px-6 py-3 text-base font-semibold text-white motion-safe:transition-opacity motion-safe:duration-200 motion-safe:active:scale-[0.98] hover:bg-primary focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-                >
-                  {COPY.continueConcept}
-                </button>
               </section>
             </LearningCard>
+            <button
+              onClick={() => {
+                const act = getActivityForStep(3);
+                if (act) {
+                  handleRecordAttempt(
+                    act.id,
+                    { selectedIndex: 0 },
+                    0,
+                    30,
+                  );
+                }
+                handleNext();
+              }}
+              className="mt-16 h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+            >
+              {COPY.continueConcept}
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </WorkSystemLayout>
         )}
 
@@ -453,16 +461,6 @@ const Learn: NextPage = () => {
             message={`Great job completing "${concept.title}"!`}
             emoji={"🎉"}
             onContinue={handleComplete}
-          />
-        )}
-
-        {/* Lesson Bottom Navigation */}
-        {currentStep < 4 && (
-          <LessonBottomNav
-            onContinue={handleNext}
-            onMute={() => setIsMuted(!isMuted)}
-            onReplay={() => {}}
-            isMuted={isMuted}
           />
         )}
 
@@ -477,8 +475,18 @@ const Learn: NextPage = () => {
             </button>
           </div>
         )}
-      </div>
-    </AppShell>
+      </main>
+
+      {/* Lesson Bottom Navigation (mobile only) */}
+      {currentStep < 4 && (
+        <LessonBottomNav
+          onContinue={handleNext}
+          onMute={() => setIsMuted(!isMuted)}
+          onReplay={() => {}}
+          isMuted={isMuted}
+        />
+      )}
+    </div>
   );
 };
 

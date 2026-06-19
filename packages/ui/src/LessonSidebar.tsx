@@ -1,68 +1,67 @@
 import React from "react";
-import { Check } from "lucide-react";
+import { BookOpen, FileEdit, HelpCircle, CheckCircle } from "lucide-react";
 
 export interface LessonSidebarProps {
-  steps: string[];
   currentStep: number;
-  completedSteps: number[];
+  totalSteps: number;
   className?: string;
 }
 
+const NAV_ITEMS = [
+  { label: "Learn", icon: BookOpen },
+  { label: "Practice", icon: FileEdit },
+  { label: "Quiz", icon: HelpCircle },
+  { label: "Complete", icon: CheckCircle },
+];
+
+function getActiveIndex(currentStep: number, totalSteps: number): number {
+  if (currentStep >= totalSteps - 1) return 3;
+  if (currentStep === 0) return 0;
+  if (currentStep === 1) return 1;
+  return 2;
+}
+
 export const LessonSidebar: React.FC<LessonSidebarProps> = ({
-  steps,
   currentStep,
-  completedSteps,
+  totalSteps,
   className = "",
 }) => {
+  const activeIndex = getActiveIndex(currentStep, totalSteps);
+
   return (
     <aside
-      className={`hidden md:flex flex-col py-8 px-4 gap-4 fixed left-0 top-0 h-full w-64 bg-surface-container-low shadow-sm z-30 pt-24 ${className}`}
+      className={`hidden md:flex flex-col py-8 px-4 gap-4 fixed left-0 top-0 h-full w-[256px] bg-surface-container-low shadow-sm z-30 pt-[96px] ${className}`}
     >
-      <h2 className="text-lg font-semibold text-slate-800">Lesson Progress</h2>
-      <p className="text-sm text-slate-500">
-        Step {currentStep + 1} of {steps.length}
-      </p>
+      <div className="mb-8 px-4">
+        <h2 className="text-[24px] font-[500] text-primary leading-[1.5]">
+          Lesson Progress
+        </h2>
+        <p className="text-on-surface-variant mt-1 text-sm">
+          Step {Math.min(currentStep + 1, totalSteps)} of {totalSteps}
+        </p>
+      </div>
 
-      <nav className="flex flex-col gap-0 mt-2">
-        {steps.map((step, index) => {
-          const isCurrent = index === currentStep;
-          const isCompleted = completedSteps.includes(index);
-
-          let circleClasses =
-            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0";
-          let labelClasses = "text-sm font-medium ml-3";
-
-          if (isCurrent) {
-            circleClasses += " bg-soft-blue text-white";
-            labelClasses += " text-soft-blue font-bold";
-          } else if (isCompleted) {
-            circleClasses += " bg-muted-green text-white";
-            labelClasses += " text-muted-green";
-          } else {
-            circleClasses += " border-2 border-slate-300 text-transparent";
-            labelClasses += " text-slate-400";
-          }
+      <nav className="flex flex-col gap-2">
+        {NAV_ITEMS.map((item, index) => {
+          const isActive = index === activeIndex;
+          const Icon = item.icon;
 
           return (
-            <div key={index}>
-              <div className="flex items-center py-3">
-                <div className={circleClasses}>
-                  {isCompleted ? (
-                    <Check className="w-4 h-4" />
-                  ) : (
-                    <span>{index + 1}</span>
-                  )}
-                </div>
-                <span className={labelClasses}>{step}</span>
-              </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={`h-6 w-0.5 ml-4 ${
-                    isCompleted ? "bg-muted-green" : "bg-slate-200"
-                  }`}
-                />
-              )}
-            </div>
+            <a
+              key={item.label}
+              href="#"
+              onClick={(e) => e.preventDefault()}
+              className={`flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
+                isActive
+                  ? "bg-secondary-container text-on-secondary-container font-bold"
+                  : "text-on-surface-variant hover:bg-surface-variant"
+              }`}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="text-sm font-semibold tracking-wider uppercase">
+                {item.label}
+              </span>
+            </a>
           );
         })}
       </nav>

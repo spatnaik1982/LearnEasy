@@ -13,10 +13,10 @@ export const LessonTopBar: React.FC<LessonTopBarProps> = ({
   onHome,
 }) => {
   const buttonClasses =
-    "hover:bg-surface-container-low p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-soft-blue";
+    "hover:bg-surface-container-low p-2 rounded-full transition-transform scale-95 focus:outline-none focus:ring-2 focus:ring-soft-blue";
 
   return (
-    <header className="fixed top-0 w-full bg-warm-off-white border-b border-outline-variant flex justify-between items-center px-margin-mobile h-touch-target-min z-40 md:px-margin-desktop">
+    <header className="fixed top-0 w-full bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile h-touch-target-min z-40 md:px-margin-desktop">
       <div className="flex items-center gap-2">
         <button
           onClick={onBack}
