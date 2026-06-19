@@ -24,7 +24,7 @@ const Welcome: NextPage = () => {
         </p>
         <button
           onClick={() => router.push("/onboarding/tour")}
-          className="mb-4 min-h-[56px] w-full max-w-xs rounded-xl bg-soft-blue px-8 py-3 text-base font-semibold text-white hover:bg-primary motion-safe:transition-colors motion-safe:duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+          className="mb-4 min-h-[56px] w-full max-w-xs rounded-full bg-soft-blue px-8 py-3 text-base font-semibold text-white motion-safe:active:scale-[0.98] hover:bg-primary motion-safe:transition-colors motion-safe:duration-200 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
         >
           {COPY.onboardingShowMe}
         </button>

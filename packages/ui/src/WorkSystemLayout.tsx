@@ -9,6 +9,9 @@ export interface WorkSystemLayoutProps {
   nextStep: string;
   children: React.ReactNode;
   className?: string;
+  taskDescription?: string;
+  completionDescription?: string;
+  workAmount?: string;
 }
 
 export function WorkSystemLayout({
@@ -19,6 +22,9 @@ export function WorkSystemLayout({
   nextStep,
   children,
   className,
+  taskDescription,
+  completionDescription,
+  workAmount,
 }: WorkSystemLayoutProps) {
   const isLastStep = currentStep >= totalSteps - 1;
   const isComplete = currentStep >= totalSteps;
@@ -47,7 +53,7 @@ export function WorkSystemLayout({
           {COPY.whatAmIDoing}
         </h2>
         <p className="mt-1 text-lg font-medium text-slate-text">
-          {stepName}
+          {taskDescription ?? stepName}
         </p>
       </section>
 
@@ -66,7 +72,7 @@ export function WorkSystemLayout({
           className="mt-1 text-base font-medium text-muted-teal"
           aria-live="polite"
         >
-          Step {isComplete ? totalSteps : currentStep + 1} of {totalSteps}
+          {workAmount ?? "Complete this activity"}
         </p>
       </section>
 
@@ -82,9 +88,9 @@ export function WorkSystemLayout({
           {COPY.howDoIKnowImDone}
         </h2>
         <p className="mt-1 text-base font-medium text-muted-teal">
-          {isComplete
+          {completionDescription ?? (isComplete
             ? COPY.allStepsCompleted
-            : COPY.completeThisStep}
+            : COPY.completeThisStep)}
         </p>
       </section>
 

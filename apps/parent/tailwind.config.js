@@ -3,12 +3,15 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./lib/**/*.{js,ts,jsx,tsx}",
+    "../../packages/ui/src/**/*.{ts,tsx}",
   ],
   theme: {
     fontFamily: {
       sans: ["var(--font-inter)", "system-ui", "sans-serif"],
     },
     spacing: {
+      0: "0px",
+      px: "1px",
       1: "8px",
       2: "16px",
       3: "24px",
@@ -29,7 +32,18 @@ module.exports = {
       full: "9999px",
     },
     extend: {
+      spacing: {
+        gutter: "24px",
+        "margin-mobile": "16px",
+        "margin-desktop": "64px",
+        "touch-target-min": "56px",
+      },
+      fontSize: {
+        "headline-md": ["24px", { fontWeight: "500", lineHeight: "1.5" }],
+        "headline-md-mobile": ["20px", { fontWeight: "500", lineHeight: "1.5" }],
+      },
       colors: {
+        "surface-container-low": "#f5f3ee",
         primary: "#335f87",
         "on-primary": "#ffffff",
         "primary-container": "#4e78a1",

@@ -11,26 +11,28 @@ interface SensoryProfile {
   reduceMotion: boolean;
   lowContrast: boolean;
   soundEnabled: boolean;
+  volume: number;
 }
 
 interface SensoryProfileContextValue extends SensoryProfile {
   setReduceMotion: (v: boolean) => void;
   setLowContrast: (v: boolean) => void;
   setSoundEnabled: (v: boolean) => void;
+  setVolume: (v: number) => void;
 }
 
 const STORAGE_KEY = "learn-easy.sensory";
 
 function loadProfile(): SensoryProfile {
   if (typeof window === "undefined")
-    return { reduceMotion: false, lowContrast: false, soundEnabled: true };
+    return { reduceMotion: false, lowContrast: false, soundEnabled: true, volume: 50 };
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
+    if (stored) return { ...{ reduceMotion: false, lowContrast: false, soundEnabled: true, volume: 50 }, ...JSON.parse(stored) };
   } catch {
     /* ignore */
   }
-  return { reduceMotion: false, lowContrast: false, soundEnabled: true };
+  return { reduceMotion: false, lowContrast: false, soundEnabled: true, volume: 50 };
 }
 
 function saveProfile(profile: SensoryProfile) {
@@ -78,6 +80,10 @@ export function SensoryProfileProvider({
     (v: boolean) => setProfile((p) => ({ ...p, soundEnabled: v })),
     [],
   );
+  const setVolume = useCallback(
+    (v: number) => setProfile((p) => ({ ...p, volume: Math.min(100, Math.max(0, v)) })),
+    [],
+  );
 
   return (
     <SensoryProfileContext.Provider
@@ -86,6 +92,7 @@ export function SensoryProfileProvider({
         setReduceMotion,
         setLowContrast,
         setSoundEnabled,
+        setVolume,
       }}
     >
       {children}

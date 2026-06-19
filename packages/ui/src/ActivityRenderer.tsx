@@ -301,7 +301,7 @@ export function ActivityRenderer({
         <button
           onClick={handleHintClick}
           className={cn(
-            "rounded-lg border border-soft-amber px-4 py-2 text-sm font-medium text-soft-amber",
+            "rounded-full border border-soft-amber px-4 py-2 text-sm font-medium text-soft-amber",
             "focus:outline-none focus:ring-2 focus:ring-soft-amber focus:ring-offset-2",
             "hover:bg-soft-amber/10 transition-colors duration-150",
           )}
