@@ -6,13 +6,16 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "test": "vitest run"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.2.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
