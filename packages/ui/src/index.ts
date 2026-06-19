@@ -22,3 +22,7 @@ export { ParentTabBar, type ParentTabBarProps } from "./parent-tab-bar";
 export { DataState, type DataStateProps } from "./data-state";
 export { Breadcrumb, type BreadcrumbProps, type BreadcrumbItem } from "./breadcrumb";
 export { MasteryChip, type MasteryChipProps, type MasteryState } from "./mastery-chip";
+export { LearningCard, type LearningCardProps } from "./LearningCard";
+export { LessonTopBar, type LessonTopBarProps } from "./LessonTopBar";
+export { LessonSidebar, type LessonSidebarProps } from "./LessonSidebar";
+export { LessonBottomNav, type LessonBottomNavProps } from "./LessonBottomNav";

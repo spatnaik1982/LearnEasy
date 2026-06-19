@@ -93,4 +93,13 @@ export const COPY = {
   viewFullProgress: "View Full Progress",
   weeklyReports: "Weekly Reports",
   aiInsights: "AI Insights",
+
+  // Activity completion descriptions
+  completionVisualCounting: "Count all the objects correctly",
+  completionMatching: "Match all the pairs",
+  completionDragDrop: "Place all items correctly",
+  completionSequencing: "Put everything in order",
+  completionMultipleChoice: "Answer all the questions",
+  completionStoryQuestion: "Answer all the questions about the story",
+  completionRealWorld: "Complete the activity",
 } as const;
