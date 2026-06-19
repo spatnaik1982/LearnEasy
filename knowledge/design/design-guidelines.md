@@ -1,25 +1,81 @@
-# Autism Learning Experience (ALX) Design Guidelines
+# Autism Learning Experience (ALX) 2.0
 
-## Arin Learn Design System v1.0
+## TEACCH-Informed + Modern ABA-Informed Design System for Arin Learn
 
-**Document Type:** UX Design Guidelines
+**Version:** 2.0
 **Product:** Arin Learn
-**Audience:** Designers, Product Managers, Frontend Engineers, Content Authors
-**Purpose:** Establish a consistent autism-friendly learning experience for children preparing for NIOS OBE Levels A, B, and C.
+**Audience:** Product Managers, UX Designers, Frontend Engineers, Content Authors, AI Engineers, Special Educators
 
 ---
 
-# 1. Introduction
+# 1. Purpose
 
-Arin Learn is designed specifically for autistic learners.
+Arin Learn is an autism-first learning platform designed to help learners prepare for NIOS Open Basic Education through structured, predictable, visually-supported, and personalized learning experiences.
 
-Traditional UX principles often optimize for efficiency, speed, and engagement. For autistic learners, these goals must be balanced with predictability, sensory comfort, emotional safety, and cognitive accessibility.
+Traditional educational products often optimize for:
 
-These guidelines define the Autism Learning Experience (ALX) framework used throughout the platform.
+* Engagement
+* Exploration
+* Speed
+* Gamification
+
+Arin Learn optimizes for:
+
+* Predictability
+* Independence
+* Cognitive accessibility
+* Emotional safety
+* Skill mastery
+
+The platform combines:
+
+* TEACCH (Structured Teaching)
+* Modern ABA (Skill Acquisition)
+* WCAG Accessibility Standards
+* Autism-Specific UX Principles
 
 ---
 
-# 2. Core Design Philosophy
+# 2. Educational Framework
+
+## TEACCH
+
+TEACCH principles are used for:
+
+* Information architecture
+* Navigation
+* Visual schedules
+* Work systems
+* Executive function support
+* Predictability
+* Independence
+
+### Goal
+
+Reduce anxiety by making learning environments predictable and understandable.
+
+---
+
+## Modern ABA
+
+ABA principles are used for:
+
+* Guided learning
+* Prompting
+* Prompt fading
+* Skill acquisition
+* Mastery progression
+* Positive feedback
+
+### Goal
+
+Help learners build skills through structured success experiences.
+
+---
+
+# 3. ALX Design Principles
+
+---
 
 ## ALX-1 Predictability
 
@@ -34,10 +90,10 @@ Users should always know:
 
 ### Requirements
 
-* Navigation remains in the same position across all screens.
-* Primary actions remain consistent.
+* Navigation remains fixed.
 * Lesson structure never changes.
-* Avoid unexpected UI changes.
+* Primary actions remain consistent.
+* No unexpected interface changes.
 
 ---
 
@@ -45,26 +101,30 @@ Users should always know:
 
 Show before explaining.
 
-Many autistic learners process visual information more effectively than verbal instructions.
-
 ### Requirements
 
-* Every concept begins with a visual example.
-* Use illustrations before text explanations.
-* Pair text with icons or imagery.
-* Use visual demonstrations whenever possible.
+Every concept begins with:
+
+1. Visual Example
+2. Demonstration
+3. Explanation
+4. Practice
+
+### Rule
+
+Images should carry the primary meaning.
+
+Text should support visuals.
 
 ---
 
 ## ALX-3 One Concept at a Time
 
-Avoid introducing multiple concepts simultaneously.
+Never introduce multiple concepts simultaneously.
 
-### Requirements
+### Each Screen Should Contain
 
-Each screen should focus on:
-
-* One concept
+* One learning objective
 * One task
 * One decision
 
@@ -72,7 +132,7 @@ Each screen should focus on:
 
 Good:
 
-Count these apples.
+Count the apples.
 
 Bad:
 
@@ -82,49 +142,49 @@ Count apples, compare quantities, and solve addition.
 
 ## ALX-4 Visible Progress
 
-Users should always understand progress and completion.
+Progress must always be visible.
 
 ### Requirements
 
 Display:
 
 * Step indicators
-* Lesson progress
 * Question counts
-* Completion status
+* Lesson progress
+* Completion state
 
 ### Example
 
-Question 2 of 5
+Question 3 of 5
 
 ---
 
 ## ALX-5 Safe Mistakes
 
-Mistakes should feel like part of learning.
+Mistakes are part of learning.
 
 ### Requirements
 
 * Unlimited retries
 * No penalties
-* No failure states
 * No public scoring
+* No failure screens
 
-### Preferred Feedback
+### Preferred Language
 
-"Let's try counting again."
+"Let's try again."
 
 ### Avoid
 
 "Incorrect."
 
-"You failed."
+"Failed."
 
 ---
 
 ## ALX-6 Controlled Sensory Environment
 
-Users must control sensory stimulation.
+Learners control stimulation.
 
 ### Requirements
 
@@ -133,166 +193,615 @@ Users must control sensory stimulation.
 * No flashing elements
 * No unexpected animations
 
-Users must be able to:
+### User Controls
 
-* Mute sounds
-* Disable animations
-* Adjust contrast
-* Adjust audio speed
+* Audio on/off
+* Volume
+* Motion reduction
+* Contrast adjustment
+* Audio speed
 
 ---
 
 ## ALX-7 Routine-Based Learning
 
-Learning should follow a predictable structure.
+Every lesson follows the same structure.
 
 ### Standard Lesson Flow
 
-1. Observe
+1. Learn
 2. Practice
 3. Quiz
 4. Complete
 
-Never alter this sequence.
+Never change this sequence.
 
 ---
 
 ## ALX-8 Mastery-Based Progression
 
-Progress should reflect understanding rather than completion.
+Progress reflects understanding.
 
 ### Focus On
 
-* Skills learned
-* Concepts mastered
-* Growth over time
+* Mastery
+* Growth
+* Independence
 
 ### Avoid
 
-* Excessive points
 * Competitive leaderboards
-* Rank systems
+* Rankings
+* Excessive point systems
 
 ---
 
-# 3. Visual Design Guidelines
+# 4. TEACCH Structured Learning Architecture
 
-## Color System
+---
+
+## ALX-9 Structured Work Systems
+
+Every learning screen must answer four questions.
+
+### Question 1
+
+What am I doing?
+
+Example:
+
+Count the apples.
+
+---
+
+### Question 2
+
+How much work is there?
+
+Example:
+
+Question 2 of 5
+
+---
+
+### Question 3
+
+How do I know I am finished?
+
+Example:
+
+Progress 40%
+
+---
+
+### Question 4
+
+What happens next?
+
+Example:
+
+Next: Practice Activity
+
+---
+
+## Design Requirement
+
+Every activity screen must visibly communicate all four answers.
+
+---
+
+# 5. Executive Function Support
+
+---
+
+## ALX-10 Executive Function Design
+
+Many autistic learners experience difficulty with:
+
+* Task initiation
+* Planning
+* Sequencing
+* Transitions
+
+The interface must compensate.
+
+---
+
+### Always Display
+
+Current Task
+
+Example:
+
+Count Apples
+
+---
+
+Completion Status
+
+Example:
+
+3 of 5 Complete
+
+---
+
+Next Activity
+
+Example:
+
+Next: Quiz
+
+---
+
+### Resume Behavior
+
+If a learner leaves:
+
+* Return to the exact activity
+* Preserve answers
+* Preserve progress
+
+Never restart automatically.
+
+---
+
+# 6. Transition Design
+
+---
+
+## ALX-11 Transition Preparation
+
+Transitions must never be abrupt.
+
+Before changing activities:
+
+Show:
+
+* Current activity completed
+* Next activity
+* Expected duration
+* Start button
+
+---
+
+### Example
+
+Great Work
+
+Next: Practice
+
+You will count objects independently.
+
+[Start Practice]
+
+---
+
+### Avoid
+
+Automatically launching the next activity.
+
+---
+
+# 7. ABA-Based Learning Design
+
+---
+
+## ALX-12 Prompt Hierarchy
+
+Support should fade as mastery improves.
+
+### Prompt Levels
+
+Level 1
+
+Full Demonstration
+
+---
+
+Level 2
+
+Visual Hint
+
+---
+
+Level 3
+
+Partial Hint
+
+---
+
+Level 4
+
+Verbal Cue
+
+---
+
+Level 5
+
+Independent
+
+---
+
+### Rule
+
+Never remove support abruptly.
+
+Always fade gradually.
+
+---
+
+## ALX-13 Errorless Learning
+
+When introducing new concepts:
+
+Success should be highly likely.
+
+### Goal
+
+Build confidence before introducing challenge.
+
+---
+
+## ALX-14 Shaping
+
+Complex skills should be broken into smaller skills.
+
+### Example
+
+Addition
+
+Count Objects
+
+↓
+
+Combine Groups
+
+↓
+
+Understand +
+
+↓
+
+Solve Addition Problems
+
+---
+
+## ALX-15 Reinforcement Framework
+
+Reinforcement should support mastery.
+
+### Preferred
+
+* Positive feedback
+* Progress visibility
+* Mastery recognition
+
+### Examples
+
+Great work.
+
+You counted correctly.
+
+You completed the lesson.
+
+---
+
+### Avoid
+
+* Slot-machine rewards
+* Excessive badges
+* Confetti explosions
+* Dopamine-heavy gamification
+
+---
+
+# 8. Independence Tracking
+
+---
+
+## ALX-16 Independence Over Accuracy
+
+The system should track:
+
+* Accuracy
+* Prompt Usage
+* Retry Count
+* Hint Usage
+* Independence Score
+
+---
+
+### Example
+
+Student A
+
+90% accuracy
+
+Required prompts every question
+
+---
+
+Student B
+
+85% accuracy
+
+Completed independently
+
+---
+
+Student B may demonstrate stronger learning progress.
+
+---
+
+# 9. Visual Schedule System
+
+---
+
+## Lesson Schedule
+
+Display on every lesson.
+
+Learn
+
+↓
+
+Practice
+
+↓
+
+Quiz
+
+↓
+
+Complete
+
+---
+
+### Rules
+
+Always show:
+
+* Current stage
+* Next stage
+* Remaining stages
+
+Never hide lesson structure.
+
+---
+
+# 10. Learning Environment Zones
+
+---
+
+## ALX-17 Learning Zones
+
+Each area should have a clear purpose.
+
+---
+
+### Learn Zone
+
+Observe and understand concepts.
+
+---
+
+### Practice Zone
+
+Guided learning.
+
+---
+
+### Quiz Zone
+
+Independent mastery.
+
+---
+
+### Calm Zone
+
+Regulation and breaks.
+
+---
+
+### Parent Zone
+
+Progress and reporting.
+
+---
+
+### Rule
+
+Never mix multiple zones on one screen.
+
+---
+
+# 11. Calm Zone
+
+---
+
+## ALX-18 Self-Regulation Support
+
+Every learner should have access to a safe break space.
+
+Accessible globally.
+
+---
+
+### Contains
+
+* Visual timer
+* Deep breathing activity
+* Calm visuals
+* Favorite images
+* Optional calming audio
+
+---
+
+### Rule
+
+Using Calm Zone is never considered failure.
+
+---
+
+# 12. Personalization Framework
+
+---
+
+## Sensory Profile
+
+Each learner maintains a sensory profile.
+
+### Example
+
+```typescript
+interface SensoryProfile {
+  audioSupport: boolean
+  visualSupport: "low" | "medium" | "high"
+  animationTolerance: "low" | "medium" | "high"
+  readingDensity: "low" | "medium" | "high"
+  promptLevel: "low" | "medium" | "high"
+  attentionSpan: "short" | "medium" | "long"
+}
+```
+
+---
+
+### Adaptations
+
+High Visual Need
+
+* Larger images
+* Less text
+* More demonstrations
+
+---
+
+High Prompt Need
+
+* Additional hints
+* Slower prompt fading
+
+---
+
+Short Attention Span
+
+* Shorter lessons
+* More checkpoints
+* More breaks
+
+---
+
+# 13. Visual Design Guidelines
+
+---
+
+## Color Principles
 
 The interface should feel calm, warm, and safe.
 
-### Preferred Colors
+### Preferred Palette
 
-Primary:
+Primary
 
-* Soft Blue
-* Muted Teal
+Soft Blue
 
-Success:
+---
 
-* Muted Green
+Secondary
 
-Warning:
+Muted Teal
 
-* Soft Amber
+---
 
-Error:
+Success
 
-* Soft Coral
+Muted Green
 
-Background:
+---
 
-* Warm Off-White
-* Light Gray
+Warning
+
+Soft Amber
+
+---
+
+Error Recovery
+
+Soft Coral
+
+---
+
+Background
+
+Warm Off-White
+
+---
 
 ### Avoid
 
 * Neon colors
 * Pure white backgrounds
 * Pure black backgrounds
-* Highly saturated red
 * Flashing color changes
 
 ---
 
 ## Contrast
 
-Maintain WCAG AA compliance.
+WCAG AA minimum.
 
-Avoid extremely harsh contrast combinations.
+Prefer:
 
-### Recommended
+Dark Gray Text
 
-* Dark gray text
-* Off-white background
-
-### Avoid
-
-* Pure black on pure white
+Warm Off-White Background
 
 ---
 
 ## Whitespace
 
-Use whitespace intentionally.
+Whitespace should reduce clutter.
 
-### Goals
-
-* Reduce clutter
-* Separate concepts
-* Guide attention
-
-### Avoid
+Avoid:
 
 Excessive whitespace that increases eye travel distance.
 
 ---
 
-# 4. Typography Guidelines
+# 14. Typography Guidelines
 
-## Font Selection
+---
 
-Use clean, readable sans-serif fonts.
-
-### Approved Fonts
+## Approved Fonts
 
 * Inter
 * Arial
 * Verdana
 * Atkinson Hyperlegible
-* OpenDyslexic (optional accessibility mode)
 
-### Avoid
+Optional Accessibility Mode:
 
-* Decorative fonts
-* Handwriting fonts
-* Script fonts
+* OpenDyslexic
 
 ---
 
-## Font Sizes
+## Minimum Sizes
 
-### Minimum Sizes
-
-Body Text:
+Body Text
 
 16px
 
-Question Text:
+---
+
+Question Text
 
 20px+
 
-Lesson Headings:
-
-24px+
-
 ---
 
-## Line Height
+Headings
 
-Use:
-
-1.5–1.75
+24px+
 
 ---
 
@@ -302,47 +811,24 @@ Always left aligned.
 
 Avoid:
 
-* Center aligned paragraphs
-* Fully justified text
+* Centered paragraphs
+* Justified text
 
 ---
 
-## Text Width
-
-Limit line length to:
-
-60–80 characters
+# 15. Interaction Guidelines
 
 ---
 
-# 5. Layout Guidelines
+## Touch Targets
 
-## Consistent Navigation
+Minimum:
 
-Navigation elements must never move.
+48x48px
 
-### Fixed Locations
+Preferred:
 
-* Back button
-* Home button
-* Progress indicator
-* Audio controls
-
----
-
-## Screen Structure
-
-Recommended Layout:
-
-Header
-
-Progress Indicator
-
-Main Learning Area
-
-Primary Action
-
-Secondary Actions
+56x56px
 
 ---
 
@@ -350,71 +836,33 @@ Secondary Actions
 
 Each screen should contain one dominant action.
 
-### Example
+Examples:
 
-Continue
+Continue Lesson
 
-Avoid presenting multiple competing actions.
+Submit Answer
 
----
-
-# 6. Interaction Design
-
-## Touch Targets
-
-### Minimum
-
-48x48 pixels
-
-### Preferred
-
-56x56 pixels
-
----
-
-## Spacing
-
-Minimum spacing:
-
-8px
-
-Preferred:
-
-12–16px
-
----
-
-## Drag and Drop
-
-Keep drag distances short.
-
-Always provide a tap alternative.
-
-### Example
-
-Drag apple to basket
-
-OR
-
-Tap basket
+Start Practice
 
 ---
 
 ## Feedback
 
-Interactions should feel responsive.
+Feedback should be immediate.
 
 ### Examples
 
-* Gentle scale animation
-* Soft highlight
+* Gentle highlight
+* Soft elevation
 * Visual confirmation
 
 Avoid excessive motion.
 
 ---
 
-# 7. Motion Guidelines
+# 16. Motion Guidelines
+
+---
 
 ## Motion Principles
 
@@ -422,57 +870,67 @@ Motion should communicate.
 
 Never entertain.
 
+---
+
 ### Allowed
 
 * Fade transitions
-* Small scale changes
 * Progress animations
+* Small scale changes
+
+---
 
 ### Avoid
 
 * Bounce animations
 * Infinite loops
-* Parallax effects
 * Screen shaking
+* Parallax effects
 
 ---
 
-## Duration
-
-Recommended:
+### Duration
 
 150–300ms
 
 ---
 
-# 8. Audio Guidelines
+### Accessibility
 
-## User Control
-
-Audio is always optional.
-
-### Requirements
-
-* Mute button
-* Volume control
-* Replay audio
+Provide Reduce Motion Mode.
 
 ---
 
-## Voice Design
+# 17. Audio Guidelines
+
+---
+
+## Audio Control
+
+Always provide:
+
+* Mute
+* Volume
+* Replay
+
+---
+
+## Voice Characteristics
 
 Voice should be:
 
 * Calm
 * Slow
-* Clear
 * Neutral
+* Clear
 
 Avoid exaggerated excitement.
 
 ---
 
-# 9. Language and Microcopy
+# 18. Language Guidelines
+
+---
 
 ## Literal Communication
 
@@ -482,43 +940,19 @@ Use direct instructions.
 
 Count the apples.
 
-Select the correct answer.
-
-### Avoid
-
-Let's conquer this challenge!
-
-You're on fire!
+Choose the correct answer.
 
 ---
 
-## Button Labels
-
-Always be explicit.
-
-### Good
-
-Submit Answer
-
-Continue Lesson
-
-Listen Again
-
 ### Avoid
 
-Go
+Let's conquer this challenge.
 
-Next
-
-Continue
-
-without context.
+You're on fire.
 
 ---
 
 ## Sentence Length
-
-Keep sentences short.
 
 Target:
 
@@ -526,106 +960,27 @@ Target:
 
 ---
 
-# 10. Error Prevention and Recovery
+## Feedback
 
-## Prevent Errors
+Good
 
-Design interfaces that reduce mistakes.
+Let's try again.
 
-### Techniques
-
-* Clear instructions
-* Large targets
-* Visual examples
-* Confirmation before destructive actions
+Count one more time.
 
 ---
 
-## Error Messages
-
-Use constructive language.
-
-### Good
-
-Let's try that again.
-
-Count each apple one more time.
-
-### Avoid
+Avoid
 
 Wrong.
-
-Error.
 
 Invalid.
 
 ---
 
-# 11. Learning-Specific Guidelines
-
-## Visual Schedules
-
-Every lesson should display:
-
-Today's Lesson
-
-1. Learn
-2. Practice
-3. Quiz
-4. Complete
-
-Users should always know what comes next.
+# 19. AI Tutor Guidelines
 
 ---
-
-## Transition Preparation
-
-Before moving between sections:
-
-Great work.
-
-Next: Practice
-
----
-
-## Completion Visibility
-
-Always show:
-
-Question 3 of 5
-
-Lesson 2 of 8
-
----
-
-## Resume Capability
-
-If a learner exits unexpectedly:
-
-Return them directly to the last activity.
-
-Never restart automatically.
-
----
-
-# 12. Personalization Guidelines
-
-Each learner should have a sensory profile.
-
-Example:
-
-{
-"audio": false,
-"animations": "low",
-"visual_support": "high",
-"contrast": "medium"
-}
-
-The interface should adapt automatically.
-
----
-
-# 13. AI Tutor Guidelines
 
 ## Communication Rules
 
@@ -634,70 +989,119 @@ AI must:
 * Use short sentences
 * Use literal language
 * Explain one idea at a time
-* Avoid abstract concepts
 * Avoid sarcasm
 * Avoid idioms
+* Avoid abstract explanations
 
 ---
 
-## Praise Guidelines
+## Teaching Sequence
 
-Focus on achievement.
+Always follow:
 
-### Good
+Show
+
+↓
+
+Explain
+
+↓
+
+Practice
+
+---
+
+## Orientation Rule
+
+Before explanations, AI should establish:
+
+* What the learner is doing
+* What comes next
+
+### Example
+
+You are practicing addition.
+
+After this question, you will do one more.
+
+Let's count these apples.
+
+---
+
+## Praise Rules
+
+Good
 
 You counted correctly.
 
-You identified all the shapes.
+You completed the activity.
 
-### Avoid
+---
+
+Avoid
 
 You're a genius.
 
-You're a superstar.
+You're amazing.
 
 ---
 
-## Explanations
+# 20. Parent Experience Guidelines
 
-Always:
+Parents need clarity, not analytics overload.
 
-Show → Explain → Practice
+The dashboard should answer:
 
-Never provide long paragraphs.
-
----
-
-# 14. Accessibility Requirements
-
-Minimum WCAG AA compliance.
-
-Support:
-
-* Keyboard navigation
-* Screen readers
-* High contrast mode
-* Dyslexia-friendly mode
-* Reduced motion mode
-* Responsive layouts
+* What was learned?
+* What improved?
+* What was difficult?
+* What should be practiced next?
 
 ---
 
-# 15. Design Review Checklist
+# 21. Success Indicators
 
-Before releasing any feature verify:
+The platform succeeds when learners can answer:
+
+1. What am I doing?
+2. What comes next?
+3. How much is left?
+4. How do I know I'm finished?
+
+If a learner cannot answer these questions at any point, the design has failed the TEACCH model.
+
+---
+
+# 22. Design Review Checklist
+
+Before release verify:
 
 * Predictable layout
 * One concept per screen
 * Visible progress
-* Clear completion state
+* Structured work system present
+* Executive function support present
+* Transition preparation present
 * Large touch targets
 * Literal language
-* No sensory overload
-* Safe error recovery
+* Safe mistake handling
 * Audio controls available
 * Motion controls available
-* AI responses follow ALX guidelines
+* Calm Zone accessible
+* AI responses follow ALX rules
+* Independence tracking implemented
 
-A feature that passes accessibility requirements but violates ALX principles should not be considered production ready.
+Features that pass accessibility requirements but violate ALX principles should not be considered production-ready.
+
+---
+
+# ALX North Star
+
+Create a learning environment that feels safe, predictable, visual, and achievable.
+
+Use TEACCH to reduce anxiety and increase independence.
+
+Use ABA to build mastery through small, achievable successes.
+
+The learner should spend their energy learning concepts, not figuring out how the system works.
 
