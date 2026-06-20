@@ -13,7 +13,6 @@ export default function ReportsPage() {
 
   useEffect(() => {
     if (!child) return;
-    setLoading(true);
     getStudentReports(child as string).then((res) => {
       if (res.data) setReport(res.data);
       setLoading(false);

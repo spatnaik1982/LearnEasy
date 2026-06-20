@@ -5,7 +5,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <h1>{COPY.appTitle} - Parent Dashboard</h1>
-      <p>Track your child's learning progress</p>
+      <p>Track your child&apos;s learning progress</p>
     </div>
   );
 };

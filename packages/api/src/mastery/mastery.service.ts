@@ -156,7 +156,7 @@ export class MasteryService {
   private async calculateIndependence(
     studentId: string,
     conceptId: string,
-    attempts: any[],
+    _attempts: any[],
   ): Promise<number> {
     // Get prompt states for this student+concept
     const promptState = await this.prisma.promptState.findUnique({

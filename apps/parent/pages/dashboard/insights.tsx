@@ -31,7 +31,6 @@ export default function InsightsPage() {
 
   useEffect(() => {
     if (!child) return;
-    setLoading(true);
     getStudentInsights(child as string).then((res) => {
       if (res.data) setInsights(res.data);
       setLoading(false);

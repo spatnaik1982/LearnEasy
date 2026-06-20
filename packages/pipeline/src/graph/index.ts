@@ -5,7 +5,7 @@ import {
 import { chunkContent } from '../chunk';
 import { generateConcepts } from '../generate-concept';
 import { generateAllActivities } from '../generate-activities';
-import { validateAll, validateWithRetry, validateConceptPair } from '../validate';
+import { validateWithRetry } from '../validate';
 import { writeAllConcepts } from '../output';
 import type {
   ConceptCandidate,
@@ -207,7 +207,7 @@ export async function runPipeline(
   try {
     validated = await validateWithRetry(
       {
-        regenerateConcept: async (conceptId, validationErrors) => {
+        regenerateConcept: async (conceptId, _validationErrors) => {
           const concept = concepts.find((c) => c.conceptId === conceptId);
           if (!concept) return null;
           const activities = activitiesMap.get(conceptId);

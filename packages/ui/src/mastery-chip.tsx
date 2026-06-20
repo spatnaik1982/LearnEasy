@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 type MasteryState = "not-started" | "in-progress" | "mastered";
 
 interface MasteryChipProps {

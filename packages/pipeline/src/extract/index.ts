@@ -171,6 +171,7 @@ function parseChapters(text: string): ChapterChunk[] {
     if (inExercise) {
       if (currentSection && currentSection.exercises) {
         if (currentSection.exercises.length === 1 && currentSection.exercises[0] === line) {
+          /* skip duplicate */
         } else {
           currentSection.exercises.push(line);
         }
