@@ -491,7 +491,46 @@ async function main() {
   console.log(`   Level A Mathematics with 4 chapters, 5 concepts, and 16 activities seeded.`);
 }
 
+async function seedUsers() {
+  const bcrypt = await import('bcryptjs');
+  const hashed = await bcrypt.hash('test123', 10);
+
+  const testParent = await prisma.parent.upsert({
+    where: { email: 'testparent@learn-easy.com' },
+    update: {},
+    create: {
+      email: 'testparent@learn-easy.com',
+      name: 'Test Parent',
+      password: hashed,
+    },
+  });
+
+  const testStudent = await prisma.student.upsert({
+    where: { email: 'teststudent@learn-easy.com' },
+    update: {},
+    create: {
+      email: 'teststudent@learn-easy.com',
+      name: 'Test Student',
+      password: hashed,
+      age: 8,
+      level: 'A',
+      autismSupportLevel: 2,
+      readingLevel: 'medium',
+      visualSupport: true,
+      audioSupport: false,
+      sensorySensitivity: true,
+      attentionSpan: 'medium',
+      parentId: testParent.id,
+    },
+  });
+
+  console.log(`  ✓ Test parent: ${testParent.email}`);
+  console.log(`  ✓ Test student: ${testStudent.email} (linked to parent)`);
+}
+
 main()
+  .then(() => seedUsers())
+  .then(() => console.log('\n✅ All seeding complete!'))
   .catch((e) => {
     console.error(e);
     process.exit(1);

@@ -11,6 +11,7 @@ import { ResumeModule } from './resume/resume.module';
 import { PromptsModule } from './prompts/prompts.module';
 import { MasteryModule } from './mastery/mastery.module';
 import { StudentModule } from './student/student.module';
+import { ParentModule } from './parent/parent.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { StudentModule } from './student/student.module';
     PromptsModule,
     MasteryModule,
     StudentModule,
+    ParentModule,
   ],
 })
 export class AppModule {}
