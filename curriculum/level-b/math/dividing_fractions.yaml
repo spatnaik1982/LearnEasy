@@ -1,0 +1,62 @@
+conceptId: dividing_fractions
+chapter:
+  code: CH3
+  name: Understanding Fractions and Their Operations
+learningObjective: Divide fractions by multiplying by the reciprocal
+coreIdea: To divide fractions, multiply by the reciprocal of the second fraction.
+examples:
+  - 1/2 ÷ 1/4 = 1/2 × 4/1 = 2. ➗
+  - 3/5 ÷ 2/3 = 3/5 × 3/2 = 9/10. ➗
+  - 4/7 ÷ 1/2 = 4/7 × 2/1 = 8/7. ➗
+misconceptions:
+  - Students may think that dividing fractions is the same as subtracting them.
+  - Students may confuse the terms 'reciprocal' and 'inverse' when learning to divide fractions.
+  - >-
+    Students might believe that the denominator of the result should be the same as the denominator of the second
+    fraction.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: intermediate
+estimatedDuration: 30
+dependencies:
+  - fractions_intro
+  - multiplying_fractions
+activities:
+  - step: observe
+    type: fraction_visual
+    order: 1
+    content:
+      numerator: 1
+      denominator: 2
+      mode: bar
+      label: 1/2
+      interactive: false
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: fraction_visual
+    order: 3
+    content:
+      numerator: 3
+      denominator: 5
+      mode: bar
+      label: 3/5
+      interactive: false
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job! You learned to divide fractions!
+      text: Keep practicing!

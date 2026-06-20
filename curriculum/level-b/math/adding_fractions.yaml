@@ -1,0 +1,72 @@
+conceptId: adding_fractions
+chapter:
+  code: CH3
+  name: Understanding and Adding Fractions
+learningObjective: Add fractions with equal denominators
+coreIdea: To add fractions with the same denominator, add the numerators.
+examples:
+  - 3/5 + 1/5 = 4/5. ➕
+  - 2/8 + 3/8 = 5/8. ➕
+  - 1/4 + 1/4 = 2/4. ➕
+misconceptions:
+  - Students may think that the denominators need to be added as well when adding fractions.
+  - Some may confuse the terms numerator and denominator, leading to incorrect fraction addition.
+  - Students might believe that fractions can only be added if they are whole numbers.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 25
+dependencies:
+  - fractions_intro
+  - like_fractions
+  - comparing_fractions
+activities:
+  - step: observe
+    type: fraction_visual
+    order: 1
+    content:
+      numerator: 4
+      denominator: 5
+      mode: bar
+      label: 3/5 + 1/5
+      interactive: false
+  - step: guided_practice
+    type: fraction_visual
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: fraction_visual
+    order: 3
+    content:
+      numerator: 2
+      denominator: 8
+      mode: bar
+      label: 2/8 + 3/8
+      interactive: true
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: What is 1/4 + 1/4?
+          options:
+            - 2/4
+            - 1/2
+            - 1/4
+            - 3/4
+          correctIndex: 0
+        - question: What is 3/5 + 1/5?
+          options:
+            - 4/5
+            - 5/5
+            - 2/5
+            - 3/5
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      description: Great job! You added fractions with equal denominators! 🎉

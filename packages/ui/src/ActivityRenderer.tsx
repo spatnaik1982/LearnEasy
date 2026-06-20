@@ -30,8 +30,9 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
 
   if (t === "matching" && Array.isArray(n.pairs)) {
     n.pairs = (n.pairs as Array<Record<string, unknown>>).map((p, i) => ({
-      ...p,
       id: p.id ?? `pair-${i}`,
+      itemA: p.itemA ?? p.number ?? p.value ?? String(p[p.key ? Object.keys(p)[0] : ''] ?? ''),
+      itemB: p.itemB ?? p.name ?? String(p.value ?? ''),
     }));
   }
 
@@ -58,6 +59,15 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
         .filter(Boolean);
       delete n.shuffled;
     }
+  }
+
+  // Handle YAML sequencing shape: { question, numbers: [12, 5, 8] }
+  if (t === "sequencing" && !Array.isArray(n.items) && Array.isArray(n.numbers)) {
+    n.items = (n.numbers as number[]).map((num, i) => ({
+      id: `item-${i}`,
+      label: String(num),
+    }));
+    n.correctOrder = (n.items as Array<{ id: string }>).map((item) => item.id);
   }
 
   if ((t === "drag_drop" || t === "dragdrop") && n.groups) {
@@ -87,6 +97,103 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
     });
     n.expectedPositions = expected;
     delete n.groups;
+  }
+
+  // Handle YAML drag_drop shape: { prompt, items: [{ value, place }] }
+  if ((t === "drag_drop" || t === "dragdrop") && !n.groups && Array.isArray(n.items) && typeof n.items[0] === "object" && n.items[0] !== null && ("value" in n.items[0] || "place" in n.items[0])) {
+    const items = n.items as Array<{ value: string; place: string }>;
+    n.items = items.map((item, i) => ({
+      id: `item-${i}`,
+      label: item.value,
+    }));
+    const placeSet = new Set(items.map((item) => item.place));
+    const targets = Array.from(placeSet);
+    n.targets = targets.map((place, i) => ({
+      id: `target-${i}`,
+      label: place,
+    }));
+    const expected: Record<string, string> = {};
+    items.forEach((item, i) => {
+      const targetIdx = targets.indexOf(item.place);
+      expected[`item-${i}`] = `target-${targetIdx}`;
+    });
+    n.expectedPositions = expected;
+  }
+
+  // Handle YAML drag_drop shape: { prompt, options: [{ digit, place }] }
+  if ((t === "drag_drop" || t === "dragdrop") && Array.isArray(n.options) && n.options.length > 0 && typeof n.options[0] === "object" && n.options[0] !== null && ("digit" in n.options[0] || "value" in n.options[0])) {
+    const opts = n.options as Array<{ digit?: string; value?: string; place: string }>;
+    n.items = opts.map((o, i) => ({ id: `item-${i}`, label: o.digit ?? o.value ?? "" }));
+    const placeSet = new Set(opts.map((o) => o.place));
+    const targets = Array.from(placeSet);
+    n.targets = targets.map((p, i) => ({ id: `target-${i}`, label: p }));
+    const expected: Record<string, string> = {};
+    opts.forEach((o, i) => {
+      expected[`item-${i}`] = `target-${targets.indexOf(o.place)}`;
+    });
+    n.expectedPositions = expected;
+    delete n.options;
+  }
+
+  // Handle YAML drag_drop shape: { question, options: { thousands: [1,3], ... } }
+  if ((t === "drag_drop" || t === "dragdrop") && n.options && typeof n.options === "object" && !Array.isArray(n.options)) {
+    const groups = Object.entries(n.options as Record<string, unknown[]>).map(([label, values]) => ({
+      label,
+      target: values.map(String),
+    }));
+    const allItems: Array<{ id: string; label: string }> = [];
+    const expected: Record<string, string> = {};
+    groups.forEach((g, gIdx) => {
+      g.target.forEach((val) => {
+        const id = `item-${allItems.length}`;
+        allItems.push({ id, label: val });
+        expected[id] = `target-${gIdx}`;
+      });
+    });
+    n.items = allItems;
+    n.targets = groups.map((g, i) => ({ id: `target-${i}`, label: g.label }));
+    n.expectedPositions = expected;
+    delete n.options;
+  }
+
+  // Handle fill_blank YAML shapes: { prompt, answer } or { question, answer } or { statement, answers }
+  if (t === "fill_blank") {
+    if (!n.template && (n.prompt || n.question || n.statement)) {
+      const rawTemplate = (n.prompt || n.question || n.statement) as string;
+      const answer = n.answer ?? n.answers;
+      if (answer) {
+        const answers = Array.isArray(answer) ? answer : [answer];
+        n.blanks = (answers as (string | number)[]).map((a, i) => ({
+          id: `blank-${i}`,
+          position: i,
+          correctAnswer: a,
+        }));
+        n.template = rawTemplate;
+      }
+    }
+  }
+
+  // Handle place_value_chart YAML shapes
+  if (t === "place_value_chart") {
+    const chart = n.chart as unknown;
+    if (chart && typeof chart === "object" && !Array.isArray(chart)) {
+      const obj = chart as Record<string, unknown>;
+      if (obj.thousands !== undefined) {
+        n.digits = [obj.thousands, obj.hundreds, obj.tens, obj.ones].map((v) => (v != null ? Number(v) : null));
+        n.maxPlaces = "lakh";
+      } else if (Array.isArray(obj.columns)) {
+        const cols = obj.columns as string[];
+        n.maxPlaces = cols.length <= 6 ? "lakh" : "crore";
+      }
+    }
+    if (Array.isArray(chart) && chart.length > 0 && typeof chart[0] === "object" && chart[0] !== null) {
+      const first = chart[0] as Record<string, unknown>;
+      if (first.digit !== undefined) {
+        n.digits = (chart as Array<Record<string, unknown>>).map((e) => Number(e.digit));
+        n.maxPlaces = "crore";
+      }
+    }
+    n.interactive = false;
   }
 
   return n;
@@ -239,6 +346,16 @@ export function ActivityRenderer({
         const isDemonstration = stepLabel === "observe";
         const answerText = (normalizedContent.text as string) ?? `${count} ${emoji}`;
         const size = (normalizedContent.size as "sm" | "md" | "lg") ?? "md";
+
+        // Description-only observe step (no structured count data)
+        const description = (activity.content.description as string) ?? "";
+        if (isDemonstration && !count && description) {
+          return (
+            <div className="flex flex-col items-center gap-4 rounded-xl bg-warm-off-white p-6">
+              <p className="text-lg text-slate-text">{description}</p>
+            </div>
+          );
+        }
 
         // Singular hint → add to hints array if not already present
         const singularHint = activity.content.hint as string | undefined;
@@ -406,12 +523,18 @@ export function ActivityRenderer({
         );
 
       case "multiple_choice": {
-        // Handle YAML data shape: { questions: [{ question, options: string[], correctIndex }] }
-        const questions = activity.content.questions as Array<{
-          question: string;
+        // Handle YAML data shape: { questions: [{ question/text, options: string[], correctIndex }] }
+        const rawQuestions = activity.content.questions as Array<{
+          question?: string;
+          text?: string;
           options: string[];
           correctIndex: number;
         }> | undefined;
+        const questions = rawQuestions?.map((q) => ({
+          question: q.question || q.text || "",
+          options: q.options,
+          correctIndex: q.correctIndex,
+        }));
 
         if (questions?.length) {
           if (multiQuestionIndex >= questions.length) return null;

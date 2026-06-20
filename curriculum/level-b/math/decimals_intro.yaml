@@ -1,0 +1,56 @@
+conceptId: decimals_intro
+chapter:
+  code: CH4
+  name: Introduction to Decimals
+learningObjective: Identify what a decimal is
+coreIdea: Decimals represent fractions with denominators of 10, 100, or 1000.
+examples:
+  - 1/10 = 0.1
+  - 1/100 = 0.01
+  - 1/1000 = 0.001
+misconceptions:
+  - Decimals are not related to fractions.
+  - The decimal point is just a dot and has no significance.
+  - All decimal numbers are larger than whole numbers.
+supports:
+  visual: true
+masteryCriteria: 0.75
+difficulty: beginner
+estimatedDuration: 15
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - comparing_quantities
+activities:
+  - step: observe
+    type: fraction_visual
+    order: 1
+    content:
+      numerator: 1
+      denominator: 10
+      mode: bar
+      label: 1/10 as a decimal
+      interactive: false
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: matching
+    order: 3
+    content: {}
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job identifying decimals!
+      text: You did it!

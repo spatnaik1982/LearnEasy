@@ -1,0 +1,61 @@
+conceptId: volume_intro
+chapter:
+  code: CH5
+  name: Volume of Solids
+learningObjective: Calculate the volume of cuboids and cubes
+coreIdea: Volume measures the space occupied by a solid.
+examples:
+  - "Volume of cuboid: 8 cm x 5 cm x 4 cm = 160 cc 📦"
+  - "Volume of cube: 10 cm x 10 cm x 10 cm = 1000 cc 🧊"
+  - "Volume of cuboid: 2.5 m x 1.5 m x 1 m = 3.75 m³"
+misconceptions:
+  - Students may confuse volume with area, thinking they are the same concept.
+  - Students might struggle with the units of measurement, mixing up cubic centimeters with square centimeters.
+  - Some may not understand that volume is a measure of three-dimensional space, leading to incorrect calculations.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 30
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - basic_shapes
+  - perimeter_intro
+  - area_intro
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: A box filled with cubes. Each cube measures 1 cm on each side. The total volume is 8 cm³. 📦
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      template: The volume of a cube with side length 3 cm is ___.
+      blanks:
+        - id: volume
+          position: 0
+          correctAnswer: "27"
+          options:
+            - "9"
+            - "18"
+            - "27"
+            - "36"
+      mode: select
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      description: Great job! You've learned about volume! 🎉

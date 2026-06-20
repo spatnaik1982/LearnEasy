@@ -1,0 +1,75 @@
+conceptId: data_collection
+chapter:
+  code: CH7
+  name: Geometry
+learningObjective: Collect and organize data
+coreIdea: Data can be collected directly or indirectly for analysis.
+examples:
+  - 📊 Counting students in a class.
+  - 🗳️ Gathering votes for an election.
+misconceptions:
+  - Data collection only involves numbers and not qualitative information.
+  - Counting is only useful for small groups and not for larger data sets.
+  - Data can only be collected through surveys and not through observations.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - comparing_quantities
+  - basic_shapes
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Counting students in a class. There are 10 students. 👩‍🎓👨‍🎓
+  - step: guided_practice
+    type: visual_counting
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: visual_counting
+    order: 3
+    content:
+      count: 8
+      emoji: 👨‍🎓
+      items:
+        - Student 1
+        - Student 2
+        - Student 3
+        - Student 4
+        - Student 5
+        - Student 6
+        - Student 7
+        - Student 8
+      text: How many students are there?
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: How many students are in the class?
+          options:
+            - "6"
+            - "8"
+            - "10"
+            - "5"
+          correctIndex: 1
+        - question: If there are 4 students and 2 more join, how many are there?
+          options:
+            - "4"
+            - "6"
+            - "5"
+            - "3"
+          correctIndex: 1
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      description: Great job collecting data! Keep practicing! 😊
