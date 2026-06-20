@@ -260,6 +260,7 @@ export function ScaleReader({
           />
         )}
       </svg>
+      {slider}
       {readingDisplay}
     </div>
   );
