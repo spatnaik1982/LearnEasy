@@ -1,6 +1,9 @@
 export { VisualCounter, type VisualCounterProps } from "./VisualCounter";
 export { Matching, type MatchingProps, type MatchingPair } from "./Matching";
 export { DragDrop, type DragDropProps, type DragDropItem, type DragDropTarget } from "./DragDrop";
+export { FillBlank, type FillBlankProps } from "./FillBlank";
+export { FractionVisualizer, type FractionVisualizerProps } from "./FractionVisualizer";
+export { GridCounter, type GridCounterProps } from "./GridCounter";
 export { MultipleChoice, type MultipleChoiceProps, type MultipleChoiceOption } from "./MultipleChoice";
 export { Sequencing, type SequencingProps, type SequencingItem } from "./Sequencing";
 export { PositiveCompletion, type PositiveCompletionProps } from "./PositiveCompletion";
@@ -12,6 +15,7 @@ export { ActivityRenderer, type ActivityRendererProps } from "./ActivityRenderer
 export { evaluateActivity, getHint, getActivityFeedback } from "./activity-utils";
 export { StoryQuestion, type StoryQuestionProps } from "./StoryQuestion";
 export { RealWorldTask, type RealWorldTaskProps } from "./RealWorldTask";
+export { ScaleReader, type ScaleReaderProps } from "./ScaleReader";
 export { AccessibilityWrapper, type AccessibilityWrapperProps } from "./AccessibilityWrapper";
 export { COPY } from "./copy";
 export { useAccessibility } from "./useAccessibility";
@@ -19,8 +23,11 @@ export { announceToScreenReader, createAnnouncementRegion, announcementId } from
 export { AppShell, type AppShellProps } from "./app-shell";
 export { StudentFooter, type StudentFooterProps } from "./student-footer";
 export { ParentTabBar, type ParentTabBarProps } from "./parent-tab-bar";
+export { PlaceValueChart, type PlaceValueChartProps } from "./PlaceValueChart";
 export { DataState, type DataStateProps } from "./data-state";
 export { Breadcrumb, type BreadcrumbProps, type BreadcrumbItem } from "./breadcrumb";
+export { ClockWidget, type ClockWidgetProps } from "./ClockWidget";
+export { ChartReader, type ChartReaderProps } from "./ChartReader";
 export { MasteryChip, type MasteryChipProps, type MasteryState } from "./mastery-chip";
 export { LearningCard, type LearningCardProps } from "./LearningCard";
 export { LessonTopBar, type LessonTopBarProps } from "./LessonTopBar";

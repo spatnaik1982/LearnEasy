@@ -1,6 +1,6 @@
 export interface Activity {
   id: string;
-  type: "visual-counter" | "matching" | "multiple-choice" | "sequencing" | "drag-drop" | "story-question" | "real-world-task";
+  type: "visual-counter" | "matching" | "multiple-choice" | "sequencing" | "drag-drop" | "story-question" | "real-world-task" | "fraction-visual" | "place-value-chart" | "grid-area" | "chart-reader" | "clock-time" | "measurement-scale" | "fill-blank";
   title: string;
   config: Record<string, unknown>;
   step?: string;
@@ -291,6 +291,250 @@ export const mockSubjects: Subject[] = [
                     { id: "c", label: "5" },
                   ],
                   correctIndex: 1,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "level-b-math",
+    title: "Level B Math",
+    description: "Advanced math concepts for Level B learners",
+    emoji: "📐",
+    chapters: [
+      {
+        id: "fractions",
+        title: "Fractions",
+        description: "Understanding fractions",
+        concepts: [
+          {
+            id: "fractions-intro",
+            title: "Introduction to Fractions",
+            description: "Learn about fractions as parts of a whole",
+            activities: [
+              {
+                id: "fraction-demo",
+                type: "fraction-visual",
+                title: "Understanding 3/4",
+                step: "observe",
+                order: 1,
+                config: { numerator: 3, denominator: 4, mode: "bar", showLabel: true },
+              },
+              {
+                id: "fraction-gp",
+                type: "fraction-visual",
+                title: "Shade 1/2",
+                step: "guided_practice",
+                order: 2,
+                config: { numerator: 1, denominator: 2, mode: "circle", interactive: true },
+              },
+              {
+                id: "fraction-mc",
+                type: "multiple-choice",
+                title: "Fraction Quiz",
+                step: "mastery_check",
+                order: 3,
+                config: {
+                  question: "Which fraction is shaded? (3 out of 4 parts)",
+                  options: [
+                    { id: "a", label: "1/4" },
+                    { id: "b", label: "3/4" },
+                    { id: "c", label: "4/3" },
+                  ],
+                  correctIndex: 1,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "measurement",
+        title: "Measurement",
+        description: "Learn to measure length, weight, volume, and time",
+        concepts: [
+          {
+            id: "telling-time",
+            title: "Telling Time",
+            description: "Learn to read analog clocks",
+            activities: [
+              {
+                id: "clock-demo",
+                type: "clock-time",
+                title: "Reading a Clock",
+                step: "observe",
+                order: 1,
+                config: { hour: 3, minute: 45, showDigital: true },
+              },
+              {
+                id: "clock-gp",
+                type: "clock-time",
+                title: "Set the Clock",
+                step: "guided_practice",
+                order: 2,
+                config: { hour: 7, minute: 30, mode: "set", interactive: true, targetTime: { hour: 7, minute: 30 } },
+              },
+              {
+                id: "clock-mc",
+                type: "multiple-choice",
+                title: "Time Quiz",
+                step: "mastery_check",
+                order: 3,
+                config: {
+                  question: "What time is shown? (Clock shows 8:15)",
+                  options: [
+                    { id: "a", label: "8:00" },
+                    { id: "b", label: "8:15" },
+                    { id: "c", label: "8:30" },
+                  ],
+                  correctIndex: 1,
+                },
+              },
+            ],
+          },
+          {
+            id: "temperature-reading",
+            title: "Reading Temperature",
+            description: "Learn to read a thermometer",
+            activities: [
+              {
+                id: "thermometer-demo",
+                type: "measurement-scale",
+                title: "Reading a Thermometer",
+                step: "observe",
+                order: 1,
+                config: { type: "thermometer", min: 0, max: 100, step: 10, unit: "°C", value: 37, showReading: true },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "place-value",
+        title: "Place Value",
+        description: "Understanding place values up to crore",
+        concepts: [
+          {
+            id: "place-value-intro",
+            title: "Place Value Chart",
+            description: "Learn about place values",
+            activities: [
+              {
+                id: "pv-demo",
+                type: "place-value-chart",
+                title: "Place Value: Crores",
+                step: "observe",
+                order: 1,
+                config: { maxPlaces: "crore", digits: [1, 2, 3, 4, 5, 6, 7, 8], targetNumber: 12345678 },
+              },
+              {
+                id: "pv-gp",
+                type: "place-value-chart",
+                title: "Fill the Chart",
+                step: "guided_practice",
+                order: 2,
+                config: { maxPlaces: "lakh", interactive: true, draggableDigits: [1, 5, 3, 2, 7, 0] },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "data-handling",
+        title: "Data Handling",
+        description: "Reading charts and graphs",
+        concepts: [
+          {
+            id: "bar-chart-reading",
+            title: "Reading Bar Charts",
+            description: "Learn to read bar charts",
+            activities: [
+              {
+                id: "chart-demo",
+                type: "chart-reader",
+                title: "Favorite Sports",
+                step: "observe",
+                order: 1,
+                config: {
+                  type: "bar",
+                  data: [
+                    { label: "Cricket", value: 8 },
+                    { label: "Football", value: 5 },
+                    { label: "Tennis", value: 3 },
+                  ],
+                  title: "Favorite Sports",
+                  showValues: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "geometry",
+        title: "Perimeter & Area",
+        description: "Counting area on a grid",
+        concepts: [
+          {
+            id: "area-grid",
+            title: "Area by Counting Squares",
+            description: "Count squares to find area",
+            activities: [
+              {
+                id: "grid-demo",
+                type: "grid-area",
+                title: "Area: 6 squares",
+                step: "observe",
+                order: 1,
+                config: { rows: 3, cols: 4, highlighted: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 0 }, { row: 2, col: 1 }], mode: "area", showCount: true },
+              },
+              {
+                id: "grid-gp",
+                type: "grid-area",
+                title: "Find the Area",
+                step: "guided_practice",
+                order: 2,
+                config: { rows: 4, cols: 5, mode: "area", interactive: true, maxHighlights: 8, showCount: true },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "equations",
+        title: "Equations & Sequences",
+        description: "Fill in missing numbers",
+        concepts: [
+          {
+            id: "fill-blank-intro",
+            title: "Fill in the Blanks",
+            description: "Complete equations and sequences",
+            activities: [
+              {
+                id: "fb-demo",
+                type: "fill-blank",
+                title: "Complete the Equation",
+                step: "guided_practice",
+                order: 1,
+                config: {
+                  template: "3 + ___ = 8",
+                  blanks: [{ id: "b1", position: 0, correctAnswer: "5", options: ["4", "5", "6"] }],
+                  mode: "select",
+                },
+              },
+              {
+                id: "fb-ip",
+                type: "fill-blank",
+                title: "Number Pattern",
+                step: "independent_practice",
+                order: 2,
+                config: {
+                  template: "2, 4, ___, 8",
+                  blanks: [{ id: "b1", position: 0, correctAnswer: "6", options: ["5", "6", "7"] }],
+                  mode: "select",
                 },
               },
             ],

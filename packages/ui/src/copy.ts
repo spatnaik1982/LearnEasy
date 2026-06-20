@@ -102,4 +102,11 @@ export const COPY = {
   completionMultipleChoice: "Answer all the questions",
   completionStoryQuestion: "Answer all the questions about the story",
   completionRealWorld: "Complete the activity",
+  completionFractionVisual: "Shade the correct number of parts",
+  completionPlaceValue: "Place digits in the correct columns",
+  completionGridArea: "Count the squares",
+  completionChartReader: "Read the chart data",
+  completionClockTime: "Show the correct time",
+  completionMeasurementScale: "Read the measurement",
+  completionFillBlank: "Fill in all the blanks",
 } as const;
