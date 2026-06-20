@@ -14,7 +14,8 @@
     "dev": "pnpm -r dev",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
-    "curriculum:validate": "pnpm --filter @learn-easy/db curriculum:validate"
+    "curriculum:validate": "pnpm --filter @learn-easy/db curriculum:validate",
+    "curriculum:generate": "pnpm --filter @learn-easy/pipeline curriculum:generate"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

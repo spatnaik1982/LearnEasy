@@ -30,3 +30,6 @@ Thumbs.db
 coverage/
 *.tsbuildinfo
 comfy_outputs/
+
+# PDF source files (large binaries)
+pdf/*.pdf

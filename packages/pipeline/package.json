@@ -1,0 +1,33 @@
+{
+  "name": "@learn-easy/pipeline",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "curriculum:generate": "node dist/cli/index.js"
+  },
+  "dependencies": {
+    "@learn-easy/llm-config": "workspace:*",
+    "zod": "^3.0.0",
+    "js-yaml": "^4.2.0",
+    "openai": "^4.0.0",
+    "pdf-parse": "^1.1.1",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "vitest": "^4.0.0"
+  }
+}
