@@ -44,7 +44,7 @@ Summary: 1 concepts, 0 errors, 0 warnings
 
 ```
 ✗ Errors:
-  /path/to/concept.yaml [bad_concept] Activity at index 1: type must be one of: visual_counting, matching, drag_drop, sequencing, multiple_choice, story_question, real_world
+  /path/to/concept.yaml [bad_concept] Activity at index 1: type must be one of: visual_counting, matching, drag_drop, sequencing, multiple_choice, story_question, real_world, fraction_visual, place_value_chart, grid_area, chart_reader, clock_time, measurement_scale, fill_blank
   [bad_concept] /path/to/concept.yaml: Missing required activity step "guided_practice"
 
 ⚠ Warnings:
@@ -86,7 +86,7 @@ These are additional checks that verify pedagogical completeness:
 | Check                          | Type     | Description                                                   |
 |--------------------------------|----------|---------------------------------------------------------------|
 | Missing required steps         | **Error**  | Each concept must have activities for: `observe`, `guided_practice`, `independent_practice`, `mastery_check`, `positive_completion` |
-| Unsupported activity type      | **Error**  | Only allowed: `visual_counting`, `matching`, `drag_drop`, `sequencing`, `multiple_choice`, `story_question`, `real_world` |
+| Unsupported activity type      | **Error**  | Only allowed: `visual_counting`, `matching`, `drag_drop`, `sequencing`, `multiple_choice`, `story_question`, `real_world`, `fraction_visual`, `place_value_chart`, `grid_area`, `chart_reader`, `clock_time`, `measurement_scale`, `fill_blank` |
 | Sentence length                | **Warning**| Text fields (`learningObjective`, `coreIdea`, activity descriptions) should be ≤ 12 words |
 | Visual-first activity          | **Warning**| At least one activity per concept should use a visual-based type (`visual_counting`, `matching`, `drag_drop`) |
 

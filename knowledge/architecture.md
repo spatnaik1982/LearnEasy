@@ -256,6 +256,102 @@ Student requests help → POST /api/ai/tutor
 
 ---
 
+## Curriculum Generation Pipeline (EPIC-13)
+
+The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that generates validated curriculum YAML files from NIOS OBE PDF textbooks:
+
+```
+                          ┌─────────────────────┐
+                          │   NIOS OBE PDF       │
+                          │   (e.g., Level B     │
+                          │    Math textbook)     │
+                          └────────┬────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ 1. Extract (pdf-parse)        │
+                    │    → pages, chapters, sections │
+                    │    → headings, examples, exer. │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ 2. Chunk (LLM)                │
+                    │    → chapter → topics         │
+                    │    → ConceptCandidates[]       │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ 3. Generate Concepts (LLM)    │
+                    │    → ConceptRegistry           │
+                    │    → GeneratedConcept[]         │
+                    │    (Zod validated)             │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ 4. Generate Activities (LLM)  │
+                    │    → 5-step ALX-7 sequence    │
+                    │    → GeneratedActivity[]       │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ 5. Validate (Curriculum       │
+                    │    Pipeline)                  │
+                    │    → Zod schema check         │
+                    │    → Dependency resolution    │
+                    │    → ALX compliance           │
+                    │    ┌──────┐    ┌───────────┐ │
+                    │    │ Pass │───→│ 6. Output │ │
+                    │    └──────┘    │ (js-yaml)  │ │
+                    │    ┌────────┐  │  YAML files│ │
+                    │    │ Retry  │  │ curriculum/│ │
+                    │    │ (x3)   │  │ level-b/   │ │
+                    │    └────────┘  │ subject/   │ │
+                    └───────────────┴────────────┘
+```
+
+### Key Packages
+
+| Package | Role |
+|---------|------|
+| `@learn-easy/llm-config` | LLM provider abstraction (OpenAI, Anthropic) configurable via env vars |
+| `@learn-easy/pipeline` | LangGraph.js state graph with 6 pipeline stages |
+| `@learn-easy/db` | Zod schemas (`conceptSpecSchema`), validation CLI, dependency graph |
+
+### LLM Provider Architecture
+
+```
+Environment Variables
+  LLM_PROVIDER=openai|anthropic
+  LLM_MODEL=gpt-4o-mini|claude-sonnet-4-20250514
+  LLM_API_KEY=<key>
+
+┌──────────────────────────────────────────┐
+│           createLlmProvider()             │
+│  (packages/llm-config/src/index.ts)       │
+└──────┬───────────────────────┬───────────┘
+       │                       │
+       ▼                       ▼
+┌──────────────┐     ┌──────────────────┐
+│ OpenAIProvider│     │AnthropicProvider │
+│ (gpt-4o-mini) │     │ (tool use)       │
+│ zodResponse   │     │ Zod via tools    │
+│ Format        │     │                  │
+└──────────────┘     └──────────────────┘
+       │                       │
+       └───────┬───────────────┘
+               ▼
+       ┌─────────────────┐
+       │ generateStructured│
+       │ (prompt, schema) │
+       └─────────────────┘
+```
+
+---
+
 ## Design Guidelines
 
 ### Color Palette (Low-Sensory)
@@ -294,8 +390,18 @@ DATABASE_URL="postgresql://user:***@localhost:5432/learneasy"
 # OpenAI (for AI Tutor)
 OPENAI_API_KEY=***
 
+# LLM Provider Configuration (for Curriculum Pipeline — EPIC-13)
+LLM_PROVIDER=openai              # "openai" or "anthropic" (default: openai)
+LLM_MODEL=gpt-4o-mini            # Model name (default: gpt-4o-mini)
+LLM_API_KEY=***                  # Optional: falls back to OPENAI_API_KEY or ANTHROPIC_API_KEY
+LLM_MAX_TOKENS=4096              # Max tokens (default: 4096)
+LLM_TEMPERATURE=0.3              # Generation temperature (default: 0.3)
+
 # API URL (frontend uses this)
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
+
+# Mock Mode (skip API calls in development)
+NEXT_PUBLIC_USE_MOCK=true
 
 # JWT Secret (for auth tokens)
 JWT_SECRET=***
