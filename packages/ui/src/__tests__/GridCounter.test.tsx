@@ -76,4 +76,15 @@ describe("computePerimeter", () => {
   it("empty cells has perimeter 0", () => {
     expect(computePerimeter([], 5, 5)).toBe(0);
   });
+
+  it("L-shape (3x1 + 2x1) has perimeter 10", () => {
+    // Cells forming an L: (0,0), (1,0), (2,0), (2,1)
+    const cells = [
+      { row: 0, col: 0 },
+      { row: 1, col: 0 },
+      { row: 2, col: 0 },
+      { row: 2, col: 1 },
+    ];
+    expect(computePerimeter(cells, 5, 5)).toBe(10);
+  });
 });

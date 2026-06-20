@@ -22,5 +22,10 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    env: {
+      // Use mock data so the e2e tests do not require a seeded database.
+      // The mock data is in apps/student/lib/mockData.ts.
+      NEXT_PUBLIC_USE_MOCK: "true",
+    },
   },
 });

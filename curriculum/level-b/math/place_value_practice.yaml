@@ -1,22 +1,21 @@
 conceptId: place_value_practice
 chapter:
   code: CH1
-  name: Understanding Place Values
-learningObjective: Place digits in the correct place value columns
-coreIdea: Each digit in a number has a value based on its position.
+  name: Understanding Numbers from 1000 to 9999
+learningObjective: Place digits in the correct columns
+coreIdea: Each column holds one digit of a number, and the position determines its value.
 examples:
-  - "In 18,342, the 1 is in the ten thousands place. 📊"
-  - "In 75,406, the 7 is in the ten thousands place. 📊"
-  - "In 800,500, the 8 is in the hundred thousands place. 📊"
+  - 5 9 6 4 = 5964
+  - 1 8 3 4 2 = 18342
+  - 7 5 4 0 6 = 75406
 misconceptions:
-  - Students may confuse the place value of digits, thinking that the value is the same regardless of position.
-  - Students might overlook the value of zero in a number, believing it contributes to the total value.
-  - Students may struggle to translate numbers into words accurately, leading to incorrect representations.
+  - Order doesn't matter
+  - Same digit can be in multiple columns
 supports:
   visual: true
 masteryCriteria: 0.8
 difficulty: beginner
-estimatedDuration: 25
+estimatedDuration: 20
 dependencies:
   - place_value_understanding
   - counting_1_10
@@ -25,7 +24,7 @@ activities:
     type: place_value_chart
     order: 1
     content:
-      description: Let's look at the number 5964. 📊
+      description: Let's look at the number 5964.
       chart:
         thousands: 5
         hundreds: 9
@@ -35,61 +34,50 @@ activities:
     type: place_value_chart
     order: 2
     content:
-      maxPlaces: lakh
-      digits:
-        - null
-        - null
-        - null
-        - null
-        - 1
-        - 8
-        - 3
-        - 4
-        - 2
-      targetNumber: 18342
-      interactive: true
+      description: Look at the number 18342 placed in the chart.
+      chart:
+        ten_thousands: 1
+        thousands: 8
+        hundreds: 3
+        tens: 4
+        ones: 2
       hints:
-        - Place the 1 in the ten thousands column.
-        - The 8 goes in the thousands column.
-        - The 3 goes in the hundreds column.
+        - Each digit goes in its own column.
+        - The first digit goes in the highest column.
+        - You're close! Check the leftmost column.
+        - Try again.
+        - ""
   - step: independent_practice
-    type: place_value_chart
+    type: multiple_choice
     order: 3
     content:
-      maxPlaces: lakh
-      digits:
-        - null
-        - null
-        - null
-        - null
-        - null
-        - 7
-        - 5
-        - 4
-        - 0
-        - 6
-      targetNumber: 75406
-      interactive: true
+      questions:
+        - question: What digit is in the hundreds place of 18342?
+          options:
+            - "1"
+            - "8"
+            - "3"
+            - "4"
+          correctIndex: 2
   - step: mastery_check
-    type: place_value_chart
+    type: multiple_choice
     order: 4
     content:
-      maxPlaces: lakh
-      digits:
-        - null
-        - null
-        - null
-        - null
-        - null
-        - null
-        - 8
-        - 0
-        - 0
-        - 5
-        - 0
-        - 0
-      targetNumber: 800500
-      interactive: true
+      questions:
+        - question: What is the value of the digit 5 in 75406?
+          options:
+            - "5"
+            - "50"
+            - "500"
+            - "5000"
+          correctIndex: 3
+        - question: In 800500, which digit is in the ten-thousands place?
+          options:
+            - "8"
+            - "0"
+            - "5"
+            - "6"
+          correctIndex: 0
   - step: positive_completion
     type: visual_counting
     order: 5

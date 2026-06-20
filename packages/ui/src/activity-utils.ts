@@ -176,9 +176,10 @@ export function evaluateActivity(
     case "chart_reader": {
       const selectedLabel = response.selectedLabel as string | undefined;
       const expectedLabel = content.correctLabel as string | undefined;
+      const interactive = content.interactive as boolean | undefined;
 
-      // No correctLabel set -> this is a stimulus, not a scored activity; auto-complete
-      if (!expectedLabel) return { correct: true };
+      // No correctLabel set, OR non-interactive: this is a stimulus, not a scored activity; auto-complete
+      if (!expectedLabel || interactive === false) return { correct: true };
 
       return {
         correct: selectedLabel !== undefined && selectedLabel === expectedLabel,

@@ -179,10 +179,11 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
     delete n.options;
   }
 
-  // Handle fill_blank YAML shapes: { prompt, answer } or { question, answer } or { statement, answers }
+  // Handle fill_blank YAML shapes: { statement, answers } or { question, answer } or { prompt, answer }
+  // For the template, prefer the equation-like text (statement/question) over descriptive prompt text.
   if (t === "fill_blank") {
-    if (!n.template && (n.prompt || n.question || n.statement)) {
-      const rawTemplate = (n.prompt || n.question || n.statement) as string;
+    if (!n.template && (n.statement || n.question || n.prompt)) {
+      const rawTemplate = (n.statement || n.question || n.prompt) as string;
       const answer = n.answer ?? n.answers;
       if (answer) {
         const answers = Array.isArray(answer) ? answer : [answer];
@@ -286,7 +287,8 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
       const first = chart[0] as Record<string, unknown>;
       if (first.digit !== undefined) {
         n.digits = (chart as Array<Record<string, unknown>>).map((e) => Number(e.digit));
-        n.maxPlaces = "crore";
+        // Size the grid to the actual number of entries, not a fixed crore.
+        n.maxPlaces = chart.length <= 6 ? "lakh" : "crore";
       }
     }
   }
@@ -440,9 +442,10 @@ export function ActivityRenderer({
 
   // Observe-step auto-complete: for visual types, auto-complete after a brief delay
   // so the learner can see the visual without needing to answer.
+  // Also auto-completes non-interactive activities in any step (no user input required).
   const autoCompleteScheduledRef = useRef(false);
   useEffect(() => {
-    if (stepLabel !== "observe" || disableObserveStepAutoComplete) {
+    if (disableObserveStepAutoComplete) {
       autoCompleteScheduledRef.current = false;
       return;
     }
@@ -450,6 +453,15 @@ export function ActivityRenderer({
       autoCompleteScheduledRef.current = false;
       return;
     }
+
+    const isObserve = stepLabel === "observe";
+    const interactive = (normalizedContent.interactive as boolean) ?? false;
+    // Auto-complete fires when: this is the observe step, OR the activity is non-interactive
+    if (!isObserve && interactive) {
+      autoCompleteScheduledRef.current = false;
+      return;
+    }
+
     if (autoCompleteScheduledRef.current) return;
     autoCompleteScheduledRef.current = true;
 
@@ -458,7 +470,7 @@ export function ActivityRenderer({
     }, observeStepAutoCompleteDelayMs);
 
     return () => clearTimeout(timer);
-  }, [activity.id, type, stepLabel, disableObserveStepAutoComplete, observeStepAutoCompleteDelayMs]);
+  }, [activity.id, type, stepLabel, normalizedContent.interactive, disableObserveStepAutoComplete, observeStepAutoCompleteDelayMs]);
 
   const renderActivity = () => {
     switch (type) {
