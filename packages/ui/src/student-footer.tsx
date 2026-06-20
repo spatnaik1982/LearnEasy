@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Home, Heart, Settings } from "lucide-react";
+import { Home, Heart, Settings, UserCircle } from "lucide-react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StudentFooterProps {}
@@ -12,6 +12,7 @@ export function StudentFooter(_props: StudentFooterProps) {
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/calm-zone", label: "Calm Zone", icon: Heart },
+    { href: "/profile", label: "Profile", icon: UserCircle },
     { href: "/settings", label: "Settings", icon: Settings },
   ] as const;
 
