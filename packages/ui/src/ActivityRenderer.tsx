@@ -123,6 +123,7 @@ export function ActivityRenderer({
   const [multiQuestionResponses, setMultiQuestionResponses] = useState<
     { correct: boolean }[]
   >([]);
+  const [retryKey, setRetryKey] = useState(0);
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
   const normalizedContent = useMemo(
@@ -156,6 +157,7 @@ export function ActivityRenderer({
           setCompleted(false);
           setFeedback(null);
           setFeedbackType(null);
+          setRetryKey((k) => k + 1);
         }, 1200);
       }
     },
@@ -364,7 +366,7 @@ export function ActivityRenderer({
       case "drag_drop":
       case "dragdrop":
         return (
-          <DragDrop
+          <DragDrop key={retryKey}
             items={(normalizedContent.items as Array<{
               id: string;
               label: string;
@@ -383,14 +385,14 @@ export function ActivityRenderer({
 
       case "sequencing":
         return (
-          <Sequencing
+          <Sequencing key={retryKey}
             items={(normalizedContent.items as Array<{
               id: string;
               label: string;
               emoji?: string;
             }>) ?? []}
             correctOrder={(normalizedContent.correctOrder as string[]) ?? []}
-            onComplete={(_isCorrect, userOrder) => {
+            onComplete={(_, userOrder) => {
               handleComplete({ order: userOrder });
             }}
           />
@@ -422,11 +424,11 @@ export function ActivityRenderer({
                 options={options}
                 correctIndex={q.correctIndex}
                 onSelect={(isCorrect) => {
-                  const updated = [...multiQuestionResponses, { correct: isCorrect }];
+                  if (!isCorrect) return;
+                  const updated = [...multiQuestionResponses];
+                  updated[multiQuestionIndex] = { correct: true };
                   if (multiQuestionIndex + 1 >= questions.length) {
-                    const correctCount = updated.filter((r) => r.correct).length;
-                    const allCorrect = correctCount === questions.length;
-                    handleComplete({ correct: allCorrect, responses: updated });
+                    handleComplete({ correct: true, responses: updated });
                   } else {
                     setMultiQuestionResponses(updated);
                     setMultiQuestionIndex((prev) => prev + 1);

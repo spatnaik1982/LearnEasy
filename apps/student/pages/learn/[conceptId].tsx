@@ -63,6 +63,11 @@ const Learn: NextPage = () => {
   const [showTransition, setShowTransition] = useState(false);
   const [pendingStep, setPendingStep] = useState<number | null>(null);
   const [recordError, setRecordError] = useState<string | null>(null);
+  const [activityCompleted, setActivityCompleted] = useState(false);
+
+  useEffect(() => {
+    setActivityCompleted(false);
+  }, [currentStep]);
 
   useEffect(() => {
     if (!conceptId) return;
@@ -352,6 +357,7 @@ const Learn: NextPage = () => {
                           }}
                           stepLabel={STEP_LABELS[1]}
                           onComplete={(result) => {
+                            if (result.correct) setActivityCompleted(true);
                             handleRecordAttempt(
                               act.id,
                               result.response,
@@ -369,19 +375,13 @@ const Learn: NextPage = () => {
 
             <div className="flex justify-center">
               <button
-                onClick={() => {
-                  const act = getActivityForStep(1);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { completed: true },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                onClick={handleNext}
+                disabled={!activityCompleted}
+                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
+                  activityCompleted
+                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
               >
                 {COPY.continueConcept}
                 <ArrowRight className="w-5 h-5" />
@@ -425,6 +425,7 @@ const Learn: NextPage = () => {
                           }}
                           stepLabel={STEP_LABELS[2]}
                           onComplete={(result) => {
+                            if (result.correct) setActivityCompleted(true);
                             handleRecordAttempt(
                               act.id,
                               result.response,
@@ -442,21 +443,15 @@ const Learn: NextPage = () => {
 
             <div className="flex justify-center">
               <button
-                onClick={() => {
-                  const act = getActivityForStep(2);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { completed: true },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                onClick={handleNext}
+                disabled={!activityCompleted}
+                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
+                  activityCompleted
+                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
               >
-                {COPY.submitAnswer}
+                {COPY.continueConcept}
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -498,6 +493,7 @@ const Learn: NextPage = () => {
                           }}
                           stepLabel={STEP_LABELS[3]}
                           onComplete={(result) => {
+                            if (result.correct) setActivityCompleted(true);
                             handleRecordAttempt(
                               act.id,
                               result.response,
@@ -515,19 +511,13 @@ const Learn: NextPage = () => {
 
             <div className="flex justify-center">
               <button
-                onClick={() => {
-                  const act = getActivityForStep(3);
-                  if (act) {
-                    handleRecordAttempt(
-                      act.id,
-                      { selectedIndex: 0 },
-                      0,
-                      30,
-                    );
-                  }
-                  handleNext();
-                }}
-                className="h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
+                onClick={handleNext}
+                disabled={!activityCompleted}
+                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
+                  activityCompleted
+                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
               >
                 {COPY.continueConcept}
                 <ArrowRight className="w-5 h-5" />

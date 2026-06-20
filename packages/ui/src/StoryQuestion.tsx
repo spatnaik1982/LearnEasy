@@ -69,6 +69,13 @@ export function StoryQuestion({
             setHasAnswered(false);
           }
         }, 600);
+      } else {
+        // Reset after a brief delay so user can retry
+        setTimeout(() => {
+          setSelectedIndex(null);
+          setIsCorrect(null);
+          setHasAnswered(false);
+        }, 1200);
       }
     },
     [hasAnswered, currentQuestion, currentQuestionIndex, questions.length, responses, onComplete],

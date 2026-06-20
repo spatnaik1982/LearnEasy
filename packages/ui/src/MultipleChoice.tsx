@@ -42,7 +42,17 @@ export function MultipleChoice({
       setHasAnswered(true);
       setIsCorrect(correct);
       announce(correct ? "Correct! Well done." : "Let's try again");
-      onSelect(correct, index);
+
+      if (correct) {
+        onSelect(true, index);
+      } else {
+        // Reset after a brief delay so user can retry
+        setTimeout(() => {
+          setSelectedId(null);
+          setHasAnswered(false);
+          setIsCorrect(false);
+        }, 1200);
+      }
     },
     [hasAnswered, correctIndex, options, onSelect, announce],
   );
