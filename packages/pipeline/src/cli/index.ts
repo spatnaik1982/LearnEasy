@@ -175,9 +175,10 @@ export async function runPipelineCLI(): Promise<void> {
 
   let llm;
   try {
+    const { loadConfig } = await import('@learn-easy/llm-config');
     llm = createLlmProvider(
       options.llmProvider
-        ? { ...require('@learn-easy/llm-config').loadConfig(), provider: options.llmProvider, model: options.llmModel || 'gpt-4o-mini' }
+        ? { ...loadConfig(), provider: options.llmProvider, model: options.llmModel || 'gpt-4o-mini' }
         : undefined,
     );
     logger.success('LLM provider initialized');

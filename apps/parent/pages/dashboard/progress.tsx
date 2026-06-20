@@ -14,7 +14,6 @@ export default function ProgressPage() {
 
   useEffect(() => {
     if (!child) return;
-    setLoading(true);
     getStudentProgress(child as string).then((res) => {
       if (res.data) setData(res.data);
       setLoading(false);

@@ -73,10 +73,6 @@ const Learn: NextPage = () => {
   const [activityCompleted, setActivityCompleted] = useState(false);
 
   useEffect(() => {
-    setActivityCompleted(false);
-  }, [currentStep]);
-
-  useEffect(() => {
     if (!conceptId) return;
     const cId = conceptId as string;
 
@@ -98,6 +94,7 @@ const Learn: NextPage = () => {
     const nextStep = currentStep + 1;
     const newCompleted = [...completedSteps, currentStep];
     setCompletedSteps(newCompleted);
+    setActivityCompleted(false);
 
     if (nextStep >= STEPS.length - 1) {
       setCurrentStep(nextStep);
@@ -110,6 +107,7 @@ const Learn: NextPage = () => {
   const handleStartTransition = useCallback(() => {
     if (pendingStep !== null) {
       setCurrentStep(pendingStep);
+      setActivityCompleted(false);
       setPendingStep(null);
     }
     setShowTransition(false);

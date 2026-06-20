@@ -2,9 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Home, Heart, Settings } from "lucide-react";
 
-export interface StudentFooterProps {
-  // No required props — the footer is self-contained with hardcoded navigation items
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface StudentFooterProps {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function StudentFooter(_props: StudentFooterProps) {
