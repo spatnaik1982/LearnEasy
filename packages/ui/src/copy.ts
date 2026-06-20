@@ -109,4 +109,7 @@ export const COPY = {
   completionClockTime: "Show the correct time",
   completionMeasurementScale: "Read the measurement",
   completionFillBlank: "Fill in all the blanks",
+
+  // Step-specific work labels
+  completionObserveStep: "Watch the example",
 } as const;
