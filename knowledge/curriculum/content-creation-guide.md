@@ -47,7 +47,8 @@ curriculum/
 │   └── evs/               # Environmental Studies
 │       ├── ch1-plants-and-animals.yaml
 │       └── ...
-├── level-b/               # Future: NIOS OBE Level B
+├── level-b/               # NIOS OBE Level B
+│   └── math/              # Mathematics (pipeline-generated)
 └── level-c/               # Future: NIOS OBE Level C
 ```
 
@@ -217,15 +218,22 @@ Each activity object has these required fields:
 
 ### Valid Activity Types
 
-| Type | Description | Best used for |
-|---|---|---|
-| `visual_counting` | Count objects shown on screen | Numbers, addition, subtraction |
-| `matching` | Match item A to item B | Classification, vocabulary, phonics |
-| `drag_drop` | Drag items into correct positions | Sequencing, sorting, spatial concepts |
-| `sequencing` | Arrange items in correct order | Story order, number sequence, life cycle |
-| `multiple_choice` | Select the correct answer from options | Mastery checks, comprehension |
-| `story_question` | Answer questions about a short story | Reading comprehension |
-| `real_world` | Apply concept to real-world scenario | Practical application, generalization |
+| Type | Level | Description | Best used for |
+|------|-------|-------------|---------------|
+| `visual_counting` | A + B | Count objects shown on screen | Numbers, addition, subtraction |
+| `matching` | A + B | Match item A to item B | Classification, vocabulary, phonics |
+| `drag_drop` | A + B | Drag items into correct positions | Sequencing, sorting, spatial concepts |
+| `sequencing` | A + B | Arrange items in correct order | Story order, number sequence, life cycle |
+| `multiple_choice` | A + B | Select the correct answer from options | Mastery checks, comprehension |
+| `story_question` | A + B | Answer questions about a short story | Reading comprehension |
+| `real_world` | A + B | Apply concept to real-world scenario | Practical application, generalization |
+| `fraction_visual` | B | Visual fraction bars/circles (part-of-whole) | Fractions, equivalents, comparison |
+| `place_value_chart` | B | Place value chart up to crore (Indian system) | Large numbers, digit placement |
+| `grid_area` | B | Grid-based area/perimeter counting | Perimeter, area, unit squares |
+| `chart_reader` | B | Bar charts and pictographs | Data handling, reading values |
+| `clock_time` | B | Interactive analog clock | Telling time, reading clocks |
+| `measurement_scale` | B | Ruler, thermometer, measuring cylinder | Measurement reading |
+| `fill_blank` | B | Equation/sequence fill-in-the-blank | Missing digits, expanded form |
 
 ### Activity Content by Type
 
@@ -338,6 +346,115 @@ content:
   scenario: "Look around your room. Can you find a clock with numbers?"
   prompt: "What numbers do you see on the clock?"
   expectedAnswer: "1 to 12"         # Optional expected answer for AI evaluation
+```
+
+---
+
+### Level B Activity Types (EPIC-14)
+
+The following 7 activity types were added in EPIC-14 for Level B Math concepts.
+
+#### `fraction_visual`
+
+```yaml
+content:
+  numerator: 3
+  denominator: 4
+  mode: "circle"                    # "bar" or "circle"
+  label: "3/4"
+  showLabel: true
+  interactive: true
+  compare:                          # Optional: equivalence comparison
+    numerator: 6
+    denominator: 8
+```
+
+#### `place_value_chart`
+
+```yaml
+content:
+  maxPlaces: "crore"                # "lakh" or "crore"
+  digits: [null, null, null, null, null, 5, 4, 3]  # null = empty slot
+  targetNumber: 543                 # Number to represent
+  interactive: true
+  draggableDigits: [5, 4, 3]        # Available digits for drag mode
+  showLabels: true
+```
+
+#### `grid_area`
+
+```yaml
+content:
+  rows: 6
+  cols: 8
+  mode: "area"                      # "area" or "perimeter"
+  highlighted:                      # Pre-highlighted cells
+    - { row: 1, col: 1 }
+    - { row: 1, col: 2 }
+  interactive: true
+  maxHighlights: 48
+  cellSize: 40
+  showCount: true
+```
+
+#### `chart_reader`
+
+```yaml
+content:
+  type: "bar"                       # "bar" or "pictograph"
+  data:
+    - label: "Cricket"
+      value: 12
+      emoji: "🏏"
+    - label: "Football"
+      value: 8
+      emoji: "⚽"
+  title: "Favorite Sports"
+  showValues: true
+  interactive: true
+```
+
+#### `clock_time`
+
+```yaml
+content:
+  hour: 3
+  minute: 45
+  mode: "read"                      # "read" or "set"
+  showDigital: true
+  targetTime:                       # For "set" mode
+    hour: 7
+    minute: 30
+  interactive: false                # true for "set" mode
+  size: 250
+```
+
+#### `measurement_scale`
+
+```yaml
+content:
+  type: "ruler"                     # "ruler", "thermometer", or "cylinder"
+  min: 0
+  max: 30
+  step: 1
+  unit: "cm"
+  value: 12
+  interactive: true
+  showReading: true
+  showLabels: true
+```
+
+#### `fill_blank`
+
+```yaml
+content:
+  template: "3 + ___ = 8"
+  blanks:
+    - id: "blank_1"
+      position: 0
+      correctAnswer: "5"
+      options: ["3", "4", "5", "6"] # For select mode
+  mode: "select"                    # "select" or "type"
 ```
 
 ### Positive Completion (Step 5)
@@ -526,7 +643,7 @@ Your file isn't in the right directory structure. It must be at `curriculum/leve
 You're missing one of the 5 required steps. Every concept must have `observe`, `guided_practice`, `independent_practice`, `mastery_check`, and `positive_completion`.
 
 ### "Activity at index N: type must be one of..."
-You used an activity type that isn't in the allowed list. Check the spelling — valid types are: `visual_counting`, `matching`, `drag_drop`, `sequencing`, `multiple_choice`, `story_question`, `real_world`.
+You used an activity type that isn't in the allowed list. Check the spelling — valid types are: `visual_counting`, `matching`, `drag_drop`, `sequencing`, `multiple_choice`, `story_question`, `real_world`, `fraction_visual`, `place_value_chart`, `grid_area`, `chart_reader`, `clock_time`, `measurement_scale`, `fill_blank`.
 
 ### "Missing dependency: concept 'X' is referenced but not found"
 A concept in your `dependencies` array doesn't exist. Either:
@@ -554,6 +671,18 @@ For full design guidelines, see `knowledge/design/design-guidelines.md`.
 
 ---
 
+## Automated Pipeline Generation
+
+Level B (and future Level C) curriculum content can be automatically generated from NIOS OBE PDF textbooks via the LangGraph-based pipeline:
+
+```bash
+pnpm curriculum:generate --pdf <path> --level B --subject math
+```
+
+See `knowledge/project-management/epic-13-pdf-curriculum-pipeline.md` for full documentation.
+
+---
+
 ## Related Documentation
 
 - [Concept Specification Schema](concept-schema.md) — TypeScript/Zod schema reference
@@ -561,3 +690,4 @@ For full design guidelines, see `knowledge/design/design-guidelines.md`.
 - [Dependency Graph](dependency-graph.md) — How prerequisites are resolved
 - [Design Guidelines](../design/design-guidelines.md) — Full ALX framework
 - [Architecture Overview](../architecture.md) — System architecture
+- [Pipeline Architecture](../architecture.md#curriculum-generation-pipeline-epic-13) — Pipeline system design

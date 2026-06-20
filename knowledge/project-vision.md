@@ -139,7 +139,7 @@ Every concept follows the same 5-step structure:
 4. **Mastery Check** — 3–5 assessment questions
 5. **Positive Completion** — Simple encouragement
 
-### Activity Types
+### Activity Types (Level A)
 - Visual Counting
 - Matching (click-to-match pairs)
 - Drag and Drop
@@ -147,6 +147,15 @@ Every concept follows the same 5-step structure:
 - Multiple Choice
 - Story-Based Questions
 - Real-World Tasks
+
+### Additional Activity Types (Level B)
+- Fraction Visualization (bars and circles)
+- Place Value Chart (Indian system, up to crore)
+- Grid Counter (area/perimeter counting)
+- Chart Reader (bar charts and pictographs)
+- Clock Widget (interactive analog clock)
+- Scale Reader (ruler, thermometer, measuring cylinder)
+- Fill-in-the-Blank (equations, sequences, missing digits)
 
 ---
 
@@ -158,7 +167,7 @@ Every concept follows the same 5-step structure:
 | **Phase 2** | Learning Experience (TEACCH framework, Activity Engine, Accessibility) | ✅ Complete |
 || **Phase 3** | Adaptive Learning (ABA engine) | ✅ Complete |
 || **UX Phase** | Cross-App UX Coherence & Predictability Pass | ✅ Complete |
-|| **Phase 4** | AI Layer (AI Tutor UI, Curriculum Generation) | ⬜ Next |
+|| **Phase 4** | AI Layer (AI Tutor UI, Curriculum Generation) + Level B Math Pipeline & Components | ✅ Complete |
 | **Phase 5** | Parent Experience & Authoring Tools | ⬜ Future |
 
 ---

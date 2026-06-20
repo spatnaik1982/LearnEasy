@@ -27,12 +27,17 @@ learn-easy/
 │   │   ├── src/        # Concept schema, pipeline, dependency graph, validation CLI
 │   │   └── prisma/     # schema.prisma, seed.ts
 │   ├── ui/             # Shared React components (low-sensory)
-│   │   ├── src/        # VisualCounter, Matching, DragDrop, MCQ, AppShell, etc.
+│   │   ├── src/        # VisualCounter, Matching, DragDrop, MCQ, AppShell, FractionVisualizer, PlaceValueChart, GridCounter, ChartReader, ClockWidget, ScaleReader, FillBlank, etc.
 │   │   └── dist/       # Built output
 │   ├── ai/             # OpenAI wrapper (gpt-4o-mini, Zod structured outputs)
+│   ├── llm-config/     # Configurable LLM provider abstraction (OpenAI, Anthropic)
+│   │   └── src/        # LlmProvider interface, OpenAIProvider, AnthropicProvider
+│   ├── pipeline/       # PDF-to-Curriculum generation pipeline (LangGraph)
+│   │   └── src/        # extract/, chunk/, generate-concept/, generate-activities/, validate/, output/, graph/, cli/
 │   └── config/         # Centralized TypeScript configs
 ├── curriculum/         # Curriculum-as-code: validated YAML concept definitions
-│   └── level-a/        # Level A: math/, language/, evs/
+│   ├── level-a/        # Level A: math/, language/, evs/
+│   └── level-b/        # Level B: math/ (pipeline-generated)
 ├── knowledge/          # Project documentation
 │   ├── curriculum/     # Concept schema, validation CLI, dependency graph docs
 │   ├── design/         # ALX design guidelines
@@ -97,6 +102,9 @@ learn-easy/
 | `pnpm lint` | all | Lint all workspaces |
 | `pnpm test` | all | Run tests across workspaces |
 | `pnpm curriculum:validate` | root | Validate all curriculum YAML files |
+| `pnpm curriculum:generate` | root | Generate curriculum from PDF (LangGraph pipeline) |
+| `pnpm --filter @learn-easy/pipeline test` | pipeline | Run pipeline tests |
+| `pnpm --filter @learn-easy/llm-config test` | llm-config | Run LLM config tests |
 | `pnpm --filter @learn-easy/api start:dev` | api | Start NestJS in watch mode |
 | `pnpm --filter @learn-easy/student dev` | student | Start student Next.js app |
 | `pnpm --filter @learn-easy/parent dev` | parent | Start parent Next.js app |

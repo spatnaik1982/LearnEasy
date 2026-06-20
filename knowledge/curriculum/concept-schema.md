@@ -71,3 +71,5 @@ if (result.success) {
 - **Story 0.2** — Concept Authoring CLI (uses this schema for input validation)
 - **Story 0.3** — Curriculum Graph / Dependency Resolution (uses `dependencies`)
 - **Story 0.4** — Concept Persistence to Database (stores `ConceptSpec` in Prisma)
+- **Story 13.4** — Concept Generation Module (LLM generates `ConceptSpec`-compatible output using this schema)
+- **Story 13.6** — Validation & Retry Loop (validates generated concepts against this schema)

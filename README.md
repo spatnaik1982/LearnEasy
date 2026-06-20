@@ -34,11 +34,18 @@ learn-easy/
 │   │   └── src/           #   VisualCounter, Matching, MultipleChoice, etc.
 │   ├── ai/                # 🤖 OpenAI tutor wrapper (gpt-4o-mini)
 │   │   └── src/           #   AiTutorService with Zod structured outputs
+│   ├── llm-config/        # 🔌 Configurable LLM provider abstraction
+│   │   └── src/           #   OpenAI + Anthropic providers, env-based config
+│   ├── pipeline/          # 🔄 PDF-to-Curriculum pipeline (LangGraph)
+│   │   └── src/           #   Extract, Chunk, Generate, Validate, Output
 │   └── config/            # 📐 Centralized TypeScript config
 ├── curriculum/            # 📚 Curriculum-as-code: YAML concept definitions
-│   └── level-a/           #   Level A: math/, language/, evs/
+│   ├── level-a/           #   Level A: math/, language/, evs/
+│   └── level-b/           #   Level B: math/ (generated via pipeline)
 ├── knowledge/             # 📖 Project documentation
 │   ├── curriculum/        #   Concept schema, validation CLI, dependency graph
+│   ├── design/            #   ALX design guidelines, token specs
+│   ├── project-management/#   Epics, backlog, issue templates, plans
 │   ├── project-vision.md  #   Vision, mission, roadmap
 │   └── architecture.md    #   System architecture, data flow
 ├── AGENTS.md              # 🤖 Agent instructions for AI coding tools
@@ -96,6 +103,7 @@ pnpm --filter @learn-easy/parent dev
 | `pnpm lint` | Lint all workspaces |
 | `pnpm test` | Run tests across workspaces |
 | `pnpm curriculum:validate` | Validate all curriculum YAML files |
+| `pnpm curriculum:generate` | Generate curriculum from PDF via LangGraph pipeline |
 | `pnpm --filter @learn-easy/api start:dev` | Start NestJS API (watch mode, port 3000) |
 | `pnpm --filter @learn-easy/student dev` | Start student frontend (port 3001) |
 | `pnpm --filter @learn-easy/parent dev` | Start parent dashboard (port 3002) |
@@ -105,10 +113,17 @@ pnpm --filter @learn-easy/parent dev
 
 ## Curriculum Infrastructure
 
-Curriculum content is defined as YAML files under `curriculum/level-a/` and loaded via a validation pipeline:
+Curriculum content is defined as YAML files under `curriculum/` and loaded via a validation pipeline:
 
 ```
 YAML → Validation (ConceptSpec Schema) → Dependency Resolution → Database Seed
+```
+
+Additionally, an automated **PDF-to-Curriculum Pipeline** can generate validated YAML files from NIOS OBE PDF textbooks:
+
+```
+PDF → Extract Text → Chunk & Topic → Generate Concepts → Generate Activities → Validate → YAML
+      (pdf-parse)    (LLM)          (LLM)              (LLM)             (retry loop)  (js-yaml)
 ```
 
 ### Validation
@@ -127,25 +142,61 @@ Validation checks:
 - **Dependency graph**: No circular dependencies, all references resolve
 - **ALX compliance**: Sentence length ≤12 words, visual-first, literal language
 
-### Current Curriculum (Level A)
+### Curriculum Generation (EPIC-13)
 
-| Subject | Chapters | Concepts |
-|---------|----------|----------|
-| **Mathematics** | Numbers, Shapes, Addition, Subtraction | 7 concepts (Counting, Number Recognition, Shapes, Addition, Subtraction, Comparing Quantities, Position Words) |
-| **Language** | Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension | 11 concepts |
-| **Environmental Science** | Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings | 11 concepts |
+```bash
+# Generate Level B Math curriculum from a NIOS PDF
+pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math
+
+# Dry run (validate without writing files)
+pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math --dry-run --verbose
+
+# Show help
+pnpm curriculum:generate --help
+```
+
+The pipeline uses a LangGraph.js state graph with configurable LLM providers (OpenAI, Anthropic) and automatic retry on validation failure. See `knowledge/project-management/epic-13-pdf-curriculum-pipeline.md` for details.
+
+### Valid Activity Types (14 total)
+
+| Type | Level | Description |
+|------|-------|-------------|
+| `visual_counting` | A + B | Count objects shown on screen |
+| `matching` | A + B | Match item A to item B |
+| `drag_drop` | A + B | Drag items into correct positions |
+| `sequencing` | A + B | Arrange items in correct order |
+| `multiple_choice` | A + B | Select the correct answer from options |
+| `story_question` | A + B | Answer questions about a short story |
+| `real_world` | A + B | Apply concept to real-world scenario |
+| `fraction_visual` | B | Visual fraction bars/circles (part-of-whole) |
+| `place_value_chart` | B | Place value chart up to crore (Indian system) |
+| `grid_area` | B | Grid-based area/perimeter counting |
+| `chart_reader` | B | Bar charts and pictographs for data handling |
+| `clock_time` | B | Interactive analog clock for telling time |
+| `measurement_scale` | B | Ruler, thermometer, measuring cylinder |
+| `fill_blank` | B | Equation/sequence fill-in-the-blank |
+
+### Current Curriculum
+
+| Level | Subject | Scope |
+|-------|---------|-------|
+| **Level A** | Mathematics | 7 concepts (Counting, Number Recognition, Shapes, Addition, Subtraction, Comparing Quantities, Position Words) |
+| **Level A** | Language | 11 concepts (Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension) |
+| **Level A** | Environmental Science | 11 concepts (Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings) |
+| **Level B** | Mathematics | 28-35 concepts across 8 chapters (generated via pipeline) |
 
 ---
 
 ## MVP Scope (Implemented)
 
-### Level A — NIOS OBE (Grades 1-3 Equivalent)
+### Levels A + B — NIOS OBE
 
-| Subject | Chapters | Concepts | Activities |
-|---------|----------|----------|------------|
-| **Mathematics** | Numbers, Shapes, Addition, Subtraction | 7 concepts | Visual Counting, Matching, Multiple Choice, Sequencing |
-| **Language** | Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension | 11 concepts | Visual Counting, Matching, Multiple Choice |
-| **Environmental Science** | Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings | 11 concepts | Visual Counting, Matching, Multiple Choice |
+| Level | Subject | Chapters | Concepts | Activity Types |
+|-------|---------|----------|----------|----------------|
+| **A** | Mathematics | Numbers, Shapes, Addition, Subtraction | 7 | Visual Counting, Matching, Multiple Choice, Sequencing |
+| **A** | Language | Letter Recognition, Phonics, Sight Words, Reading Readiness, Writing Readiness, Basic Comprehension | 11 | Visual Counting, Matching, Multiple Choice |
+| **A** | Environmental Science | Living Things, My Family, Seasons & Weather, Water & Air, My Surroundings | 11 | Visual Counting, Matching, Multiple Choice |
+| **B** | Mathematics (pipeline-generated) | Numbers, Operations, Fractions, Decimals, Measurement, Perimeter/Area/Volume, Geometry, Data Handling | 28-35 | 14 types including FractionVisualizer, PlaceValueChart, GridCounter, ChartReader, ClockWidget, ScaleReader, FillBlank |
 
 ### Features
 
@@ -153,12 +204,12 @@ Validation checks:
 |---------|--------|-------------|
 | Student Learning Flow | ✅ | 5-step experience with TEACCH work system |
 | TEACCH Structured Learning | ✅ | Visual schedule, work system layout, transition screens |
-| Activity Engine | ✅ | 7 activity types with centralized renderer |
+| Activity Engine | ✅ | 14 activity types with centralized renderer (+7 Level B types) |
 | ABA Learning Engine | ✅ | Prompt hierarchy (5 levels), auto-fading, mastery calculation |
 | Calm Zone | ✅ | Self-regulation break space with timer + breathing exercise |
 | Resume Learning | ✅ | Continue from exact activity after returning |
 | Accessibility Framework | ✅ | Keyboard reorder, aria-live announcements, focus management |
-| Curriculum-as-Code | ✅ | 29 concepts across Math + Language + EVS as validated YAML files |
+| Curriculum-as-Code | ✅ | 29 Level A + 28-35 Level B concepts as validated YAML files |
 | Curriculum Validation | ✅ | CLI validation (Zod schema, activity steps, dependency graph, ALX compliance) |
 | Progress Tracking | ✅ | Activity attempt recording, concept mastery, session tracking |
 | Parent Dashboard | ✅ | Progress tracking, weekly reports, AI insights |
@@ -173,6 +224,8 @@ Validation checks:
 | Centralized Copy | ✅ | All action strings from single copy.ts, consistent terminology |
 | Loading/Error States | ✅ | DataState component with loading, empty, error, ready states |
 | Parent Narrative Dashboard | ✅ | Headline-driven overview with this-week panel and next-step card |
+| LLM Provider Config | ✅ | Configurable OpenAI/Anthropic providers via env vars (`packages/llm-config`) |
+| PDF-to-Curriculum Pipeline | ✅ | LangGraph.js pipeline: extract → chunk → generate → validate → output (`packages/pipeline`) |
 
 ---
 
@@ -238,7 +291,8 @@ Validation checks:
 | **Database** | PostgreSQL 16 + pgvector | Primary data + embeddings |
 | **ORM** | Prisma 5 | Type-safe database access |
 | **UI Framework** | Tailwind CSS, shadcn/ui | Accessible, low-sensory components |
-| **AI** | OpenAI gpt-4o-mini, Zod | Structured AI tutoring |
+| **AI** | OpenAI gpt-4o-mini, Anthropic Claude, Zod | Structured AI tutoring |
+| **Pipeline** | LangGraph.js, pdf-parse, js-yaml | PDF-to-Curriculum generation |
 | **Auth** | Passport.js, JWT, bcrypt | Authentication |
 | **Package Manager** | pnpm 10 | Monorepo workspace management |
 
