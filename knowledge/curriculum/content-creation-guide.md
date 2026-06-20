@@ -350,7 +350,40 @@ content:
 
 ---
 
+## Level B Chapter Reference
+
+This table maps each Level B Math chapter to the activity types it uses. Use it as a starting point when authoring a new concept.
+
+| Chapter | Topics | Observe | Guided | Independent | Mastery | Example |
+|---|---|---|---|---|---|---|
+| CH1 — Numbers (1000–9999) | place value, reading/writing, forming, expanded form | `place_value_chart` | `drag_drop` | `fill_blank` | `multiple_choice` | `place_value_understanding.yaml` |
+| CH2 — Operations | addition, subtraction, multiplication, division | `visual_counting` | `story_question` / `drag_drop` | `fill_blank` | `multiple_choice` | `addition_basics.yaml` |
+| CH3 — Fractions & Geometry | fractions, decimals, perimeter, area, volume, angles, symmetry, lines | `fraction_visual` / `grid_area` | `drag_drop` / `matching` | `fill_blank` / `fraction_visual` | `multiple_choice` | `fractions_intro.yaml` |
+| CH4 — Order & Comparison | ascending, descending, comparing | `visual_counting` / `sequencing` | `drag_drop` | `multiple_choice` | `multiple_choice` | `ascending_order_numbers.yaml` |
+| CH5 — Measurement | length, weight, capacity, conversion, time | `clock_time` / `measurement_scale` | `drag_drop` / `matching` | `fill_blank` / `measurement_scale` | `multiple_choice` / `clock_time` | `clock_reading.yaml` |
+| CH7 — Data Handling | data collection, bar graphs, pictographs | `chart_reader` | `drag_drop` | `fill_blank` | `multiple_choice` | `bar_graphs.yaml` |
+
+**Coverage gaps:** CH5 (Measurement) now has clock_time and measurement_scale concepts added. CH6 is planned for future content.
+
+## Per-type Scoring Rules
+
+Each activity type has a `correct: boolean` decision made by `evaluateActivity()` in `packages/ui/src/activity-utils.ts`. The table below documents, for each new type, what content field is required for scoring and what happens when the field is missing.
+
+| Type | Required for scoring | Without it | Tolerance |
+|---|---|---|---|
+| `fraction_visual` | (none — click-driven) | `correct: true` if `interactive: false`, else `correct: false` | exact match |
+| `place_value_chart` | `targetNumber` | `correct: true` if `interactive: false` (observe), else `correct: false` | exact digit match |
+| `grid_area` | (none — click-driven) | `correct: false` (no clicks = no completion) | exact count (area) or perimeter |
+| `chart_reader` | `correctLabel` (when `interactive: true`) | `correct: true` (stimulus observe) | exact label match |
+| `clock_time` | `targetTime` (when `interactive: true`) | `correct: true` (observe) | hour exact, minutes ±5 |
+| `measurement_scale` | `targetValue` (when `interactive: true`) | `correct: true` (observe) | ±1 step |
+| `fill_blank` | `blanks[].correctAnswer` (always) | `correct: false` (no answers provided) | string match |
+
+**Observe-step auto-complete:** When `stepLabel === "observe"` and the type is in `OBSERVE_STEP_AUTO_COMPLETABLE_TYPES` (all 7 new types), the renderer auto-calls `onComplete({ observed: true })` after 1500ms. `evaluateActivity` short-circuits on `response.observed === true` and returns `{ correct: true }` regardless of the type.
+
 ### Level B Activity Types (EPIC-14)
+
+> **Note on the observe step:** For the observe step (where the tutor demonstrates), set `interactive: false` (or omit the `interactive` key). The renderer auto-completes these activities after 1500ms. The user is not expected to answer anything in observe. See the "Per-type scoring rules" section below for details.
 
 The following 7 activity types were added in EPIC-14 for Level B Math concepts.
 
@@ -369,17 +402,62 @@ content:
     denominator: 8
 ```
 
-#### `place_value_chart`
+**Comparison mode (equivalent fractions):**
 
 ```yaml
 content:
-  maxPlaces: "crore"                # "lakh" or "crore"
-  digits: [null, null, null, null, null, 5, 4, 3]  # null = empty slot
-  targetNumber: 543                 # Number to represent
-  interactive: true
-  draggableDigits: [5, 4, 3]        # Available digits for drag mode
-  showLabels: true
+  numerator: 1
+  denominator: 2
+  mode: circle
+  label: "1/2"
+  compare:
+    numerator: 2
+    denominator: 4
+  showLabel: true
 ```
+
+#### `place_value_chart`
+
+```yaml
+# Canonical shape (recommended for new content)
+content:
+  maxPlaces: crore        # "lakh" or "crore"
+  digits: [null, null, null, null, null, 5, 4, 3]  # null = empty slot
+  targetNumber: 543
+  interactive: true
+  draggableDigits: [5, 4, 3]
+  showLabels: true
+
+# Pipeline shape A — place → digit object (used in place_value_understanding.yaml)
+content:
+  description: "Let's look at the number 5964."
+  chart:
+    thousands: 5
+    hundreds: 9
+    tens: 6
+    ones: 4
+
+# Pipeline shape B — digit/place pairs (used in expanded_form.yaml)
+content:
+  description: "Let's look at the number 75406."
+  chart:
+    - { digit: "7", place: "10000" }
+    - { digit: "5", place: "1000" }
+    - { digit: "4", place: "100" }
+    - { digit: "0", place: "10" }
+    - { digit: "6", place: "1" }
+
+# Pipeline shape C — columns/rows table (used in forming_numbers.yaml)
+content:
+  description: "Let's look at how to arrange digits."
+  chart:
+    columns: [Thousands, Hundreds, Tens, Ones]
+    rows:
+      - [5, 3, 1, 0]
+      - [0, 1, 3, 5]
+```
+
+**Scoring:** Requires `targetNumber`. Without it, the activity is unscored (used in observe steps where the learner is just viewing).
 
 #### `grid_area`
 
@@ -400,19 +478,34 @@ content:
 #### `chart_reader`
 
 ```yaml
+# Stimulus mode (observe step, default): the chart is displayed but bars are not clickable.
 content:
-  type: "bar"                       # "bar" or "pictograph"
+  type: bar
   data:
-    - label: "Cricket"
+    - label: Cricket
       value: 12
       emoji: "🏏"
-    - label: "Football"
+    - label: Football
       value: 8
       emoji: "⚽"
-  title: "Favorite Sports"
+  title: Favorite Sports
+  showValues: true
+  interactive: false
+
+# Scored mode (guided/independent/mastery): bars are clickable.
+content:
+  type: bar
+  data:
+    - { label: Cricket, value: 12 }
+    - { label: Football, value: 8 }
+    - { label: Hockey, value: 5 }
+  title: Which sport is most popular?
   showValues: true
   interactive: true
+  correctLabel: Cricket     # required for scoring
 ```
+
+**Scoring:** Requires `correctLabel` when `interactive: true`. Without it, the activity is stimulus-only and auto-completes.
 
 #### `clock_time`
 
@@ -429,6 +522,8 @@ content:
   size: 250
 ```
 
+**Scoring:** Requires `targetTime` for guided/independent/mastery steps. Without it (or with `interactive: false`), the activity is observe-only and auto-completes. The 5-minute tolerance on minutes is built in. Recommended Level B chapter: CH5 (Time / Measurement).
+
 #### `measurement_scale`
 
 ```yaml
@@ -444,6 +539,8 @@ content:
   showLabels: true
 ```
 
+**Scoring:** Requires `targetValue` for guided/independent/mastery steps. Without it (or with `interactive: false`), the activity is observe-only. The 1-step tolerance is built in.
+
 #### `fill_blank`
 
 ```yaml
@@ -456,6 +553,35 @@ content:
       options: ["3", "4", "5", "6"] # For select mode
   mode: "select"                    # "select" or "type"
 ```
+
+**Pipeline variant — `prompt + answers` (used in `expanded_form.yaml`):**
+
+```yaml
+content:
+  prompt: "Fill in the blanks for the expanded form of 395432:"
+  statement: "395432 = ___ + ___ + ___ + ___ + ___ + ___."
+  answers:
+    - "300000"
+    - "90000"
+    - "5000"
+    - "400"
+    - "30"
+    - "2"
+```
+
+The renderer builds the `blanks` array from the `answers` field and uses the `prompt` (or `statement`) as the `template`.
+
+### Runtime Normalization
+
+The student app's `ActivityRenderer` includes a `normalizeContent()` helper that translates YAML shapes the EPIC-13 pipeline emits into the canonical component prop shape. Content authors writing YAML by hand should prefer the canonical shapes documented above, but the runtime will accept pipeline variants too.
+
+For each new type, the runtime supports:
+- `place_value_chart`: 4 shapes (canonical + 3 pipeline variants shown above)
+- `chart_reader`: 2 shapes (canonical + `categories` variant)
+- `fill_blank`: 2 shapes (canonical + `prompt + answers` variant shown above)
+- `grid_area`, `clock_time`, `measurement_scale`, `fraction_visual`: the canonical shapes shown above
+
+See `packages/ui/src/ActivityRenderer.tsx` for the exact normalization rules.
 
 ### Positive Completion (Step 5)
 

@@ -153,6 +153,24 @@ function runAlxComplianceChecks(entries: ConceptCurriculumEntry[]): AlxResult {
         `${tag} ${filePath}: No visual-based activity found (recommend at least one of: ${VISUAL_TYPES.join(', ')})`,
       );
     }
+
+    // ── 4. Perimeter misconception check (WARNING) ──────────────
+    // When using grid_area with perimeter mode, recommend a misconception.
+    for (const act of activities) {
+      if (act.type === 'grid_area') {
+        const mode = (act.content as Record<string, unknown>).mode;
+        if (mode === 'perimeter') {
+          const hasPerimMisconception = concept.misconceptions.some((m) =>
+            m.toLowerCase().includes('perimeter') || m.toLowerCase().includes('area')
+          );
+          if (!hasPerimMisconception) {
+            warnings.push(
+              `${tag} ${filePath}: grid_area perimeter activity has no perimeter-related misconception (recommend adding one to help struggling learners)`,
+            );
+          }
+        }
+      }
+    }
   }
 
   return { errors, warnings };

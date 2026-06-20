@@ -33,6 +33,11 @@ export function evaluateActivity(
   response: Record<string, unknown>,
   content: ActivityContent,
 ): EvaluationResult {
+  // Auto-completed observe step (see ActivityRenderer observe-step auto-complete pattern)
+  if (response.observed === true) {
+    return { correct: true };
+  }
+
   switch (type) {
     case "visual_counter":
     case "visual_counting": {
@@ -135,15 +140,26 @@ export function evaluateActivity(
     case "fraction_visual": {
       const shaded = response.shaded as number | undefined;
       const expectedNumerator = content.numerator as number | undefined;
-      return {
-        correct: shaded === expectedNumerator,
-      };
+      const interactive = content.interactive as boolean | undefined;
+
+      // Observe step: non-interactive, no expected answer -> auto-complete
+      if (interactive === false) return { correct: true };
+      if (shaded === undefined) return { correct: true };
+
+      return { correct: shaded === expectedNumerator };
     }
 
     case "place_value_chart": {
       const targetNumber = content.targetNumber as number | undefined;
       const digits = content.digits as (number | null)[] | undefined;
-      if (!targetNumber || !digits) return { correct: true };
+      const interactive = content.interactive as boolean | undefined;
+
+      // Observe step: non-interactive -> auto-complete
+      if (interactive === false) return { correct: true };
+
+      // interactive steps need both targetNumber and digits to score
+      if (targetNumber == null || !digits) return { correct: false };
+
       const targetStr = String(targetNumber).replace(/,/g, '').padStart(digits.length, '0');
       const placedStr = digits.map((d) => d ?? 0).join('');
       return { correct: placedStr === targetStr };
@@ -160,6 +176,10 @@ export function evaluateActivity(
     case "chart_reader": {
       const selectedLabel = response.selectedLabel as string | undefined;
       const expectedLabel = content.correctLabel as string | undefined;
+
+      // No correctLabel set -> this is a stimulus, not a scored activity; auto-complete
+      if (!expectedLabel) return { correct: true };
+
       return {
         correct: selectedLabel !== undefined && selectedLabel === expectedLabel,
       };
@@ -169,7 +189,14 @@ export function evaluateActivity(
       const setHour = response.hour as number | undefined;
       const setMinute = response.minute as number | undefined;
       const targetTime = content.targetTime as { hour: number; minute: number } | undefined;
-      if (setHour === undefined || setMinute === undefined || !targetTime) return { correct: false };
+      const interactive = content.interactive as boolean | undefined;
+
+      // Observe step: non-interactive, no target -> auto-complete
+      if (interactive === false || !targetTime) {
+        return { correct: true };
+      }
+
+      if (setHour === undefined || setMinute === undefined) return { correct: false };
       const hourMatch = setHour === targetTime.hour;
       const minuteDiff = Math.abs(setMinute - targetTime.minute);
       return {
@@ -180,7 +207,14 @@ export function evaluateActivity(
     case "measurement_scale": {
       const setValue = response.value as number | undefined;
       const targetValue = content.targetValue as number | undefined;
-      if (setValue === undefined || targetValue === undefined) return { correct: false };
+      const interactive = content.interactive as boolean | undefined;
+
+      // Observe step: non-interactive, no target -> auto-complete
+      if (interactive === false || targetValue === undefined) {
+        return { correct: true };
+      }
+
+      if (setValue === undefined) return { correct: false };
       const step = (content.step as number) ?? 1;
       return {
         correct: Math.abs(setValue - targetValue) <= step,

@@ -1,0 +1,80 @@
+conceptId: equivalent_fractions_practice
+chapter:
+  code: CH3
+  name: Understanding Fractions
+learningObjective: Find equivalent fractions visually
+coreIdea: Equivalent fractions represent the same amount even though they look different.
+examples:
+  - "1/2 is the same as 2/4. 🔄"
+  - "1/2 is the same as 3/6. 🔄"
+  - "1/3 is the same as 2/6. 🔄"
+misconceptions:
+  - Students may think that fractions with different numerators and denominators cannot be equivalent.
+  - Students may confuse the terms numerator and denominator, leading to incorrect fraction representation.
+  - Students might believe that only fractions with the same denominator can be equivalent.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - equivalent_fractions
+  - fractions_intro
+activities:
+  - step: observe
+    type: fraction_visual
+    order: 1
+    content:
+      numerator: 1
+      denominator: 2
+      mode: bar
+      label: "1/2"
+      interactive: false
+  - step: guided_practice
+    type: fraction_visual
+    order: 2
+    content:
+      numerator: 2
+      denominator: 4
+      mode: bar
+      label: "2/4"
+      compare:
+        numerator: 1
+        denominator: 2
+      showLabel: true
+      interactive: false
+      hints:
+        - Look at how much is shaded in each bar.
+        - 2/4 and 1/2 have the same amount shaded.
+        - They are equivalent fractions.
+  - step: independent_practice
+    type: fraction_visual
+    order: 3
+    content:
+      numerator: 3
+      denominator: 6
+      mode: bar
+      label: "3/6"
+      compare:
+        numerator: 1
+        denominator: 2
+      showLabel: true
+      interactive: false
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: "Which is equivalent to 1/3?"
+          options:
+            - 2/6
+            - 1/4
+            - 2/3
+            - 1/2
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job finding equivalents!
+      encouragement: true

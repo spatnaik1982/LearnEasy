@@ -35,7 +35,9 @@ activities:
           value: 2
         - label: April
           value: 4
-      title: Rainfall by Month
+      title: Rainfall by Month (cm)
+      showValues: true
+      interactive: false
   - step: guided_practice
     type: drag_drop
     order: 2

@@ -1,0 +1,88 @@
+conceptId: capacity_reading
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Read capacity on a measuring cylinder
+coreIdea: A measuring cylinder shows the volume of liquid in millilitres.
+examples:
+  - "500 mL of water reaches the 500 mark on the cylinder. 🧪"
+  - "250 mL of juice reaches the 250 mark on the cylinder. 🧪"
+  - "750 mL of milk reaches the 750 mark on the cylinder. 🧪"
+misconceptions:
+  - Students may read the bottom of the meniscus instead of the top of the liquid.
+  - Students may think the cylinder measures weight instead of volume.
+  - Students may confuse mL with L when reading the scale.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - reading_cylinder
+  - number_recognition_1_10
+activities:
+  - step: observe
+    type: measurement_scale
+    order: 1
+    content:
+      type: cylinder
+      min: 0
+      max: 1000
+      step: 100
+      unit: mL
+      value: 500
+      showReading: true
+      showLabels: true
+      interactive: false
+  - step: guided_practice
+    type: measurement_scale
+    order: 2
+    content:
+      type: cylinder
+      min: 0
+      max: 1000
+      step: 100
+      unit: mL
+      value: 0
+      targetValue: 250
+      showReading: true
+      showLabels: true
+      interactive: true
+      hints:
+        - Find the 250 mark on the cylinder.
+        - Each big line is 100 mL.
+        - 250 is halfway between 200 and 300.
+  - step: independent_practice
+    type: measurement_scale
+    order: 3
+    content:
+      type: cylinder
+      min: 0
+      max: 1000
+      step: 100
+      unit: mL
+      value: 0
+      targetValue: 750
+      showReading: true
+      showLabels: true
+      interactive: true
+  - step: mastery_check
+    type: measurement_scale
+    order: 4
+    content:
+      type: cylinder
+      min: 0
+      max: 1000
+      step: 100
+      unit: mL
+      value: 0
+      targetValue: 600
+      showReading: true
+      showLabels: true
+      interactive: true
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job reading the cylinder!
+      encouragement: true

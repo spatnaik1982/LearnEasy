@@ -10,12 +10,35 @@ import { StoryQuestion } from "./StoryQuestion";
 import { RealWorldTask } from "./RealWorldTask";
 import { FractionVisualizer } from "./FractionVisualizer";
 import { PlaceValueChart } from "./PlaceValueChart";
-import { GridCounter } from "./GridCounter";
+import { GridCounter, computePerimeter } from "./GridCounter";
 import { ChartReader } from "./ChartReader";
 import { ClockWidget } from "./ClockWidget";
 import { ScaleReader } from "./ScaleReader";
 import { FillBlank } from "./FillBlank";
 
+const OBSERVE_STEP_AUTO_COMPLETABLE_TYPES = [
+  "fraction_visual",
+  "place_value_chart",
+  "chart_reader",
+  "grid_area",
+  "clock_time",
+  "measurement_scale",
+  "fill_blank",
+] as const;
+
+/**
+ * Normalizes content from a YAML activity into the prop shape the corresponding
+ * UI component expects. The pipeline (EPIC-13) may emit several different shapes
+ * for the same activity type; this function translates them all into the canonical
+ * shape documented in `knowledge/curriculum/content-creation-guide.md`.
+ *
+ * For each activity type, the function:
+ *   1. Reads the canonical field first
+ *   2. Falls back to common pipeline variants
+ *   3. Coerces types where the pipeline emits strings instead of numbers
+ *
+ * Adding a new normalization branch: add an `if (t === "<type>")` block.
+ */
 function normalizeContent(type: string, content: Record<string, unknown>): Record<string, unknown> {
   const n = { ...content };
   const t = type.toLowerCase().replace(/-/g, "_");
@@ -173,6 +196,79 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
     }
   }
 
+  // Handle fraction_visual YAML shapes: pipeline variant uses description instead of label
+  if (t === "fraction_visual") {
+    if (!n.label && typeof n.description === "string") {
+      n.label = n.description;
+    }
+    if (n.compare && typeof n.compare === "object") {
+      n.compare = {
+        numerator: Number((n.compare as any).numerator ?? 0),
+        denominator: Number((n.compare as any).denominator ?? 1),
+      };
+    }
+  }
+
+  // Handle grid_area YAML shapes: pipeline variant uses cells instead of highlighted
+  if (t === "grid_area") {
+    if (!n.highlighted && Array.isArray(n.cells)) {
+      n.highlighted = n.cells;
+    }
+    if (n.highlighted && !Array.isArray(n.highlighted)) {
+      n.highlighted = [];
+    }
+  }
+
+  // Handle chart_reader YAML shapes: pipeline variant uses categories instead of data
+  if (t === "chart_reader") {
+    if (!n.data && Array.isArray(n.categories)) {
+      n.data = (n.categories as any[]).map((c) => ({
+        label: c.name ?? c.label ?? "",
+        value: Number(c.count ?? c.value ?? 0),
+        emoji: c.emoji,
+      }));
+      delete n.categories;
+    }
+    if (Array.isArray(n.data)) {
+      n.data = (n.data as any[]).map((d) => ({
+        label: String(d.label ?? d.name ?? ""),
+        value: Number(d.value ?? d.count ?? 0),
+        emoji: d.emoji,
+      }));
+    }
+  }
+
+  // Handle clock_time YAML shapes: pipeline variant uses time field
+  if (t === "clock_time") {
+    if (n.time && typeof n.time === "object") {
+      const t = n.time as any;
+      n.hour = Number(n.hour ?? t.hour ?? t.h ?? 12);
+      n.minute = Number(n.minute ?? t.minute ?? t.m ?? 0);
+      delete n.time;
+    }
+    if (n.targetTime && typeof n.targetTime === "object") {
+      const tt = n.targetTime as any;
+      n.targetTime = {
+        hour: Number(tt.hour ?? tt.h ?? 12),
+        minute: Number(tt.minute ?? tt.m ?? 0),
+      };
+    }
+  }
+
+  // Handle measurement_scale YAML shapes: pipeline variant uses range/reading
+  if (t === "measurement_scale") {
+    if (n.range && typeof n.range === "object") {
+      const r = n.range as any;
+      n.min = Number(n.min ?? r.from ?? r.min ?? 0);
+      n.max = Number(n.max ?? r.to ?? r.max ?? 10);
+      delete n.range;
+    }
+    if (n.reading !== undefined && n.value === undefined) {
+      n.value = Number(n.reading);
+      delete n.reading;
+    }
+  }
+
   // Handle place_value_chart YAML shapes
   if (t === "place_value_chart") {
     const chart = n.chart as unknown;
@@ -193,7 +289,6 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
         n.maxPlaces = "crore";
       }
     }
-    n.interactive = false;
   }
 
   return n;
@@ -217,6 +312,16 @@ export interface ActivityRendererProps {
   /** Step label (observe/guided_practice/independent_practice/mastery_check).
    *  Used to control whether counting activities show or hide the answer. */
   stepLabel?: string;
+  /**
+   * Delay in ms before the observe-step auto-completes for visual types.
+   * Default: 1500. Set to 0 for instant auto-complete.
+   */
+  observeStepAutoCompleteDelayMs?: number;
+  /**
+   * If true, the observe-step auto-complete is disabled entirely.
+   * Useful for testing or for types that have their own observe logic.
+   */
+  disableObserveStepAutoComplete?: boolean;
 }
 
 export function ActivityRenderer({
@@ -225,6 +330,8 @@ export function ActivityRenderer({
   className,
   promptLevel = 1,
   stepLabel,
+  observeStepAutoCompleteDelayMs = 1500,
+  disableObserveStepAutoComplete = false,
 }: ActivityRendererProps) {
   const startTimeRef = useRef<number>(Date.now());
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -330,6 +437,28 @@ export function ActivityRenderer({
   useEffect(() => {
     matchedPairIdsRef.current = [];
   }, [activity.id]);
+
+  // Observe-step auto-complete: for visual types, auto-complete after a brief delay
+  // so the learner can see the visual without needing to answer.
+  const autoCompleteScheduledRef = useRef(false);
+  useEffect(() => {
+    if (stepLabel !== "observe" || disableObserveStepAutoComplete) {
+      autoCompleteScheduledRef.current = false;
+      return;
+    }
+    if (!(OBSERVE_STEP_AUTO_COMPLETABLE_TYPES as readonly string[]).includes(type)) {
+      autoCompleteScheduledRef.current = false;
+      return;
+    }
+    if (autoCompleteScheduledRef.current) return;
+    autoCompleteScheduledRef.current = true;
+
+    const timer = setTimeout(() => {
+      handleComplete({ observed: true, activityType: type });
+    }, observeStepAutoCompleteDelayMs);
+
+    return () => clearTimeout(timer);
+  }, [activity.id, type, stepLabel, disableObserveStepAutoComplete, observeStepAutoCompleteDelayMs]);
 
   const renderActivity = () => {
     switch (type) {
@@ -635,7 +764,12 @@ export function ActivityRenderer({
             showLabel={(normalizedContent.showLabel as boolean) ?? false}
             interactive={(normalizedContent.interactive as boolean) ?? false}
             compare={normalizedContent.compare as { numerator: number; denominator: number } | undefined}
-            onShade={(shaded) => handleComplete({ shaded })}
+            onShade={(shaded) => {
+              // Only fire handleComplete when the activity is interactive
+              if ((normalizedContent.interactive as boolean) ?? false) {
+                handleComplete({ shaded });
+              }
+            }}
           />
         );
 
@@ -648,6 +782,8 @@ export function ActivityRenderer({
             draggableDigits={normalizedContent.draggableDigits as number[]}
             targetNumber={normalizedContent.targetNumber as number}
             showLabels={(normalizedContent.showLabels as boolean) ?? true}
+            onPlaceDigit={(col, digit) => handleComplete({ placed: { col, digit } })}
+            onRemoveDigit={(col) => handleComplete({ removed: { col } })}
           />
         );
 
@@ -662,7 +798,13 @@ export function ActivityRenderer({
             maxHighlights={normalizedContent.maxHighlights as number}
             cellSize={(normalizedContent.cellSize as number) ?? 40}
             showCount
-            onHighlight={(cells) => handleComplete({ highlighted: cells, count: cells.length })}
+            onHighlight={(cells) => {
+              const mode = (normalizedContent.mode as 'area' | 'perimeter') ?? 'area';
+              const count = mode === 'perimeter'
+                ? computePerimeter(cells, (normalizedContent.rows as number) ?? 5, (normalizedContent.cols as number) ?? 5)
+                : cells.length;
+              handleComplete({ highlighted: cells, count });
+            }}
           />
         );
 
@@ -674,7 +816,12 @@ export function ActivityRenderer({
             title={normalizedContent.title as string}
             showValues={(normalizedContent.showValues as boolean) ?? true}
             interactive={(normalizedContent.interactive as boolean) ?? false}
-            onSelect={(label) => handleComplete({ selectedLabel: label })}
+            onSelect={(label) => {
+              // Only fire when interactive (not a stimulus)
+              if ((normalizedContent.interactive as boolean) ?? false) {
+                handleComplete({ selectedLabel: label });
+              }
+            }}
           />
         );
 
