@@ -31,16 +31,18 @@ activities:
     order: 2
     content:
       description: "Add the stars"
-      left: 3
-      right: 2
+      left: ["⭐", "⭐", "⭐"]
+      right: ["⭐", "⭐"]
+      sum: 5
       hint: "Count all the stars together."
   - step: "independent_practice"
     type: "visual_counting"
     order: 3
     content:
       description: "Add the flowers"
-      left: 2
-      right: 3
+      left: ["🌸", "🌸"]
+      right: ["🌸", "🌸", "🌸"]
+      sum: 5
   - step: "mastery_check"
     type: "multiple_choice"
     order: 4
