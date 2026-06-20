@@ -1,5 +1,6 @@
 export interface ActivityContent {
   count?: number;
+  sum?: number;
   pairs?: Array<{ id: string; itemA: string; itemB: string }>;
   correctOrder?: string[];
   correctIndex?: number;
@@ -9,6 +10,7 @@ export interface ActivityContent {
   question?: string;
   scenario?: string;
   taskDescription?: string;
+  expectedPositions?: Record<string, string>;
   [key: string]: unknown;
 }
 
@@ -34,7 +36,7 @@ export function evaluateActivity(
   switch (type) {
     case "visual_counter":
     case "visual_counting": {
-      const expectedCount = content.count;
+      const expectedCount = content.sum ?? content.count;
       const givenCount = response.count as number | undefined;
       return {
         correct: givenCount === expectedCount,
@@ -90,6 +92,9 @@ export function evaluateActivity(
     }
 
     case "story_question": {
+      if (typeof response.correct === "boolean") {
+        return { correct: response.correct };
+      }
       const correctIndex = content.correctIndex;
       const selectedIndex = response.selectedIndex as number | undefined;
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { cn } from "./utils";
 import { evaluateActivity, getHint, getLeveledHint, getActivityFeedback } from "./activity-utils";
 import { VisualCounter } from "./VisualCounter";
@@ -8,6 +8,82 @@ import { Sequencing } from "./Sequencing";
 import { MultipleChoice } from "./MultipleChoice";
 import { StoryQuestion } from "./StoryQuestion";
 import { RealWorldTask } from "./RealWorldTask";
+
+function normalizeContent(type: string, content: Record<string, unknown>): Record<string, unknown> {
+  const n = { ...content };
+  const t = type.toLowerCase().replace(/-/g, "_");
+
+  if (t === "story_question" && !n.scenario && n.story) {
+    n.scenario = n.story;
+  }
+
+  if ((t === "real_world" || t === "real_world_task") && !n.taskDescription && n.prompt) {
+    n.taskDescription = n.prompt;
+  }
+
+  if (t === "matching" && Array.isArray(n.pairs)) {
+    n.pairs = (n.pairs as Array<Record<string, unknown>>).map((p, i) => ({
+      ...p,
+      id: p.id ?? `pair-${i}`,
+    }));
+  }
+
+  if (t === "sequencing" && Array.isArray(n.items)) {
+    if (typeof (n.items as unknown[])[0] === "string") {
+      n.items = (n.items as string[]).map((s, i) => {
+        const emojiMatch = s.match(/\p{Emoji}/u);
+        return {
+          id: `item-${i}`,
+          label: s,
+          emoji: emojiMatch ? emojiMatch[0] : undefined,
+        };
+      });
+    }
+    if (!n.correctOrder) {
+      n.correctOrder = (n.items as Array<Record<string, unknown>>).map((item) => item.id as string);
+    }
+    if (n.shuffled) {
+      const items = n.items as Array<{ id: string; label: string; emoji?: string }>;
+      const shuffledLabels = n.shuffled as string[];
+      const itemMap = new Map(items.map((i) => [i.label, i]));
+      n.items = shuffledLabels
+        .map((label) => itemMap.get(label))
+        .filter(Boolean);
+      delete n.shuffled;
+    }
+  }
+
+  if ((t === "drag_drop" || t === "dragdrop") && n.groups) {
+    const groups = n.groups as Array<{ label: string; target: string[] }>;
+    n.targets = groups.map((g, i) => ({ id: `target-${i}`, label: g.label }));
+
+    if (Array.isArray(n.items) && typeof (n.items as unknown[])[0] === "string") {
+      n.items = (n.items as string[]).map((s, i) => {
+        const emojiMatch = s.match(/\p{Emoji}/u);
+        return {
+          id: `item-${i}`,
+          label: s,
+          emoji: emojiMatch ? emojiMatch[0] : undefined,
+        };
+      });
+    }
+
+    const expected: Record<string, string> = {};
+    groups.forEach((g, gIdx) => {
+      g.target.forEach((itemStr) => {
+        const items = n.items as Array<{ id: string; label: string }>;
+        const item = items.find((i) => i.label === itemStr || i.id === itemStr);
+        if (item) {
+          expected[item.id] = `target-${gIdx}`;
+        }
+      });
+    });
+    n.expectedPositions = expected;
+    delete n.groups;
+  }
+
+  return n;
+}
 
 export interface ActivityRendererProps {
   activity: {
@@ -49,6 +125,10 @@ export function ActivityRenderer({
   >([]);
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
+  const normalizedContent = useMemo(
+    () => normalizeContent(type, activity.content),
+    [type, activity.content],
+  );
 
   const handleComplete = useCallback(
     (response: Record<string, unknown>) => {
@@ -56,7 +136,7 @@ export function ActivityRenderer({
       setCompleted(true);
 
       const timeSpent = Date.now() - startTimeRef.current;
-      const result = evaluateActivity(type, response, activity.content);
+      const result = evaluateActivity(type, response, normalizedContent);
       const fb = getActivityFeedback(result.correct);
 
       setFeedback(fb);
@@ -79,7 +159,7 @@ export function ActivityRenderer({
         }, 1200);
       }
     },
-    [type, activity.content, hintsUsed, onComplete, completed],
+    [type, normalizedContent, hintsUsed, onComplete, completed],
   );
 
   const handleHintClick = useCallback(async () => {
@@ -129,7 +209,7 @@ export function ActivityRenderer({
   }, [activity.id]);
 
   const matchedPairIdsRef = useRef<string[]>([]);
-  const totalPairs = type === "matching" ? (activity.content.pairs as Array<unknown>)?.length ?? 0 : 0;
+  const totalPairs = type === "matching" ? (normalizedContent.pairs as Array<unknown>)?.length ?? 0 : 0;
 
   useEffect(() => {
     matchedPairIdsRef.current = [];
@@ -139,18 +219,90 @@ export function ActivityRenderer({
     switch (type) {
       case "visual_counter":
       case "visual_counting": {
-        const count = (activity.content.count as number) ?? 0;
-        const emoji = (activity.content.emoji as string) ?? (activity.content.items as string[])?.[0] ?? "🔢";
-        const isDemonstration = stepLabel === "observe";
-        const answerText = (activity.content.text as string) ?? `${count} ${emoji}`;
+        const left = activity.content.left;
+        const right = activity.content.right;
+        const isAddition = Array.isArray(left) || Array.isArray(right) || typeof left === "number" || typeof right === "number";
 
+        const additionSum = (activity.content.sum as number | undefined)
+          ?? (Array.isArray(left) ? left.length : 0) + (Array.isArray(right) ? right.length : 0);
+        const count = isAddition ? additionSum : ((normalizedContent.count as number) ?? 0);
+        const emoji = (normalizedContent.emoji as string) ?? (normalizedContent.items as string[])?.[0] ?? "🔢";
+        const isDemonstration = stepLabel === "observe";
+        const answerText = (normalizedContent.text as string) ?? `${count} ${emoji}`;
+        const size = (normalizedContent.size as "sm" | "md" | "lg") ?? "md";
+
+        // Singular hint → add to hints array if not already present
+        const singularHint = activity.content.hint as string | undefined;
+        if (singularHint && !Array.isArray(activity.content.hints)) {
+          (normalizedContent.hints as string[]) = [singularHint];
+        }
+
+        // ── Addition shape: show left + right groups with "+" separator ──
+        if (isAddition) {
+          const leftItems = Array.isArray(left) ? (left as string[]) : [];
+          const rightItems = Array.isArray(right) ? (right as string[]) : [];
+          const leftEmoji = leftItems[0] ?? (Array.isArray(right) ? right[0] : undefined) ?? "🔢";
+          const rightEmoji = rightItems[0] ?? leftEmoji;
+
+          const maxOption = Math.max(10, Math.min(count + 2, 20));
+          const numberButtons = (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-lg font-semibold text-slate-text">
+                How many in all?
+              </p>
+              <div className="flex max-w-[340px] flex-wrap justify-center gap-3">
+                {Array.from({ length: maxOption }, (_, i) => i + 1).map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => handleComplete({ count: n })}
+                    disabled={completed}
+                    className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-slate-300 bg-white text-lg font-bold text-slate-text hover:border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-colors motion-safe:duration-150"
+                    aria-label={`Select ${n}`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+
+          if (isDemonstration) {
+            return (
+              <div className="flex flex-col items-center gap-6">
+                <div className="flex items-center justify-center gap-4">
+                  <VisualCounter count={leftItems.length} emoji={leftEmoji} size={size} showCount />
+                  <span className="text-3xl font-bold text-slate-text">+</span>
+                  <VisualCounter count={rightItems.length} emoji={rightEmoji} size={size} showCount />
+                  <span className="text-3xl font-bold text-slate-text">=</span>
+                  <span className="text-3xl font-bold text-slate-text">{count}</span>
+                </div>
+                <p className="text-xl font-semibold text-slate-text" aria-live="polite">
+                  {answerText}
+                </p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex items-center justify-center gap-4">
+                <VisualCounter count={leftItems.length} emoji={leftEmoji} size={size} showCount={false} />
+                <span className="text-3xl font-bold text-slate-text">+</span>
+                <VisualCounter count={rightItems.length} emoji={rightEmoji} size={size} showCount={false} />
+              </div>
+              {numberButtons}
+            </div>
+          );
+        }
+
+        // ── Standard counting shape ──
         if (isDemonstration) {
           return (
             <div className="flex flex-col items-center gap-4">
               <VisualCounter
                 count={count}
                 emoji={emoji}
-                size={(activity.content.size as "sm" | "md" | "lg") ?? "md"}
+                size={size}
                 showCount
               />
               <p className="text-xl font-semibold text-slate-text" aria-live="polite">
@@ -166,7 +318,7 @@ export function ActivityRenderer({
             <VisualCounter
               count={count}
               emoji={emoji}
-              size={(activity.content.size as "sm" | "md" | "lg") ?? "md"}
+              size={size}
               showCount={false}
             />
             <div className="flex flex-col items-center gap-3">
@@ -194,7 +346,7 @@ export function ActivityRenderer({
       case "matching":
         return (
           <Matching
-            pairs={(activity.content.pairs as Array<{
+            pairs={(normalizedContent.pairs as Array<{
               id: string;
               itemA: string;
               itemB: string;
@@ -213,12 +365,12 @@ export function ActivityRenderer({
       case "dragdrop":
         return (
           <DragDrop
-            items={(activity.content.items as Array<{
+            items={(normalizedContent.items as Array<{
               id: string;
               label: string;
               emoji?: string;
             }>) ?? []}
-            targets={(activity.content.targets as Array<{
+            targets={(normalizedContent.targets as Array<{
               id: string;
               label: string;
             }>) ?? []}
@@ -232,12 +384,12 @@ export function ActivityRenderer({
       case "sequencing":
         return (
           <Sequencing
-            items={(activity.content.items as Array<{
+            items={(normalizedContent.items as Array<{
               id: string;
               label: string;
               emoji?: string;
             }>) ?? []}
-            correctOrder={(activity.content.correctOrder as string[]) ?? []}
+            correctOrder={(normalizedContent.correctOrder as string[]) ?? []}
             onComplete={(_isCorrect, userOrder) => {
               handleComplete({ order: userOrder });
             }}
@@ -307,15 +459,15 @@ export function ActivityRenderer({
       case "story_question":
         return (
           <StoryQuestion
-            scenario={(activity.content.scenario as string) ?? ""}
+            scenario={(normalizedContent.scenario as string) ?? ""}
             questions={
-              (activity.content.questions as Array<{
+              (normalizedContent.questions as Array<{
                 question: string;
                 options: string[];
                 correctIndex: number;
               }>) ?? []
             }
-            visual={(activity.content.visual as string) ?? undefined}
+            visual={(normalizedContent.visual as string) ?? undefined}
             onComplete={(responses) => {
               const lastResponse = responses[responses.length - 1];
               handleComplete({
@@ -331,10 +483,10 @@ export function ActivityRenderer({
       case "real_world_task":
         return (
           <RealWorldTask
-            scenario={(activity.content.scenario as string) ?? ""}
-            taskDescription={(activity.content.taskDescription as string) ?? ""}
-            visualExample={(activity.content.visualExample as string) ?? undefined}
-            hint={(activity.content.hint as string) ?? undefined}
+            scenario={(normalizedContent.scenario as string) ?? ""}
+            taskDescription={(normalizedContent.taskDescription as string) ?? ""}
+            visualExample={(normalizedContent.visualExample as string) ?? undefined}
+            hint={(normalizedContent.hint as string) ?? undefined}
             onComplete={() => {
               handleComplete({ completed: true });
             }}
