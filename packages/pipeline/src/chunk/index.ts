@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { z } from 'zod';
 import type { LlmProvider } from '@learn-easy/llm-config';
 import type { ChapterChunk, ConceptCandidate } from '../types';
@@ -71,9 +69,47 @@ function prepareChapterText(chapter: ChapterChunk, maxTokens: number): string[] 
   return chunks;
 }
 
+const PROMPT_TEMPLATE = `You are analyzing a textbook chapter from the NIOS OBE Level {LEVEL} {SUBJECT} curriculum. Your task is to identify discrete, teachable concepts within this chapter.
+
+## Chapter Content
+
+Chapter {CHAPTER_NUMBER}: {CHAPTER_TITLE}
+
+\`\`\`
+{CHAPTER_TEXT}
+\`\`\`
+
+## Existing Prerequisite Concepts
+
+The learner has already mastered these concepts (available as prerequisites):
+{EXISTING_CONCEPTS}
+
+## ALX Guidelines for Learning Objectives
+
+- Use plain, concrete language (no jargon).
+- Focus on what the child will DO, not what they'll understand.
+- Keep to 12 words or fewer.
+- Start with an action verb (Identify, Count, Add, Compare, etc.).
+
+## Output Requirements
+
+For each concept you identify, provide:
+
+1. **conceptId**: Lowercase with underscores (e.g., "fractions_intro")
+2. **learningObjective**: What the child will do (≤12 words)
+3. **coreIdea**: The key takeaway in one sentence
+4. **examples**: 2-3 concrete examples from the chapter text (use emoji where possible)
+5. **misconceptions**: 1-2 common mistakes (infer from exercises if possible)
+6. **suggestedDependencies**: conceptIds this concept depends on (use IDs from the existing concepts list, or suggest new ones)
+7. **estimatedDuration**: Minutes (10-30 based on content density)
+8. **sourceSections**: Which sections of the chapter text this concept comes from
+
+Identify between 3 and 8 concepts per chapter. Each concept must be distinct and teachable on its own. Do not combine concepts that should be taught separately.
+
+Make sure dependency conceptIds use the correct format (lowercase_with_underscores).`;
+
 function loadPromptTemplate(): string {
-  const templatePath = join(__dirname, 'prompts', 'chapter-concepts.txt');
-  return readFileSync(templatePath, 'utf-8');
+  return PROMPT_TEMPLATE;
 }
 
 function buildPrompt(

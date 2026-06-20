@@ -35,23 +35,57 @@ export class OpenRouterProvider implements LlmProvider {
     schema: z.ZodType<T>,
     options?: { temperature?: number; maxTokens?: number },
   ): Promise<T> {
-    const response = await this.client.beta.chat.completions.parse({
-      model: this.model,
-      messages: [{ role: 'user', content: prompt }],
-      response_format: zodResponseFormat(schema, 'result'),
-      max_tokens: options?.maxTokens ?? this.defaultMaxTokens,
-      temperature: options?.temperature ?? this.defaultTemperature,
-    });
+    try {
+      const response = await this.client.beta.chat.completions.parse({
+        model: this.model,
+        messages: [{ role: 'user', content: prompt }],
+        response_format: zodResponseFormat(schema, 'result'),
+        max_tokens: options?.maxTokens ?? this.defaultMaxTokens,
+        temperature: options?.temperature ?? this.defaultTemperature,
+      });
 
-    const parsed = response.choices[0]?.message?.parsed;
-    if (!parsed) {
-      const refusal = response.choices[0]?.message?.refusal;
-      throw new Error(
-        refusal
-          ? `LLM refused to generate: ${refusal}`
-          : 'LLM returned no parsed content',
-      );
+      const parsed = response.choices[0]?.message?.parsed;
+      if (!parsed) {
+        const refusal = response.choices[0]?.message?.refusal;
+        throw new Error(
+          refusal
+            ? `LLM refused to generate: ${refusal}`
+            : 'LLM returned no parsed content',
+        );
+      }
+      return schema.parse(parsed);
+    } catch (err: unknown) {
+      if (
+        err instanceof Error &&
+        'status' in err &&
+        Number(err.status) === 400 &&
+        err.message.includes('Provider returned error')
+      ) {
+        const response = await this.client.chat.completions.create({
+          model: this.model,
+          messages: [
+            { role: 'system', content: `You must respond with valid JSON matching this schema. Do not include explanations outside the JSON.` },
+            { role: 'user', content: prompt },
+          ],
+          response_format: { type: 'json_object' },
+          max_tokens: options?.maxTokens ?? this.defaultMaxTokens,
+          temperature: options?.temperature ?? this.defaultTemperature,
+        });
+
+        const content = response.choices[0]?.message?.content;
+        if (!content) {
+          throw new Error('LLM returned no content');
+        }
+
+        try {
+          const parsed = JSON.parse(content);
+          return schema.parse(parsed);
+        } catch (parseErr) {
+          const msg = parseErr instanceof Error ? parseErr.message : String(parseErr);
+          throw new Error(`Failed to parse LLM JSON response: ${msg}`);
+        }
+      }
+      throw err;
     }
-    return schema.parse(parsed);
   }
 }

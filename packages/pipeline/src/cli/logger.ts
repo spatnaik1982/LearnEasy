@@ -40,11 +40,12 @@ export function reportTable(metrics: { label: string; value: string | number; st
   const labelPad = Math.max(...metrics.map((m) => m.label.length));
   const valuePad = Math.max(...metrics.map((m) => String(m.value).length));
 
-  console.log(`\n${'─'.repeat(labelPad + valuePad + 12)}`);
+  const width = Math.max(0, labelPad + valuePad + 12);
+  console.log(`\n${'─'.repeat(width)}`);
   console.log(
-    `${BOLD}${' '.repeat(2)}Metric${' '.repeat(labelPad - 6)}${' '.repeat(2)}Count${' '.repeat(valuePad - 3)}Status${RESET}`,
+    `${BOLD}${' '.repeat(2)}Metric${' '.repeat(Math.max(0, labelPad - 6))}${' '.repeat(2)}Count${' '.repeat(Math.max(0, valuePad - 5))}Status${RESET}`,
   );
-  console.log(`${'─'.repeat(labelPad + valuePad + 12)}`);
+  console.log(`${'─'.repeat(width)}`);
 
   for (const m of metrics) {
     const statusIcon =
@@ -56,5 +57,5 @@ export function reportTable(metrics: { label: string; value: string | number; st
     );
   }
 
-  console.log(`${'─'.repeat(labelPad + valuePad + 12)}\n`);
+  console.log(`${'─'.repeat(width)}\n`);
 }

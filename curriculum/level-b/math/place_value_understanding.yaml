@@ -1,0 +1,96 @@
+conceptId: place_value_understanding
+chapter:
+  code: CH1
+  name: Understanding Place Values
+learningObjective: Identify place values of digits in numbers
+coreIdea: Students will recognize the value of each digit based on its position.
+examples:
+  - In 5964, 9 is 900 (hundreds)
+  - In 18,342, 3 is 3,000 (thousands)
+  - In 807695, 0 is 0 (tens)
+misconceptions:
+  - Students may confuse the place value of digits, thinking that the value is the same regardless of position.
+  - Students might overlook the value of zero in a number, believing it contributes to the total value.
+  - Students may struggle to translate numbers into words accurately, leading to incorrect representations.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 25
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - reading_numbers_1000_9999
+  - writing_numbers_1000_9999
+activities:
+  - step: observe
+    type: place_value_chart
+    order: 1
+    content:
+      description: Let's look at the number 5964. 📊
+      chart:
+        thousands: 5
+        hundreds: 9
+        tens: 6
+        ones: 4
+      explanation: The digit 9 is in the hundreds place, so it represents 900.
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      question: Drag the digits to their correct place values for 18,342.
+      options:
+        thousands:
+          - 1
+          - 3
+        hundreds:
+          - 8
+          - 0
+        tens:
+          - 4
+          - 2
+        ones:
+          - 2
+      hints:
+        - "The correct answer is: 1 in thousands, 3 in hundreds."
+        - Look at the thousands place carefully.
+        - You're close! Check your hundreds placement.
+        - Try thinking about where each digit belongs.
+  - step: independent_practice
+    type: matching
+    order: 3
+    content:
+      question: Match the numbers to their place values.
+      pairs:
+        - number: 807695
+          value: 0
+        - number: 5964
+          value: 9
+        - number: 18
+          value: 1
+        - number: 342
+          value: 3
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - text: What is the place value of 3 in 18,342?
+          options:
+            - "30"
+            - "300"
+            - 3,000
+            - 30,000
+          correctIndex: 2
+        - text: What does the 0 represent in 807695?
+          options:
+            - "0"
+            - "10"
+            - "100"
+            - 1,000
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job! You've learned about place values! 🎉
