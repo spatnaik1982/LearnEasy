@@ -177,12 +177,12 @@ function toMockActivity(from: ApiActivity): MockActivity {
 
 // ── Public API functions ───────────────────────────────────────
 
-export async function fetchSubjects(): Promise<ApiResponse<MockSubject[]>> {
+export async function fetchSubjects(level = "A"): Promise<ApiResponse<MockSubject[]>> {
   if (USE_MOCK) {
     return { data: mockSubjects, error: null };
   }
 
-  const res = await apiFetch<ApiSubject[]>("/levels/A/subjects");
+  const res = await apiFetch<ApiSubject[]>(`/levels/${level}/subjects`);
   if (!res.data) return { data: null as MockSubject[] | null, error: res.error };
 
   return {
@@ -470,6 +470,22 @@ export async function fetchResumeState(
   }
 
   return apiFetch(`/students/${studentId}/resume-state`);
+}
+
+// ── Student profile ────────────────────────────────────────────
+
+export async function fetchStudentProfile(
+  studentId: string,
+): Promise<ApiResponse<{ id: string; name: string; email: string; level: string }>> {
+  if (USE_MOCK) {
+    return { data: null, error: null };
+  }
+  // API wraps in { data: ... }, and apiFetch also wraps in { data: ..., error }
+  // so we need to unwrap one level
+  interface Envelope { data: { id: string; name: string; email: string; level: string } }
+  const res = await apiFetch<Envelope>(`/students/${studentId}`);
+  if (res.data) return { data: res.data.data, error: null };
+  return { data: null, error: res.error };
 }
 
 // ── Onboarding ──────────────────────────────────────────────────

@@ -1,21 +1,31 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { fetchSubjects } from "../lib/api";
+import { fetchSubjects, fetchStudentProfile } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import type { Subject } from "../lib/mockData";
 import { COPY, AppShell, Breadcrumb } from "@learn-easy/ui";
 
 const Subjects: NextPage = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSubjects().then((res) => {
+    async function load() {
+      let level = user?.level || "A";
+      // Fetch fresh profile from API so level updates (e.g. DB change) take effect
+      if (user?.id) {
+        const profile = await fetchStudentProfile(user.id);
+        if (profile.data) level = profile.data.level;
+      }
+      const res = await fetchSubjects(level);
       if (res.data) setSubjects(res.data);
       setLoading(false);
-    });
-  }, []);
+    }
+    load();
+  }, [user?.id]);
 
   if (loading) {
     return (

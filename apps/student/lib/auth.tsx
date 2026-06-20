@@ -4,6 +4,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  level: string;
 }
 
 interface AuthContextValue {
@@ -59,7 +60,7 @@ function decodeToken(token: string): User | null {
   try {
     const payload = token.split(".")[1];
     const decoded = JSON.parse(atob(payload));
-    return { id: decoded.sub, name: decoded.name, email: decoded.email };
+    return { id: decoded.sub, name: decoded.name, email: decoded.email, level: decoded.level || "A" };
   } catch {
     return null;
   }
@@ -78,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const mockToken = [
         btoa(JSON.stringify({ alg: "HS256", typ: "JWT" })),
-        btoa(JSON.stringify({ sub: "student-1", name: "Alex", email })),
+        btoa(JSON.stringify({ sub: "student-1", name: "Alex", email, level: "A" })),
         btoa(JSON.stringify({ sig: "mock-signature" })),
       ].join(".");
 
