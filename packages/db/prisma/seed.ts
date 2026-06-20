@@ -6,6 +6,10 @@ const prisma = new PrismaClient();
 async function seedFromPipeline(entries: ConceptCurriculumEntry[]): Promise<number> {
   let totalSeeded = 0;
 
+  // Clean slate for idempotent re-seed
+  await prisma.activityAttempt.deleteMany();
+  await prisma.activity.deleteMany();
+
   // Group by level -> subject -> chapter
   const levelMap = new Map<string, { code: string; name: string; entries: ConceptCurriculumEntry[] }>();
 
