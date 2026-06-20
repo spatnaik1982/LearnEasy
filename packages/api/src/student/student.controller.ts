@@ -1,4 +1,4 @@
-import { Controller, Param, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { StudentService } from './student.service';
 
@@ -6,6 +6,12 @@ import { StudentService } from './student.service';
 @UseGuards(JwtAuthGuard)
 export class StudentController {
   constructor(private studentService: StudentService) {}
+
+  @Get(':id')
+  async getProfile(@Param('id') id: string) {
+    const student = await this.studentService.getProfile(id);
+    return { data: student };
+  }
 
   @Patch(':id/onboarding/complete')
   async completeOnboarding(@Param('id') id: string) {

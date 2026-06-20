@@ -17,8 +17,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  private generateToken(id: string, email: string, role: string) {
-    return this.jwtService.sign({ sub: id, email, role });
+  private generateToken(id: string, email: string, role: string, level?: string) {
+    const payload: Record<string, string> = { sub: id, email, role };
+    if (level) payload.level = level;
+    return this.jwtService.sign(payload);
   }
 
   async signupStudent(dto: SignupStudentDto) {
@@ -47,8 +49,8 @@ export class AuthService {
     });
 
     return {
-      access_token: this.generateToken(student.id, student.email, 'student'),
-      user: { id: student.id, email: student.email, name: student.name, role: 'student' },
+      access_token: this.generateToken(student.id, student.email, 'student', student.level),
+      user: { id: student.id, email: student.email, name: student.name, role: 'student', level: student.level },
     };
   }
 
@@ -85,8 +87,8 @@ export class AuthService {
       if (!valid) throw new UnauthorizedException('Invalid credentials');
 
       return {
-        access_token: this.generateToken(student.id, student.email, 'student'),
-        user: { id: student.id, email: student.email, name: student.name, role: 'student' },
+        access_token: this.generateToken(student.id, student.email, 'student', student.level),
+        user: { id: student.id, email: student.email, name: student.name, role: 'student', level: student.level },
       };
     }
 
