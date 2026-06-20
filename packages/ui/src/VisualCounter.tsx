@@ -5,6 +5,8 @@ export interface VisualCounterProps {
   emoji: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  /** Show the count as a number below the grid. Defaults to false. */
+  showCount?: boolean;
 }
 
 const sizeConfig = {
@@ -18,6 +20,7 @@ export function VisualCounter({
   emoji,
   size = "md",
   className,
+  showCount = false,
 }: VisualCounterProps) {
   const config = sizeConfig[size];
   const items = Array.from({ length: count }, (_, i) => i);
@@ -26,7 +29,7 @@ export function VisualCounter({
     <div
       className={cn("flex flex-col", className)}
       role="img"
-      aria-label={`${count} items shown`}
+      aria-label={showCount ? `${count} items shown` : "Items to count"}
     >
       <div className={cn("grid place-items-center", config.cols, config.gap)}>
         {items.map((i) => (
@@ -35,9 +38,11 @@ export function VisualCounter({
           </span>
         ))}
       </div>
-      <span className="mt-3 text-lg font-semibold text-slate-text text-left">
-        {count}
-      </span>
+      {showCount && (
+        <span className="mt-3 text-lg font-semibold text-slate-text text-left">
+          {count}
+        </span>
+      )}
     </div>
   );
 }

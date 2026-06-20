@@ -12,7 +12,7 @@ export interface MultipleChoiceProps {
   question: string;
   options: MultipleChoiceOption[];
   correctIndex: number;
-  onSelect: (isCorrect: boolean) => void;
+  onSelect: (isCorrect: boolean, selectedIndex: number) => void;
   className?: string;
 }
 
@@ -42,7 +42,7 @@ export function MultipleChoice({
       setHasAnswered(true);
       setIsCorrect(correct);
       announce(correct ? "Correct! Well done." : "Let's try again");
-      onSelect(correct);
+      onSelect(correct, index);
     },
     [hasAnswered, correctIndex, options, onSelect, announce],
   );

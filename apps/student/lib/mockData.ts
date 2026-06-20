@@ -3,6 +3,8 @@ export interface Activity {
   type: "visual-counter" | "matching" | "multiple-choice" | "sequencing" | "drag-drop" | "story-question" | "real-world-task";
   title: string;
   config: Record<string, unknown>;
+  step?: string;
+  order?: number;
 }
 
 export interface Concept {
@@ -49,12 +51,16 @@ export const mockSubjects: Subject[] = [
                 id: "counting-visual",
                 type: "visual-counter",
                 title: "How Many Apples?",
+                step: "observe",
+                order: 1,
                 config: { count: 5, emoji: "🍎" },
               },
               {
                 id: "counting-match",
                 type: "matching",
                 title: "Match Number to Count",
+                step: "guided_practice",
+                order: 2,
                 config: {
                   pairs: [
                     { id: "c1", itemA: "🍎🍎", itemB: "2" },
@@ -67,6 +73,8 @@ export const mockSubjects: Subject[] = [
                 id: "counting-mc",
                 type: "multiple-choice",
                 title: "Counting Quiz",
+                step: "mastery_check",
+                order: 3,
                 config: {
                   question: "How many stars are there? ⭐⭐⭐⭐",
                   options: [
@@ -88,6 +96,8 @@ export const mockSubjects: Subject[] = [
                 id: "number-match",
                 type: "matching",
                 title: "Match Number to Word",
+                step: "guided_practice",
+                order: 1,
                 config: {
                   pairs: [
                     { id: "n1", itemA: "1", itemB: "One" },
@@ -100,6 +110,8 @@ export const mockSubjects: Subject[] = [
                 id: "number-seq",
                 type: "sequencing",
                 title: "Order the Numbers",
+                step: "independent_practice",
+                order: 2,
                 config: {
                   items: [
                     { id: "s1", label: "Three" },
@@ -113,6 +125,8 @@ export const mockSubjects: Subject[] = [
                 id: "number-mc",
                 type: "multiple-choice",
                 title: "Number Quiz",
+                step: "mastery_check",
+                order: 3,
                 config: {
                   question: "Which number comes after 3?",
                   options: [
@@ -141,12 +155,16 @@ export const mockSubjects: Subject[] = [
                 id: "shapes-visual",
                 type: "visual-counter",
                 title: "Shape Counter",
+                step: "observe",
+                order: 1,
                 config: { count: 4, emoji: "⬛" },
               },
               {
                 id: "shapes-match",
                 type: "matching",
                 title: "Match the Shape",
+                step: "guided_practice",
+                order: 2,
                 config: {
                   pairs: [
                     { id: "sh1", itemA: "🟠", itemB: "Circle" },
@@ -159,6 +177,8 @@ export const mockSubjects: Subject[] = [
                 id: "shapes-mc",
                 type: "multiple-choice",
                 title: "Shape Quiz",
+                step: "mastery_check",
+                order: 3,
                 config: {
                   question: "Which shape has 3 sides?",
                   options: [
@@ -187,12 +207,16 @@ export const mockSubjects: Subject[] = [
                 id: "add-visual",
                 type: "visual-counter",
                 title: "Count the Total",
+                step: "observe",
+                order: 1,
                 config: { count: 7, emoji: "🍪" },
               },
               {
                 id: "add-match",
                 type: "matching",
                 title: "Match the Sum",
+                step: "guided_practice",
+                order: 2,
                 config: {
                   pairs: [
                     { id: "a1", itemA: "2 + 3", itemB: "5" },
@@ -205,6 +229,8 @@ export const mockSubjects: Subject[] = [
                 id: "add-mc",
                 type: "multiple-choice",
                 title: "Addition Quiz",
+                step: "mastery_check",
+                order: 3,
                 config: {
                   question: "What is 3 + 4?",
                   options: [
@@ -233,12 +259,16 @@ export const mockSubjects: Subject[] = [
                 id: "sub-visual",
                 type: "visual-counter",
                 title: "Take Away",
+                step: "observe",
+                order: 1,
                 config: { count: 3, emoji: "🧁" },
               },
               {
                 id: "sub-match",
                 type: "matching",
                 title: "Match the Difference",
+                step: "guided_practice",
+                order: 2,
                 config: {
                   pairs: [
                     { id: "s1", itemA: "5 - 2", itemB: "3" },
@@ -251,6 +281,8 @@ export const mockSubjects: Subject[] = [
                 id: "sub-mc",
                 type: "multiple-choice",
                 title: "Subtraction Quiz",
+                step: "mastery_check",
+                order: 3,
                 config: {
                   question: "What is 7 - 3?",
                   options: [
