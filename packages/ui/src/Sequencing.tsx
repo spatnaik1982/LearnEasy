@@ -11,7 +11,7 @@ export interface SequencingItem {
 export interface SequencingProps {
   items: SequencingItem[];
   correctOrder: string[];
-  onComplete: (isCorrect: boolean) => void;
+  onComplete: (isCorrect: boolean, userOrder: string[]) => void;
   className?: string;
 }
 
@@ -46,7 +46,7 @@ export function Sequencing({
             ? "Sequence complete! All items in correct order."
             : "Sequence complete. Some items may be out of order.",
         );
-        onComplete(correct);
+        onComplete(correct, newSequence.map(s => s.id));
       }
     },
     [sequence, available, items.length, correctOrder, onComplete, isComplete, announce],

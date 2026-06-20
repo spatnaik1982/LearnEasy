@@ -166,10 +166,12 @@ function toMockConcept(from: ApiConcept): MockConcept {
 function toMockActivity(from: ApiActivity): MockActivity {
   return {
     id: from.id,
-    type: from.type as MockActivity["type"] || "visual-counter",
+    type: (from.type as MockActivity["type"]) || "visual-counter",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response shape is unknown
     title: (from.content as any)?.description || "",
     config: from.content || {},
+    step: from.step,
+    order: from.order,
   };
 }
 

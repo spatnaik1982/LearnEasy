@@ -77,6 +77,10 @@ export function evaluateActivity(
     }
 
     case "multiple_choice": {
+      // Direct correctness override from multi-question aggregate
+      if (typeof response.correct === "boolean") {
+        return { correct: response.correct };
+      }
       const correctIndex = content.correctIndex;
       const selectedIndex = response.selectedIndex as number | undefined;
 

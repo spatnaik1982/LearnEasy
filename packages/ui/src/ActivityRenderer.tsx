@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "./utils";
-import { evaluateActivity, getHint, getLeveledHint, PROMPT_LEVELS, getActivityFeedback } from "./activity-utils";
+import { evaluateActivity, getHint, getLeveledHint, getActivityFeedback } from "./activity-utils";
 import { VisualCounter } from "./VisualCounter";
 import { Matching } from "./Matching";
 import { DragDrop } from "./DragDrop";
@@ -15,7 +15,6 @@ export interface ActivityRendererProps {
     type: string;
     content: Record<string, unknown>;
   };
-  step: string;
   onComplete: (result: {
     correct: boolean;
     response: Record<string, unknown>;
@@ -25,14 +24,17 @@ export interface ActivityRendererProps {
   className?: string;
   /** Current ABA prompt level (1-5) for this student+concept */
   promptLevel?: number;
+  /** Step label (observe/guided_practice/independent_practice/mastery_check).
+   *  Used to control whether counting activities show or hide the answer. */
+  stepLabel?: string;
 }
 
 export function ActivityRenderer({
   activity,
-  step,
   onComplete,
   className,
   promptLevel = 1,
+  stepLabel,
 }: ActivityRendererProps) {
   const startTimeRef = useRef<number>(Date.now());
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -41,6 +43,10 @@ export function ActivityRenderer({
   const [feedback, setFeedback] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<"correct" | "incorrect" | null>(null);
   const [completed, setCompleted] = useState(false);
+  const [multiQuestionIndex, setMultiQuestionIndex] = useState(0);
+  const [multiQuestionResponses, setMultiQuestionResponses] = useState<
+    { correct: boolean }[]
+  >([]);
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
 
@@ -118,19 +124,72 @@ export function ActivityRenderer({
     setFeedback(null);
     setFeedbackType(null);
     setCompleted(false);
+    setMultiQuestionIndex(0);
+    setMultiQuestionResponses([]);
+  }, [activity.id]);
+
+  const matchedPairIdsRef = useRef<string[]>([]);
+  const totalPairs = type === "matching" ? (activity.content.pairs as Array<unknown>)?.length ?? 0 : 0;
+
+  useEffect(() => {
+    matchedPairIdsRef.current = [];
   }, [activity.id]);
 
   const renderActivity = () => {
     switch (type) {
       case "visual_counter":
-      case "visual_counting":
+      case "visual_counting": {
+        const count = (activity.content.count as number) ?? 0;
+        const emoji = (activity.content.emoji as string) ?? (activity.content.items as string[])?.[0] ?? "🔢";
+        const isDemonstration = stepLabel === "observe";
+        const answerText = (activity.content.text as string) ?? `${count} ${emoji}`;
+
+        if (isDemonstration) {
+          return (
+            <div className="flex flex-col items-center gap-4">
+              <VisualCounter
+                count={count}
+                emoji={emoji}
+                size={(activity.content.size as "sm" | "md" | "lg") ?? "md"}
+                showCount
+              />
+              <p className="text-xl font-semibold text-slate-text" aria-live="polite">
+                {answerText}
+              </p>
+            </div>
+          );
+        }
+
+        const maxOption = Math.max(10, Math.min(count + 2, 20));
         return (
-          <VisualCounter
-            count={(activity.content.count as number) ?? 0}
-            emoji={(activity.content.emoji as string) ?? "🔢"}
-            size={(activity.content.size as "sm" | "md" | "lg") ?? "md"}
-          />
+          <div className="flex flex-col items-center gap-6">
+            <VisualCounter
+              count={count}
+              emoji={emoji}
+              size={(activity.content.size as "sm" | "md" | "lg") ?? "md"}
+              showCount={false}
+            />
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-lg font-semibold text-slate-text">
+                How many do you see?
+              </p>
+              <div className="flex max-w-[340px] flex-wrap justify-center gap-3">
+                {Array.from({ length: maxOption }, (_, i) => i + 1).map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => handleComplete({ count: n })}
+                    disabled={completed}
+                    className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-slate-300 bg-white text-lg font-bold text-slate-text hover:border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-colors motion-safe:duration-150"
+                    aria-label={`Select ${n}`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         );
+      }
 
       case "matching":
         return (
@@ -140,9 +199,12 @@ export function ActivityRenderer({
               itemA: string;
               itemB: string;
             }>) ?? []}
-            onMatch={() => {
-              // Individual match handled internally;
-              // we track completion via the overall pairs
+            onMatch={(pairId) => {
+              matchedPairIdsRef.current.push(pairId);
+              if (matchedPairIdsRef.current.length >= totalPairs) {
+                const pairs = matchedPairIdsRef.current.map((id) => ({ id, correct: true }));
+                handleComplete({ pairs });
+              }
             }}
           />
         );
@@ -173,11 +235,54 @@ export function ActivityRenderer({
               emoji?: string;
             }>) ?? []}
             correctOrder={(activity.content.correctOrder as string[]) ?? []}
-            onComplete={() => {}}
+            onComplete={(_isCorrect, userOrder) => {
+              handleComplete({ order: userOrder });
+            }}
           />
         );
 
-      case "multiple_choice":
+      case "multiple_choice": {
+        // Handle YAML data shape: { questions: [{ question, options: string[], correctIndex }] }
+        const questions = activity.content.questions as Array<{
+          question: string;
+          options: string[];
+          correctIndex: number;
+        }> | undefined;
+
+        if (questions?.length) {
+          if (multiQuestionIndex >= questions.length) return null;
+          const q = questions[multiQuestionIndex];
+          const options = q.options.map((label, i) => ({
+            id: String(i),
+            label,
+          }));
+          return (
+            <div className="flex flex-col gap-4">
+              <span className="text-sm font-medium text-muted-teal">
+                Question {multiQuestionIndex + 1} of {questions.length}
+              </span>
+              <MultipleChoice
+                key={multiQuestionIndex}
+                question={q.question}
+                options={options}
+                correctIndex={q.correctIndex}
+                onSelect={(isCorrect) => {
+                  const updated = [...multiQuestionResponses, { correct: isCorrect }];
+                  if (multiQuestionIndex + 1 >= questions.length) {
+                    const correctCount = updated.filter((r) => r.correct).length;
+                    const allCorrect = correctCount === questions.length;
+                    handleComplete({ correct: allCorrect, responses: updated });
+                  } else {
+                    setMultiQuestionResponses(updated);
+                    setMultiQuestionIndex((prev) => prev + 1);
+                  }
+                }}
+              />
+            </div>
+          );
+        }
+
+        // Fall back to mock data shape: { question, options: [{ id, label }], correctIndex }
         return (
           <MultipleChoice
             question={(activity.content.question as string) ?? ""}
@@ -189,9 +294,12 @@ export function ActivityRenderer({
               }>) ?? []
             }
             correctIndex={(activity.content.correctIndex as number) ?? 0}
-            onSelect={() => {}}
+            onSelect={(_isCorrect, selectedIndex) => {
+              handleComplete({ selectedIndex });
+            }}
           />
         );
+      }
 
       case "story_question":
         return (
@@ -246,24 +354,6 @@ export function ActivityRenderer({
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      {/* Step label */}
-      <div
-        className="text-sm font-medium text-muted-teal"
-        aria-live="polite"
-      >
-        Step: {step}
-      </div>
-
-      {/* ABA Prompt Level indicator */}
-      {promptLevel > 0 && promptLevel <= 5 && (
-        <div
-          className="text-xs font-medium text-soft-coral"
-          aria-label={`Prompt level: ${PROMPT_LEVELS[promptLevel - 1]}`}
-        >
-          Prompt: {PROMPT_LEVELS[promptLevel - 1]}
-        </div>
-      )}
-
       {/* Activity content */}
       <div aria-label={`Activity: ${type}`}>
         {renderActivity()}
