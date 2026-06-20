@@ -1,0 +1,72 @@
+conceptId: place_value_decimals
+chapter:
+  code: CH4
+  name: Understanding Decimals
+learningObjective: Identify place values in decimal numbers
+coreIdea: The position of a digit in a decimal determines its value.
+examples:
+  - In 125.021, 2 is in the tenths place
+  - In 0.005, 5 is in the thousandths place
+  - In 3.14, 1 is in the hundredths place
+misconceptions:
+  - Students may confuse the place value of digits to the left and right of the decimal point.
+  - Students might think that decimals are not related to whole numbers, leading to misunderstanding their values.
+  - Students may struggle to identify the correct place value for digits in larger decimal numbers.
+supports:
+  visual: true
+masteryCriteria: 0.75
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - decimals_intro
+activities:
+  - step: observe
+    type: place_value_chart
+    order: 1
+    content:
+      digits:
+        - 1
+        - 2
+        - 5
+        - 0
+        - 2
+        - 1
+      maxPlaces: lakh
+      targetNumber: 125021
+      interactive: false
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      template: In the number 0.005, the digit 5 is in the ___ place.
+      blanks:
+        - id: place
+          position: 0
+          correctAnswer: thousandths
+          options:
+            - tenths
+            - hundredths
+            - thousandths
+            - ones
+      mode: select
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job identifying place values in decimals!
+      text: You did it! Keep practicing!

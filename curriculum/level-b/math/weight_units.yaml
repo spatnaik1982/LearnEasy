@@ -1,0 +1,51 @@
+conceptId: weight_units
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Identify different units of weight measurement
+coreIdea: Weight can be measured using various standard units.
+examples:
+  - 1 kg = 1000 g ⚖️
+  - 10 g = 10000 mg
+  - 1 quintal = 100 kg
+misconceptions:
+  - Weight is only measured in kilograms and grams, ignoring other units like quintals and milligrams.
+  - Students may confuse the conversion factors between different weight units, such as mixing up grams and milligrams.
+  - Some may believe that weight measurement is not relevant in daily life, overlooking practical applications.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 15
+dependencies:
+  - length_units
+  - length_conversion
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Weight can be measured in different units like kilograms, grams, and milligrams. ⚖️
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: matching
+    order: 3
+    content: {}
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job identifying weight units!
+      text: You did it! Keep practicing!

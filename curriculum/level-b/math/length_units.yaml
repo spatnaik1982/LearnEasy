@@ -1,0 +1,79 @@
+conceptId: length_units
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Identify different units of length measurement
+coreIdea: Length can be measured using various standard units.
+examples:
+  - 1 cm = 10 mm 📏
+  - 1 m = 100 cm 📐
+  - 1 km = 1000 m 🏞️
+misconceptions:
+  - Students may confuse millimeters and centimeters due to their similar names and small size.
+  - >-
+    Students might think that all units of length are equal, not understanding the hierarchy of units (e.g., 1 km is
+    much larger than 1 m).
+  - >-
+    Students may struggle to convert between units, believing that addition or subtraction is required instead of
+    multiplication or division.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 15
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Look at this ruler showing centimeters and millimeters. 📏
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: matching
+    order: 3
+    content:
+      pairs:
+        - itemA: 1 cm
+          itemB: 10 mm
+        - itemA: 1 m
+          itemB: 100 cm
+        - itemA: 1 km
+          itemB: 1000 m
+        - itemA: 1 mm
+          itemB: 0.1 cm
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: How many millimeters are in 1 centimeter?
+          options:
+            - 10 mm
+            - 100 mm
+            - 1 mm
+            - 0.1 mm
+          correctIndex: 0
+        - question: "Which is larger: 1 km or 1 m?"
+          options:
+            - 1 km
+            - 1 m
+            - They are equal
+            - None of the above
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job identifying length units!
+      text: You did it!

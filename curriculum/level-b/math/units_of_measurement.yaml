@@ -1,0 +1,61 @@
+conceptId: units_of_measurement
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Identify units for length, area, and volume
+coreIdea: Different measurements use specific units for clarity.
+examples:
+  - Length in meters (m) and centimeters (cm) 📏
+  - Area in square meters (sq.m) and square centimeters (sq.cm) 📐
+  - Volume in cubic meters (m³) and liters (L) 🧪
+misconceptions:
+  - Students may confuse different units of measurement (e.g., mixing up meters and centimeters).
+  - Students may not understand the concept of area and volume as distinct from length.
+  - >-
+    Students may think that all measurements can be converted directly without understanding the context of the
+    measurement.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 15
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - comparing_quantities
+  - basic_shapes
+  - position_words
+  - addition_1_10
+  - subtraction_1_10
+  - perimeter_intro
+  - area_intro
+  - volume_intro
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Length is measured in meters (m) and centimeters (cm). 📏
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: matching
+    order: 3
+    content: {}
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content: {}
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job identifying units of measurement!
+      text: You did it! Keep up the great work!

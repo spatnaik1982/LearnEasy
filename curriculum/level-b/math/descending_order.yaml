@@ -33,15 +33,24 @@ activities:
         - "5643"
         - "4963"
   - step: guided_practice
-    type: drag_drop
+    type: sequencing
     order: 2
     content:
       question: "Drag the numbers into the correct descending order:"
-      options:
-        - "4963"
-        - "5643"
-        - "5695"
-        - "7864"
+      items:
+        - id: item-0
+          label: "4963"
+        - id: item-1
+          label: "5643"
+        - id: item-2
+          label: "5695"
+        - id: item-3
+          label: "7864"
+      correctOrder:
+        - item-3
+        - item-2
+        - item-1
+        - item-0
       hints:
         - The correct answer is 7864, 5695, 5643, 4963. Let me show you...
         - Look at the largest number first.
@@ -49,15 +58,17 @@ activities:
         - Try starting with the number that has the highest value.
         - ""
   - step: independent_practice
-    type: sequencing
+    type: multiple_choice
     order: 3
     content:
-      question: "Arrange these numbers in descending order: 9,845, 67,833, 64,569, 8,765."
-      options:
-        - 8,765 > 9,845 > 64,569 > 67,833
-        - 67,833 > 64,569 > 9,845 > 8,765
-        - 9,845 > 67,833 > 64,569 > 8,765
-        - 64,569 > 67,833 > 9,845 > 8,765
+      questions:
+        - question: "Arrange these numbers in descending order: 9,845, 67,833, 64,569, 8,765."
+          options:
+            - "8,765 > 9,845 > 64,569 > 67,833"
+            - "67,833 > 64,569 > 9,845 > 8,765"
+            - "9,845 > 67,833 > 64,569 > 8,765"
+            - "64,569 > 67,833 > 9,845 > 8,765"
+          correctIndex: 1
   - step: mastery_check
     type: multiple_choice
     order: 4

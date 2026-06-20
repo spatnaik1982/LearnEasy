@@ -31,24 +31,27 @@ activities:
       title: Understanding Place Value
       description: Let's look at the number 7126. It has 7 thousands, 1 hundred, 2 tens, and 6 ones. 📊
   - step: guided_practice
-    type: drag_drop
+    type: sequencing
     order: 2
     content:
-      question: Drag the words to match the number 6042.
-      options:
-        - Six Thousand
-        - Forty
-        - Two
-        - Six Hundred
+      question: Arrange the words to write the number 6042 in words.
+      items:
+        - id: item-0
+          label: "Six Thousand"
+        - id: item-1
+          label: "Forty"
+        - id: item-2
+          label: "Two"
+      correctOrder:
+        - item-0
+        - item-1
+        - item-2
       hints:
         - The correct answer is 'Six Thousand, Forty, Two'. Let me show you...
         - Look at the thousands place carefully.
         - You're close! Check your hundreds and tens.
         - Try breaking the number down into parts.
-      answerOrder:
-        - 0
-        - 1
-        - 2
+        - ""
   - step: independent_practice
     type: fill_blank
     order: 3

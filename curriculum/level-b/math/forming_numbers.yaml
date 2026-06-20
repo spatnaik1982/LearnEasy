@@ -50,10 +50,21 @@ activities:
             - 3
             - 5
   - step: guided_practice
-    type: drag_drop
+    type: sequencing
     order: 2
     content:
-      task: Arrange the digits 3, 1, and 5 to form the smallest number. Drag the digits to the correct place.
+      question: Arrange the digits to form the smallest number.
+      items:
+        - id: item-0
+          label: "3"
+        - id: item-1
+          label: "1"
+        - id: item-2
+          label: "5"
+      correctOrder:
+        - item-1
+        - item-0
+        - item-2
       hints:
         - The correct answer is 135. Let me show you...
         - Look at the first digit carefully.
@@ -61,15 +72,17 @@ activities:
         - Try starting with the smallest digit first.
         - ""
   - step: independent_practice
-    type: sequencing
+    type: multiple_choice
     order: 3
     content:
-      task: Arrange the digits 4, 0, 9, and 5 to form the largest number. Put them in order.
-      options:
-        - "4059"
-        - "9540"
-        - "9405"
-        - "5904"
+      questions:
+        - question: "Arrange the digits 4, 0, 9, and 5 to form the largest number."
+          options:
+            - "4059"
+            - "9540"
+            - "9405"
+            - "5904"
+          correctIndex: 1
   - step: mastery_check
     type: multiple_choice
     order: 4

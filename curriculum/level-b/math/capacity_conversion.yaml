@@ -1,0 +1,87 @@
+conceptId: capacity_conversion
+chapter:
+  code: CH5
+  name: Understanding Capacity Units
+learningObjective: Convert between different units of capacity
+coreIdea: You can convert capacity from one unit to another using multiplication or division.
+examples:
+  - 2 L = 2000 mL ➡️ 2 x 1000
+  - 1500 mL = 1.5 L ➡️ 1500 ÷ 1000
+  - 5 L = 5000 mL ➡️ 5 x 1000
+misconceptions:
+  - Students may confuse liters and milliliters, thinking they are the same unit.
+  - Students might believe that converting units always requires addition instead of multiplication or division.
+  - "Some students may not understand that the relationship between units is based on powers of ten. "
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - capacity_units
+  - length_units
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Here are 2 liters of liquid. 💧 Each liter has 1000 milliliters, so 2 liters equals 2000 milliliters.
+  - step: guided_practice
+    type: fill_blank
+    order: 2
+    content:
+      template: If I have ___ mL, that is equal to 1.5 L.
+      blanks:
+        - id: blank1
+          position: 0
+          correctAnswer: "1500"
+          options:
+            - "1000"
+            - "1500"
+            - "2000"
+            - "2500"
+      mode: select
+      hints:
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      template: 5 L is equal to ___ mL.
+      blanks:
+        - id: blank1
+          position: 0
+          correctAnswer: "5000"
+          options:
+            - "2000"
+            - "5000"
+            - "10000"
+            - "15000"
+      mode: select
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: How many mL are in 3 L?
+          options:
+            - 3000 mL
+            - 1500 mL
+            - 1000 mL
+            - 500 mL
+          correctIndex: 0
+        - question: What is 2500 mL in liters?
+          options:
+            - 2.5 L
+            - 3.0 L
+            - 1.5 L
+            - 1.0 L
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job on learning capacity conversion! Keep practicing!

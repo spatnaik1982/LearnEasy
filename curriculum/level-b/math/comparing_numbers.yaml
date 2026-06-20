@@ -30,28 +30,32 @@ activities:
       description: Here are 5 apples 🍏 and 3 oranges 🍊. Which is more?
       visual: Image showing 5 apples and 3 oranges
   - step: guided_practice
-    type: drag_drop
+    type: multiple_choice
     order: 2
     content:
-      question: "Drag the numbers to compare: 7 ___ 4"
-      options:
-        - <
-        - ">"
-        - "="
-      hints:
-        - The correct answer is >. Let me show you...
-        - Look at the numbers carefully.
-        - You're close! Check your comparison.
-        - Try thinking about their values.
+      questions:
+        - question: "7 ___ 4"
+          options:
+            - "<"
+            - ">"
+            - "="
+          correctIndex: 1
   - step: independent_practice
     type: sequencing
     order: 3
     content:
       question: "Arrange these numbers from smallest to largest: 12, 5, 8."
-      numbers:
-        - 12
-        - 5
-        - 8
+      items:
+        - id: item-0
+          label: "12"
+        - id: item-1
+          label: "5"
+        - id: item-2
+          label: "8"
+      correctOrder:
+        - item-1
+        - item-2
+        - item-0
   - step: mastery_check
     type: multiple_choice
     order: 4

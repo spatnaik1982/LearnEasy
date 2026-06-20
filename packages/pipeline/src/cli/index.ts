@@ -9,6 +9,7 @@ import type { PipelineReport } from '../graph';
 import * as logger from './logger';
 
 config();
+config({ path: join(__dirname, '..', '..', '..', '..', '.env') });
 
 const LEVEL_A_CONCEPT_IDS = [
   'counting_1_10',
@@ -45,7 +46,7 @@ function parseArgs(): CLIOptions {
     interactive: false,
     dryRun: false,
     verbose: false,
-    outputDir: join(process.cwd(), 'curriculum'),
+    outputDir: join(__dirname, '..', '..', '..', '..', 'curriculum'),
     maxRetries: 3,
   };
 

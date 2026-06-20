@@ -1,0 +1,94 @@
+conceptId: multiplication_basics
+chapter:
+  code: CH2
+  name: Multiplication Fundamentals
+learningObjective: Multiply numbers to find a total
+coreIdea: Multiplication is repeated addition of the same number.
+examples:
+  - One bus carries 75 people. Four buses carry 300.
+  - 85 x 25 = 2125.
+misconceptions:
+  - Students may confuse multiplication with addition, thinking they are the same operation.
+  - Some learners might believe that multiplication only applies to whole numbers and not to fractions or decimals.
+  - >-
+    Students may think that multiplication is only about finding a total, not recognizing its use in scaling or repeated
+    groups.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 25
+dependencies:
+  - counting_1_10
+  - addition_basics
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: Let's see how multiplication works! If one bus carries 75 people, how many people do 4 buses carry? 🚍🚍🚍🚍
+  - step: guided_practice
+    type: story_question
+    order: 2
+    content:
+      scenario: A farmer has 6 baskets. Each basket has 5 apples. How many apples does the farmer have in total? 🍏🍏🍏🍏🍏🍏
+      questions:
+        - question: How many apples are there?
+          options:
+            - "30"
+            - "25"
+            - "20"
+            - "15"
+          correctIndex: 0
+        - question: What operation should you use?
+          options:
+            - Addition
+            - Subtraction
+            - Multiplication
+            - Division
+          correctIndex: 2
+      hints:
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      template: If 3 cars each carry 4 people, then the total number of people is ___.
+      blanks:
+        - id: "1"
+          position: 0
+          correctAnswer: "12"
+          options:
+            - "10"
+            - "12"
+            - "15"
+            - "9"
+      mode: select
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: What is 7 x 8?
+          options:
+            - "56"
+            - "54"
+            - "64"
+            - "58"
+          correctIndex: 0
+        - question: Which shows multiplication?
+          options:
+            - 5 + 5 + 5 + 5 + 5
+            - 5 x 5
+            - 5 - 5
+            - 5 / 5
+          correctIndex: 1
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      emoji: 🎉
+      items:
+        - Great job! You learned about multiplication!
+      text: You did it! Keep practicing!

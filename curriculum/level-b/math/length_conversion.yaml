@@ -1,0 +1,73 @@
+conceptId: length_conversion
+chapter:
+  code: CH5
+  name: Measurement
+learningObjective: Convert between different units of length
+coreIdea: Length can be converted between units by multiplying or dividing by powers of 10.
+examples:
+  - 5 m = 500 cm
+  - 3 km = 3000 m
+  - 250 cm = 2.5 m
+misconceptions:
+  - Students may multiply when they should divide and vice versa.
+  - Students may think 100 cm equals 1 m but struggle with decimals.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: intermediate
+estimatedDuration: 15
+dependencies:
+  - length_units
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: See how units change! 1 m = 100 cm, 1 km = 1000 m.
+  - step: guided_practice
+    type: fill_blank
+    order: 2
+    content:
+      template: "___ m = 300 cm"
+      blanks:
+        - answer: "3"
+  - step: independent_practice
+    type: matching
+    order: 3
+    content:
+      pairs:
+        - itemA: 2 m
+          itemB: 200 cm
+        - itemA: 5 km
+          itemB: 5000 m
+        - itemA: 150 cm
+          itemB: 1.5 m
+        - itemA: 10 mm
+          itemB: 1 cm
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: How many centimeters are in 3 meters?
+          options:
+            - 30 cm
+            - 300 cm
+            - 3000 cm
+            - 0.3 cm
+          correctIndex: 1
+        - question: 5000 m is equal to how many kilometers?
+          options:
+            - 0.5 km
+            - 5 km
+            - 50 km
+            - 500 km
+          correctIndex: 1
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      count: 1
+      items:
+        - Great job converting length units!
+      text: You can now convert between different units of length.

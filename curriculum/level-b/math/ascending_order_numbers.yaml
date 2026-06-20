@@ -30,31 +30,29 @@ activities:
     content:
       description: "Look at these numbers: 1789, 2543, 2913, 5496. They are in ascending order! 📈"
   - step: guided_practice
-    type: drag_drop
+    type: multiple_choice
     order: 2
     content:
-      question: "Arrange these numbers in ascending order: 840, 9345, 53706, 54905."
-      options:
-        - 840, 9345, 53706, 54905
-        - 9345, 840, 54905, 53706
-        - 53706, 840, 9345, 54905
-        - 54905, 53706, 840, 9345
-      hints:
-        - The correct answer is 840, 9345, 53706, 54905. Let me show you...
-        - Look at the smallest number carefully.
-        - You're close! Check your first number.
-        - Try comparing the numbers one by one.
-        - ""
+      questions:
+        - question: "Arrange these numbers in ascending order: 840, 9345, 53706, 54905."
+          options:
+            - "840, 9345, 53706, 54905"
+            - "9345, 840, 54905, 53706"
+            - "53706, 840, 9345, 54905"
+            - "54905, 53706, 840, 9345"
+          correctIndex: 0
   - step: independent_practice
-    type: sequencing
+    type: multiple_choice
     order: 3
     content:
-      question: "Put these numbers in ascending order: 4564, 5645, 8793, 9873."
-      options:
-        - 4564, 5645, 8793, 9873
-        - 5645, 4564, 9873, 8793
-        - 8793, 9873, 5645, 4564
-        - 9873, 8793, 5645, 4564
+      questions:
+        - question: "Put these numbers in ascending order: 4564, 5645, 8793, 9873."
+          options:
+            - "4564, 5645, 8793, 9873"
+            - "5645, 4564, 9873, 8793"
+            - "8793, 9873, 5645, 4564"
+            - "9873, 8793, 5645, 4564"
+          correctIndex: 0
   - step: mastery_check
     type: multiple_choice
     order: 4

@@ -1,0 +1,76 @@
+conceptId: perimeter_intro
+chapter:
+  code: CH3
+  name: Understanding Perimeter
+learningObjective: Calculate the perimeter of shapes
+coreIdea: Perimeter is the total distance around a shape.
+examples:
+  - "Perimeter of rectangle: 6 cm + 3 cm + 6 cm + 3 cm = 18 cm 🟦"
+  - "Perimeter of square: 4 x 5 cm = 20 cm 🟥"
+  - "Perimeter of triangle: 4 cm + 5 cm + 3 cm = 12 cm 🔺"
+misconceptions:
+  - Perimeter is only for squares and rectangles, not for other shapes.
+  - The perimeter of a shape is the same as its area.
+  - You can calculate perimeter by adding only two sides of a shape.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+  - basic_shapes
+activities:
+  - step: observe
+    type: visual_counting
+    order: 1
+    content:
+      description: >-
+        Let's find the perimeter of a rectangle. The sides are 6 cm and 3 cm. The perimeter is 6 cm + 3 cm + 6 cm + 3 cm
+        = 18 cm. 🟦
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      hints:
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      template: The perimeter of a square with side length 5 cm is ___.
+      blanks:
+        - id: perimeter
+          position: 0
+          correctAnswer: 20 cm
+          options:
+            - 15 cm
+            - 20 cm
+            - 25 cm
+            - 10 cm
+      mode: select
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: What is the perimeter of a triangle with sides 4 cm, 5 cm, and 3 cm?
+          options:
+            - 12 cm
+            - 10 cm
+            - 15 cm
+            - 8 cm
+          correctIndex: 0
+        - question: Which shape's perimeter is calculated as 4 x 5 cm?
+          options:
+            - Triangle
+            - Square
+            - Rectangle
+            - Circle
+          correctIndex: 1
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      description: Great job calculating perimeters! Keep practicing! 🎉

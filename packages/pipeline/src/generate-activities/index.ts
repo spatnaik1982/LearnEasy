@@ -107,15 +107,92 @@ For a fractions_intro concept:
 - independent_practice: "What fraction of this circle is shaded?" with 2/3 circle
 - mastery_check: Multiple choice: "Which shows 1/2?", "How many parts in total?"
 
+## Content Shape Definitions
+
+Each activity type has a specific content shape. Follow these exactly:
+
+### visual_counting
+\`\`\`json
+{ "count": number, "emoji": string, "items": [string], "text": string }
+\`\`\`
+For observe steps, use \`{ "description": string }\` as a read-only display.
+
+### matching
+\`\`\`json
+{ "pairs": [{ "itemA": string, "itemB": string }] }
+\`\`\`
+
+### drag_drop
+\`\`\`json
+{ "items": [{ "id": string, "label": string }], "groups": [{ "label": string, "target": [string] }] }
+\`\`\`
+Each group label is a target zone. Each item's label is the draggable text. Each group target lists the item labels that belong there.
+
+### sequencing
+\`\`\`json
+{ "items": [{ "id": string, "label": string }], "correctOrder": [string] }
+\`\`\`
+
+### multiple_choice
+\`\`\`json
+{ "questions": [{ "question": string, "options": [string], "correctIndex": number }] }
+\`\`\`
+
+### story_question
+\`\`\`json
+{ "scenario": string, "questions": [{ "question": string, "options": [string], "correctIndex": number }] }
+\`\`\`
+
+### fraction_visual
+\`\`\`json
+{ "numerator": number, "denominator": number, "mode": "bar"|"circle", "label": string, "interactive": bool }
+\`\`\`
+
+### place_value_chart
+\`\`\`json
+{ "digits": [number|null], "maxPlaces": "lakh"|"crore", "targetNumber": number, "interactive": bool }
+\`\`\`
+
+### grid_area
+\`\`\`json
+{ "rows": number, "cols": number, "mode": "area"|"perimeter", "interactive": bool }
+\`\`\`
+
+### chart_reader
+\`\`\`json
+{ "type": "bar"|"pictograph", "data": [{ "label": string, "value": number }], "title": string }
+\`\`\`
+
+### clock_time
+\`\`\`json
+{ "hour": number, "minute": number, "mode": "read"|"set", "interactive": bool, "showDigital": bool }
+\`\`\`
+
+### measurement_scale
+\`\`\`json
+{ "type": "ruler"|"thermometer"|"cylinder", "min": number, "max": number, "step": number, "unit": string, "value": number, "interactive": bool }
+\`\`\`
+
+### fill_blank
+\`\`\`json
+{ "template": string, "blanks": [{ "id": string, "position": number, "correctAnswer": string|number, "options": [string|number] }], "mode": "select"|"type" }
+\`\`\`
+"template" is the text with ___ placeholders. Each blank has a position (0-based index matching the placeholder), correctAnswer, and optional options.
+
+### real_world / real_world_task
+\`\`\`json
+{ "scenario": string, "taskDescription": string }
+\`\`\`
+
 ## Output Format
 
 Return exactly 5 activities in order (step 1-5). Each activity must have:
 - step: string
 - type: string (from allowed types for that step)
 - order: number (1-5)
-- content: string — a JSON-encoded string of the activity content object with type-specific fields.
+- content: string — a JSON-encoded string of the activity content object following the content shape definitions above.
   For guided_practice: include "hints" array (exactly 5 strings — 4 graduated hints + 1 empty string).
-  For mastery_check: include "questions" array (exactly 2-3 items, each with "text", "options" (array of 4 strings), and "correctIndex" (number 0-3)).`;
+  For mastery_check: include "questions" array (exactly 2-3 items, each with "question" (NOT "text"), "options" (array of 4 strings), and "correctIndex" (number 0-3)).`;
 
 function buildPrompt(
   template: string,
