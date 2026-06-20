@@ -1,0 +1,101 @@
+conceptId: expanded_form
+chapter:
+  code: CH1
+  name: Understanding Numbers from 1000 to 9999
+learningObjective: Write numbers in expanded form
+coreIdea: Expanded form shows the sum of each digit's place value.
+examples:
+  - 75406 = 70000 + 5000 + 400 + 0 + 6
+  - 87965 = 80000 + 7000 + 900 + 60 + 5
+  - 395432 = 300000 + 90000 + 5000 + 400 + 30 + 2
+misconceptions:
+  - Students may confuse expanded form with standard form, thinking they are the same.
+  - Students might believe that expanded form only applies to numbers with non-zero digits in every place value.
+  - >-
+    Some students may think that expanded form is just writing the number out in words rather than showing the sum of
+    place values.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 15
+dependencies:
+  - writing_numbers_1000_9999
+  - place_value_understanding
+activities:
+  - step: observe
+    type: place_value_chart
+    order: 1
+    content:
+      title: Understanding Expanded Form
+      description: Let's look at the number 75406. Place each digit in its value column.
+      chart:
+        - digit: "7"
+          place: "10000"
+        - digit: "5"
+          place: "1000"
+        - digit: "4"
+          place: "100"
+        - digit: "0"
+          place: "10"
+        - digit: "6"
+          place: "1"
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      prompt: Drag the digits to their correct place value for the number 87965.
+      options:
+        - digit: "8"
+          place: "10000"
+        - digit: "7"
+          place: "1000"
+        - digit: "9"
+          place: "100"
+        - digit: "6"
+          place: "10"
+        - digit: "5"
+          place: "1"
+      hints:
+        - The correct answer is 8 in the ten-thousands place. Let me show you...
+        - Look at the place value of each digit carefully.
+        - You're close! Check your placement of the digit 9.
+        - Try placing the digits according to their values.
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      prompt: "Fill in the blanks for the expanded form of 395432:"
+      statement: 395432 = ___ + ___ + ___ + ___ + ___ + ___.
+      answers:
+        - "300000"
+        - "90000"
+        - "5000"
+        - "400"
+        - "30"
+        - "2"
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - text: What is the expanded form of 75406?
+          options:
+            - 70000 + 5000 + 400 + 0 + 6
+            - 7000 + 500 + 40 + 6
+            - 70000 + 500 + 40 + 6
+            - 70000 + 5000 + 400 + 60
+          correctIndex: 0
+        - text: Which number has an expanded form of 80000 + 7000 + 900 + 60 + 5?
+          options:
+            - "87965"
+            - "98765"
+            - "67895"
+            - "56789"
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job! You learned how to write numbers in expanded form! 🎉

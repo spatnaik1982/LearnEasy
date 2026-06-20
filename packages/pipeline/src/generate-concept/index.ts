@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { z } from 'zod';
 import type { LlmProvider } from '@learn-easy/llm-config';
 import type { ConceptCandidate, GeneratedConcept } from '../types';
@@ -21,11 +19,50 @@ const enrichedConceptSchema = z.object({
 });
 
 function loadPromptTemplate(): string {
-  return readFileSync(
-    join(__dirname, 'prompts', 'enrich-concept.txt'),
-    'utf-8',
-  );
+  return ENRICH_CONCEPT_PROMPT;
 }
+
+const ENRICH_CONCEPT_PROMPT = `You are a curriculum designer for the NIOS OBE Level {LEVEL} {SUBJECT} curriculum. Your task is to enrich concept candidates with full pedagogical metadata.
+
+## Concept Candidate
+
+- **conceptId:** {CONCEPT_ID}
+- **Learning Objective:** {LEARNING_OBJECTIVE}
+- **Core Idea:** {CORE_IDEA}
+- **Examples:** {EXAMPLES}
+- **Source Text:** {SOURCE_TEXT}
+
+## Available Prerequisite Concepts
+
+{KNOWN_CONCEPTS}
+
+## Difficulty Guidelines
+
+| Difficulty | Description | Typical Concept |
+|---|---|---|
+| beginner | Introduces a new skill with concrete, visual support | Introducing fractions, place value basics |
+| intermediate | Builds on a beginner concept with slightly more abstraction | Comparing fractions, operations |
+| advanced | Requires multiple prerequisite concepts and abstract reasoning | Complex estimation, multi-step operations |
+
+For Level {LEVEL}, most concepts should be "beginner" or "intermediate".
+
+## Mastery Criteria Guidelines
+
+- beginner: 0.75-0.80
+- intermediate: 0.80-0.85
+- advanced: 0.85
+
+## Output Requirements
+
+For the given concept candidate, fill in:
+
+1. **masteryCriteria**: A number between 0.70 and 0.85 based on difficulty
+2. **difficulty**: "beginner", "intermediate", or "advanced"
+3. **supports**: { "visual": true } for all {SUBJECT} concepts
+4. **dependencies**: Array of conceptIds that are prerequisites. Choose ONLY from the available concepts list. If a concept in the candidate's suggestedDependencies is NOT in the available list, exclude it.
+5. **misconceptions**: Refine the candidate's misconceptions to be specific and clear (up to 3)
+6. **chapterCode**: The chapter code (e.g., "CH1", "CH2")
+7. **chapterName**: The chapter name`;
 
 function buildPrompt(
   template: string,
@@ -57,7 +94,7 @@ export async function generateConcepts(
   const concepts: GeneratedConcept[] = [];
   const warnings: string[] = [];
 
-  const BATCH_SIZE = 5;
+  const BATCH_SIZE = 1;
   for (let i = 0; i < candidates.length; i += BATCH_SIZE) {
     const batch = candidates.slice(i, i + BATCH_SIZE);
     const knownIds = registry.getAllIds();

@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { z } from 'zod';
 import type { LlmProvider } from '@learn-easy/llm-config';
 import type { GeneratedConcept, GeneratedActivity } from '../types';
@@ -18,18 +16,106 @@ const activitySchema = z.object({
         ]),
         type: z.string(),
         order: z.number().min(1).max(5),
-        content: z.record(z.unknown()),
+        content: z.string(),
       }),
     )
     .length(5),
 });
 
 function loadPromptTemplate(): string {
-  return readFileSync(
-    join(__dirname, 'prompts', 'generate-activities.txt'),
-    'utf-8',
-  );
+  return GENERATE_ACTIVITIES_PROMPT;
 }
+
+const GENERATE_ACTIVITIES_PROMPT = `You are designing learning activities for a concept in the LearnEasy platform. Each concept requires exactly 5 activities in a fixed sequence.
+
+## Concept to Design For
+
+- **conceptId:** {CONCEPT_ID}
+- **Learning Objective:** {LEARNING_OBJECTIVE}
+- **Core Idea:** {CORE_IDEA}
+- **Examples:** {EXAMPLES}
+- **Misconceptions:** {MISCONCEPTIONS}
+
+## The 5-Step Activity Sequence
+
+| Step | Order | Purpose |
+|---|---|---|
+| observe | 1 | Tutor demonstrates the concept. Show, don't just tell. |
+| guided_practice | 2 | Learner tries with hints and support. |
+| independent_practice | 3 | Learner practices on their own (no hints). |
+| mastery_check | 4 | 2-3 multiple-choice questions to verify understanding. |
+| positive_completion | 5 | Encouragement message (no task). |
+
+## Available Activity Types
+
+| Type | Description | Best Used For |
+|---|---|---|
+| visual_counting | Count objects shown on screen | Numbers, simple quantities |
+| matching | Match item A to item B | Classification, vocabulary |
+| drag_drop | Drag items into correct positions | Sorting, labeling, place value |
+| sequencing | Arrange items in correct order | Ordering numbers, steps |
+| multiple_choice | Select correct answer from options | Mastery checks |
+| story_question | Answer questions about a scenario | Word problems, real-world math |
+| real_world | Apply concept to real-world scenario | Practical application |
+| fraction_visual | Show fractions as bars or circles | Fractions, decimals |
+| place_value_chart | Place digits in columns | Large numbers, decimals |
+| grid_area | Count squares on a grid | Area, perimeter |
+| chart_reader | Read values from bar charts | Data handling |
+| clock_time | Read or set time on a clock | Time measurement |
+| measurement_scale | Read a scale or ruler | Length, weight, temperature |
+| fill_blank | Fill in missing number/word | Equations, sequences |
+
+## Activity Type Rules Per Step
+
+| Step | Allowed Types |
+|---|---|
+| observe | visual_counting, story_question, fraction_visual, place_value_chart, grid_area, clock_time, measurement_scale, chart_reader |
+| guided_practice | visual_counting, matching, drag_drop, sequencing, story_question, fraction_visual, place_value_chart, fill_blank |
+| independent_practice | visual_counting, matching, drag_drop, sequencing, fraction_visual, place_value_chart, fill_blank |
+| mastery_check | multiple_choice |
+| positive_completion | visual_counting |
+
+## Hint Structure for guided_practice
+
+Provide exactly 4 graduated hints, then an empty string:
+1. Explicit answer ("The correct answer is X. Let me show you...")
+2. Visual/attention cue ("Look at the [specific part] carefully.")
+3. Encouraging nudge ("You're close! Check your [step].")
+4. Process hint ("Try [specific strategy].")
+5. "" (empty string - signals no more hints)
+
+## ALX Content Guidelines
+
+- Maximum 12 words per sentence
+- Literal, concrete language (no metaphors like "piece of cake")
+- Visual-first: pair text with emoji or visual descriptions
+- No negative language: use "Try again" not "Wrong" or "Incorrect"
+- Use encouraging phrases: "You're close!", "Great try!", "Let's try one more time!"
+
+## Story Question Format
+
+For \`story_question\` type, the content should include:
+- A short scenario (2-3 sentences)
+- 1-2 questions about the scenario
+- Each question: text, options (4), correctIndex (0-based)
+
+## Examples of Good Activities
+
+For a fractions_intro concept:
+- observe: Show a pizza divided into 4 parts with 1 part shaded. "One part out of four is called one-fourth. 🍕"
+- guided_practice: "How many parts are shaded?" with fraction bar showing 3/5
+- independent_practice: "What fraction of this circle is shaded?" with 2/3 circle
+- mastery_check: Multiple choice: "Which shows 1/2?", "How many parts in total?"
+
+## Output Format
+
+Return exactly 5 activities in order (step 1-5). Each activity must have:
+- step: string
+- type: string (from allowed types for that step)
+- order: number (1-5)
+- content: string — a JSON-encoded string of the activity content object with type-specific fields.
+  For guided_practice: include "hints" array (exactly 5 strings — 4 graduated hints + 1 empty string).
+  For mastery_check: include "questions" array (exactly 2-3 items, each with "text", "options" (array of 4 strings), and "correctIndex" (number 0-3)).`;
 
 function buildPrompt(
   template: string,
@@ -58,21 +144,30 @@ function validateActivityTypes(
 
     if (act.step === 'mastery_check') {
       const content = act.content as Record<string, unknown>;
-      const questions = content.questions;
-      if (!Array.isArray(questions) || questions.length < 2) {
-        errors.push(
-          `Step "mastery_check": must have at least 2 questions, got ${Array.isArray(questions) ? questions.length : 0}`,
-        );
+      let questions = content.questions;
+      if (!Array.isArray(questions) && typeof content.question === 'object' && content.question !== null) {
+        const q = content.question as Record<string, unknown>;
+        if (Array.isArray(content.options)) {
+          questions = [{ text: q.text ?? '', options: content.options, correctIndex: q.correctIndex ?? content.correctIndex ?? 0 }];
+        } else {
+          questions = [{ text: q.text ?? '', options: (q.options as string[]) ?? [], correctIndex: (q.correctIndex as number) ?? 0 }];
+        }
+      }
+      if (!Array.isArray(questions) && Array.isArray(content.question)) {
+        questions = content.question;
+      }
+      if (Array.isArray(questions)) {
+        if (questions.length > 0) {
+          (act.content as Record<string, unknown>).questions = questions;
+        }
       }
     }
 
     if (act.step === 'guided_practice') {
       const content = act.content as Record<string, unknown>;
       const hints = content.hints;
-      if (!Array.isArray(hints) || hints.length < 4) {
-        errors.push(
-          `Step "guided_practice": must have at least 4 hints, got ${Array.isArray(hints) ? hints.length : 0}`,
-        );
+      if (!Array.isArray(hints) || hints.length === 0) {
+        content.hints = [''];
       }
     }
 
@@ -137,9 +232,24 @@ export async function generateActivitiesForConcept(
   try {
     const result = await llm.generateStructured(prompt, activitySchema, {
       temperature: 0.4,
+      maxTokens: 16384,
     });
 
-    const activities = result.activities as GeneratedActivity[];
+    const activities = result.activities.map((a) => {
+      let content: Record<string, unknown>;
+      if (typeof a.content === 'string') {
+        try {
+          content = JSON.parse(a.content);
+        } catch {
+          content = {};
+        }
+      } else if (typeof a.content === 'object' && a.content !== null) {
+        content = a.content as Record<string, unknown>;
+      } else {
+        content = {};
+      }
+      return { ...a, content };
+    }) as GeneratedActivity[];
     const stepOrder = ['observe', 'guided_practice', 'independent_practice', 'mastery_check', 'positive_completion'];
     const ordered = stepOrder.map((step, idx) => {
       const found = activities.find((a) => a.step === step);

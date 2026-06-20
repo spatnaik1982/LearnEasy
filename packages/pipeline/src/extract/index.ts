@@ -4,12 +4,49 @@ import type { ExtractedPDF, ChapterChunk, SectionChunk } from '../types';
 
 const CHAPTER_HEADING = /^(Lesson|Chapter|Unit)\s+(\d+)\s*[:\-–—]\s*(.+)$/im;
 
-const SECTION_HEADING = /^(\d+\.\d+)\s+(.+)$/m;
+const SECTION_HEADING = /^(\d+)\.(\d{1,2}(?:\.\d)?)\s*([A-Za-z].+)$/m;
 
 const EXAMPLE_MARKER = /^(Example|उदाहरण)\b/i;
 
 const EXERCISE_MARKER =
   /^(Let us see what you have learnt|Exercise|Practice|Answer|Answers)/im;
+
+function parseTOC(text: string): Map<number, string> {
+  const tocStart = text.indexOf('Sl. No.');
+  if (tocStart === -1) return new Map();
+
+  const tocEnd = text.indexOf('\nContents', tocStart);
+  const tocText = text.slice(tocStart, tocEnd !== -1 ? tocEnd : tocStart + 800);
+
+  const lines = tocText.split('\n');
+  const result = new Map<number, string>();
+  let currentNum = 0;
+  let currentTitle = '';
+
+  const ENTRY_START = /^(\d+)\.(.+)$/;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('Sl.')) continue;
+
+    const match = trimmed.match(ENTRY_START);
+    if (match) {
+      if (currentNum > 0 && currentTitle) {
+        result.set(currentNum, currentTitle);
+      }
+      currentNum = parseInt(match[1], 10);
+      currentTitle = match[2].replace(/\d+$/, '').trim();
+    } else if (currentNum > 0) {
+      currentTitle += ' ' + trimmed.replace(/\d+$/, '').trim();
+    }
+  }
+
+  if (currentNum > 0 && currentTitle) {
+    result.set(currentNum, currentTitle);
+  }
+
+  return result;
+}
 
 export async function extractPDF(pdfPath: string): Promise<ExtractedPDF> {
   if (!pdfPath.endsWith('.pdf')) {
@@ -45,11 +82,14 @@ export async function extractPDF(pdfPath: string): Promise<ExtractedPDF> {
 }
 
 function parseChapters(text: string): ChapterChunk[] {
+  const tocChapters = parseTOC(text);
   const lines = text.split('\n');
   const chapters: ChapterChunk[] = [];
   let currentChapter: ChapterChunk | null = null;
   let currentSection: SectionChunk | null = null;
   let inExercise = false;
+  let lastChapterNum = 0;
+  const createdChapters = new Set<number>();
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -69,7 +109,46 @@ function parseChapters(text: string): ChapterChunk[] {
         pages: [],
       };
       chapters.push(currentChapter);
+      lastChapterNum = currentChapter.chapterNumber;
+      createdChapters.add(currentChapter.chapterNumber);
       inExercise = false;
+      continue;
+    }
+
+    const sectionMatch = line.match(SECTION_HEADING);
+    if (sectionMatch && !EXAMPLE_MARKER.test(line) && sectionMatch[3].length >= 10) {
+      const chapterNum = parseInt(sectionMatch[1], 10);
+
+      if (!createdChapters.has(chapterNum) && tocChapters.has(chapterNum)) {
+        if (currentSection && currentChapter) {
+          currentChapter.sections.push(currentSection);
+        }
+        currentSection = null;
+
+        const title = tocChapters.get(chapterNum) || `Chapter ${chapterNum}`;
+        currentChapter = {
+          chapterNumber: chapterNum,
+          chapterTitle: title,
+          sections: [],
+          pages: [],
+        };
+        chapters.push(currentChapter);
+        lastChapterNum = chapterNum;
+        createdChapters.add(chapterNum);
+        inExercise = false;
+      }
+
+      if (currentChapter && chapterNum === lastChapterNum) {
+        if (currentSection) {
+          currentChapter.sections.push(currentSection);
+        }
+        currentSection = {
+          heading: line,
+          body: '',
+          examples: [],
+          exercises: [],
+        };
+      }
       continue;
     }
 
@@ -96,20 +175,6 @@ function parseChapters(text: string): ChapterChunk[] {
           currentSection.exercises.push(line);
         }
       }
-      continue;
-    }
-
-    const sectionMatch = line.match(SECTION_HEADING);
-    if (sectionMatch && !EXAMPLE_MARKER.test(line)) {
-      if (currentSection) {
-        currentChapter.sections.push(currentSection);
-      }
-      currentSection = {
-        heading: line,
-        body: '',
-        examples: [],
-        exercises: [],
-      };
       continue;
     }
 

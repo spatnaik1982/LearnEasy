@@ -1,0 +1,90 @@
+conceptId: reading_numbers_1000_9999
+chapter:
+  code: CH1
+  name: Reading and Writing Numbers from 1000 to 9999
+learningObjective: Read numbers from 1000 to 9999
+coreIdea: Children will learn to read and write four-digit numbers.
+examples:
+  - 1000 - One Thousand
+  - 2918 - Two Thousand Nine Hundred Eighteen
+  - 5274 - Five Thousand Two Hundred Seventy Four
+misconceptions:
+  - >-
+    Students may confuse the order of digits when reading numbers (e.g., saying 'One Thousand Nine Hundred Twenty Eight'
+    instead of 'Two Thousand Nine Hundred Eighteen').
+  - Students might struggle with the concept of place value and how it affects the pronunciation of numbers.
+  - Some students may think that numbers can only be read in pairs or triples, leading to confusion with larger numbers.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - counting_1_10
+  - number_recognition_1_10
+activities:
+  - step: observe
+    type: place_value_chart
+    order: 1
+    content:
+      title: Reading Four-Digit Numbers
+      description: |-
+        Let's look at the number 2918.
+
+        In the place value chart: 
+        - 2 is in the Thousands place. 
+        - 9 is in the Hundreds place. 
+        - 1 is in the Tens place. 
+        - 8 is in the Ones place. 
+
+        So, 2918 is read as 'Two Thousand Nine Hundred Eighteen.'
+  - step: guided_practice
+    type: drag_drop
+    order: 2
+    content:
+      prompt: Drag the numbers to their correct place values for 5274.
+      items:
+        - value: "5"
+          place: Thousands
+        - value: "2"
+          place: Hundreds
+        - value: "7"
+          place: Tens
+        - value: "4"
+          place: Ones
+      hints:
+        - The correct answer is 5274. Let me show you...
+        - Look at the Thousands place carefully.
+        - You're close! Check your Hundreds place.
+        - Try placing 5 in the Thousands column.
+        - ""
+  - step: independent_practice
+    type: fill_blank
+    order: 3
+    content:
+      prompt: "Fill in the blank: 1000 is read as __________."
+      answer: One Thousand
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - text: How do you read the number 4502?
+          options:
+            - Four Thousand Five Hundred Two
+            - Five Thousand Four Hundred Two
+            - Four Hundred Fifty Two Thousand
+            - Two Thousand Four Hundred Fifty
+          correctIndex: 0
+        - text: What is the correct reading for 8361?
+          options:
+            - Eight Thousand Three Hundred Sixty One
+            - Three Thousand Eight Hundred Sixty One
+            - Eight Hundred Thirty Six Thousand One
+            - Six Thousand Eight Hundred Thirty One
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job! You are learning to read numbers! 🎉
