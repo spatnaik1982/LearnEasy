@@ -223,6 +223,9 @@ export function ActivityRenderer({
               label: string;
             }>) ?? []}
             onDrop={() => {}}
+            onComplete={(placements) => {
+              handleComplete({ droppedPositions: placements });
+            }}
           />
         );
 

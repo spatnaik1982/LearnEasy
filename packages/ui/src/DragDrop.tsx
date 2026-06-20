@@ -17,10 +17,11 @@ export interface DragDropProps {
   items: DragDropItem[];
   targets: DragDropTarget[];
   onDrop: (itemId: string, targetId: string) => void;
+  onComplete?: (placements: Record<string, string>) => void;
   className?: string;
 }
 
-export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
+export function DragDrop({ items, targets, onDrop, onComplete, className }: DragDropProps) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [placed, setPlaced] = useState<Map<string, string>>(new Map());
   const itemsContainerRef = useRef<HTMLDivElement>(null);
@@ -45,9 +46,18 @@ export function DragDrop({ items, targets, onDrop, className }: DragDropProps) {
       setPlaced((prev) => new Map(prev).set(selectedItem, targetId));
       announce(`Placed ${item?.label || selectedItem} into ${target?.label || targetId}`);
       onDrop(selectedItem, targetId);
+
+      // Check completion: current placed count + 1 (this item)
+      if (placed.size + 1 >= items.length) {
+        const placements: Record<string, string> = {};
+        placed.forEach((v, k) => { placements[k] = v; });
+        placements[selectedItem] = targetId;
+        onComplete?.(placements);
+      }
+
       setSelectedItem(null);
     },
-    [selectedItem, onDrop, items, targets, announce],
+    [selectedItem, onDrop, onComplete, items, targets, placed, announce],
   );
 
   const handleItemKeyDown = useCallback(
