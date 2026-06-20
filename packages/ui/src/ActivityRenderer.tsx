@@ -202,6 +202,11 @@ function normalizeContent(type: string, content: Record<string, unknown>): Recor
     if (!n.label && typeof n.description === "string") {
       n.label = n.description;
     }
+    // If label is set but showLabel isn't, default to true so the label is visible.
+    // Many existing pipeline-emitted YAMLs (and hand-written ones) set label without showLabel.
+    if (n.label && n.showLabel === undefined) {
+      n.showLabel = true;
+    }
     if (n.compare && typeof n.compare === "object") {
       n.compare = {
         numerator: Number((n.compare as any).numerator ?? 0),
