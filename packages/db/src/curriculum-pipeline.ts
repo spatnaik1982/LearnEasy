@@ -56,6 +56,13 @@ const VALID_ACTIVITY_TYPES = [
   'multiple_choice',
   'story_question',
   'real_world',
+  'fraction_visual',
+  'place_value_chart',
+  'grid_area',
+  'chart_reader',
+  'clock_time',
+  'measurement_scale',
+  'fill_blank',
 ] as const;
 
 // Extract level/subject info from a relative path like: level-a/math/counting-1-10.yaml

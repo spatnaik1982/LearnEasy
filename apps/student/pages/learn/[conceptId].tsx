@@ -31,10 +31,10 @@ const STEPS = [
 const LEARN_STEPS = STEPS.slice(0, -1);
 
 const STEP_ACTIVITY_TYPES: Record<number, string[]> = {
-  0: ["visual_counter", "visual_counting", "story_question"],
-  1: ["matching", "story_question"],
-  2: ["sequencing", "drag_drop", "matching"],
-  3: ["multiple_choice"],
+  0: ["visual_counter", "visual_counting", "story_question", "fraction_visual", "place_value_chart", "grid_area", "chart_reader", "clock_time", "measurement_scale"],
+  1: ["matching", "story_question", "fraction_visual", "place_value_chart", "grid_area", "clock_time", "measurement_scale", "fill_blank"],
+  2: ["sequencing", "drag_drop", "matching", "fraction_visual", "place_value_chart", "grid_area", "chart_reader", "fill_blank"],
+  3: ["multiple_choice", "fill_blank"],
 };
 
 const ACTIVITY_WORK_LABELS: Record<string, string> = {
@@ -48,6 +48,13 @@ const ACTIVITY_WORK_LABELS: Record<string, string> = {
   story_question: COPY.completionStoryQuestion,
   real_world: COPY.completionRealWorld,
   real_world_task: COPY.completionRealWorld,
+  fraction_visual: COPY.completionFractionVisual,
+  place_value_chart: COPY.completionPlaceValue,
+  grid_area: COPY.completionGridArea,
+  chart_reader: COPY.completionChartReader,
+  clock_time: COPY.completionClockTime,
+  measurement_scale: COPY.completionMeasurementScale,
+  fill_blank: COPY.completionFillBlank,
 };
 
 const Learn: NextPage = () => {

@@ -8,6 +8,13 @@ import { Sequencing } from "./Sequencing";
 import { MultipleChoice } from "./MultipleChoice";
 import { StoryQuestion } from "./StoryQuestion";
 import { RealWorldTask } from "./RealWorldTask";
+import { FractionVisualizer } from "./FractionVisualizer";
+import { PlaceValueChart } from "./PlaceValueChart";
+import { GridCounter } from "./GridCounter";
+import { ChartReader } from "./ChartReader";
+import { ClockWidget } from "./ClockWidget";
+import { ScaleReader } from "./ScaleReader";
+import { FillBlank } from "./FillBlank";
 
 function normalizeContent(type: string, content: Record<string, unknown>): Record<string, unknown> {
   const n = { ...content };
@@ -492,6 +499,98 @@ export function ActivityRenderer({
             onComplete={() => {
               handleComplete({ completed: true });
             }}
+          />
+        );
+
+      case "fraction_visual":
+        return (
+          <FractionVisualizer
+            numerator={(normalizedContent.numerator as number) ?? 1}
+            denominator={(normalizedContent.denominator as number) ?? 2}
+            mode={(normalizedContent.mode as 'bar' | 'circle') ?? 'bar'}
+            label={normalizedContent.label as string}
+            showLabel={(normalizedContent.showLabel as boolean) ?? false}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            compare={normalizedContent.compare as { numerator: number; denominator: number } | undefined}
+            onShade={(shaded) => handleComplete({ shaded })}
+          />
+        );
+
+      case "place_value_chart":
+        return (
+          <PlaceValueChart
+            maxPlaces={(normalizedContent.maxPlaces as 'lakh' | 'crore') ?? 'crore'}
+            digits={normalizedContent.digits as (number | null)[]}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            draggableDigits={normalizedContent.draggableDigits as number[]}
+            targetNumber={normalizedContent.targetNumber as number}
+            showLabels={(normalizedContent.showLabels as boolean) ?? true}
+          />
+        );
+
+      case "grid_area":
+        return (
+          <GridCounter
+            rows={(normalizedContent.rows as number) ?? 5}
+            cols={(normalizedContent.cols as number) ?? 5}
+            highlighted={normalizedContent.highlighted as { row: number; col: number }[]}
+            mode={(normalizedContent.mode as 'area' | 'perimeter') ?? 'area'}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            maxHighlights={normalizedContent.maxHighlights as number}
+            cellSize={(normalizedContent.cellSize as number) ?? 40}
+            showCount
+            onHighlight={(cells) => handleComplete({ highlighted: cells, count: cells.length })}
+          />
+        );
+
+      case "chart_reader":
+        return (
+          <ChartReader
+            type={(normalizedContent.type as 'bar' | 'pictograph') ?? 'bar'}
+            data={(normalizedContent.data as { label: string; value: number; emoji?: string }[]) ?? []}
+            title={normalizedContent.title as string}
+            showValues={(normalizedContent.showValues as boolean) ?? true}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            onSelect={(label) => handleComplete({ selectedLabel: label })}
+          />
+        );
+
+      case "clock_time":
+        return (
+          <ClockWidget
+            hour={(normalizedContent.hour as number) ?? 12}
+            minute={(normalizedContent.minute as number) ?? 0}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            mode={(normalizedContent.mode as 'read' | 'set') ?? 'read'}
+            showDigital={(normalizedContent.showDigital as boolean) ?? true}
+            targetTime={normalizedContent.targetTime as { hour: number; minute: number } | undefined}
+            onTimeChange={(h, m) => handleComplete({ hour: h, minute: m })}
+          />
+        );
+
+      case "measurement_scale":
+        return (
+          <ScaleReader
+            type={(normalizedContent.type as 'ruler' | 'thermometer' | 'cylinder') ?? 'ruler'}
+            min={(normalizedContent.min as number) ?? 0}
+            max={(normalizedContent.max as number) ?? 10}
+            step={(normalizedContent.step as number) ?? 1}
+            unit={(normalizedContent.unit as string) ?? 'cm'}
+            value={normalizedContent.value as number | undefined}
+            interactive={(normalizedContent.interactive as boolean) ?? false}
+            targetValue={normalizedContent.targetValue as number | undefined}
+            showReading
+            onValueChange={(v) => handleComplete({ value: v })}
+          />
+        );
+
+      case "fill_blank":
+        return (
+          <FillBlank
+            template={(normalizedContent.template as string) ?? ''}
+            blanks={(normalizedContent.blanks as { id: string; position: number; correctAnswer: string | number; options?: (string | number)[] }[]) ?? []}
+            mode={(normalizedContent.mode as 'select' | 'type') ?? 'select'}
+            onComplete={(answers) => handleComplete({ answers })}
           />
         );
 

@@ -132,6 +132,71 @@ export function evaluateActivity(
       return { correct: true };
     }
 
+    case "fraction_visual": {
+      const shaded = response.shaded as number | undefined;
+      const expectedNumerator = content.numerator as number | undefined;
+      return {
+        correct: shaded === expectedNumerator,
+      };
+    }
+
+    case "place_value_chart": {
+      const targetNumber = content.targetNumber as number | undefined;
+      const digits = content.digits as (number | null)[] | undefined;
+      if (!targetNumber || !digits) return { correct: true };
+      const targetStr = String(targetNumber).replace(/,/g, '').padStart(digits.length, '0');
+      const placedStr = digits.map((d) => d ?? 0).join('');
+      return { correct: placedStr === targetStr };
+    }
+
+    case "grid_area": {
+      const count = response.count as number | undefined;
+      const highlighted = response.highlighted as { row: number; col: number }[] | undefined;
+      return {
+        correct: count !== undefined && highlighted !== undefined && count === highlighted.length,
+      };
+    }
+
+    case "chart_reader": {
+      const selectedLabel = response.selectedLabel as string | undefined;
+      const expectedLabel = content.correctLabel as string | undefined;
+      return {
+        correct: selectedLabel !== undefined && selectedLabel === expectedLabel,
+      };
+    }
+
+    case "clock_time": {
+      const setHour = response.hour as number | undefined;
+      const setMinute = response.minute as number | undefined;
+      const targetTime = content.targetTime as { hour: number; minute: number } | undefined;
+      if (setHour === undefined || setMinute === undefined || !targetTime) return { correct: false };
+      const hourMatch = setHour === targetTime.hour;
+      const minuteDiff = Math.abs(setMinute - targetTime.minute);
+      return {
+        correct: hourMatch && minuteDiff <= 5,
+      };
+    }
+
+    case "measurement_scale": {
+      const setValue = response.value as number | undefined;
+      const targetValue = content.targetValue as number | undefined;
+      if (setValue === undefined || targetValue === undefined) return { correct: false };
+      const step = (content.step as number) ?? 1;
+      return {
+        correct: Math.abs(setValue - targetValue) <= step,
+      };
+    }
+
+    case "fill_blank": {
+      const answers = response.answers as Record<string, string | number> | undefined;
+      const blanks = content.blanks as { id: string; correctAnswer: string | number }[] | undefined;
+      if (!answers || !blanks) return { correct: false };
+      const allCorrect = blanks.every(
+        (b) => String(answers[b.id]) === String(b.correctAnswer),
+      );
+      return { correct: allCorrect };
+    }
+
     default:
       return { correct: false };
   }
