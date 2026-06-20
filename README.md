@@ -148,6 +148,9 @@ Validation checks:
 # Generate Level B Math curriculum from a NIOS PDF
 pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math
 
+# Process a single chapter (inspect results before running all chapters)
+pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math --chapter 1 --verbose
+
 # Dry run (validate without writing files)
 pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math --dry-run --verbose
 

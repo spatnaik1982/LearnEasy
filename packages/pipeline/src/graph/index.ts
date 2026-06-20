@@ -20,6 +20,7 @@ export interface PipelineOptions {
   levelCode: string;
   subject: string;
   force: boolean;
+  chapterFilter?: number;
   outputDir: string;
   llmProvider: string;
   llmModel: string;
@@ -89,6 +90,29 @@ export async function runPipeline(
       duration: Date.now() - startTime,
       outputPaths: [],
     };
+  }
+
+  if (options.chapterFilter) {
+    const originalCount = chapters.length;
+    chapters = chapters.filter((ch) => ch.chapterNumber === options.chapterFilter);
+    if (chapters.length === 0) {
+      return {
+        status: 'failed',
+        chaptersProcessed: 0,
+        conceptsGenerated: 0,
+        activitiesGenerated: 0,
+        filesWritten: 0,
+        filesSkipped: 0,
+        validationErrors: 1,
+        retriesNeeded: 0,
+        failedConcepts: 0,
+        warnings: [],
+        errors: [`Chapter ${options.chapterFilter} not found. Available: ${Array.from({ length: originalCount }, (_, i) => i + 1).join(', ')}`],
+        duration: Date.now() - startTime,
+        outputPaths: [],
+      };
+    }
+    log(options.verbose, `  → Filtered to chapter ${options.chapterFilter} (of ${originalCount})`);
   }
 
   // 2. Chunk

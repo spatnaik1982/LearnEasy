@@ -25,6 +25,7 @@ interface CLIOptions {
   level: string;
   subject: string;
   force: boolean;
+  chapter?: number;
   llmProvider?: string;
   llmModel?: string;
   interactive: boolean;
@@ -83,6 +84,9 @@ function parseArgs(): CLIOptions {
       case '--max-retries':
         options.maxRetries = parseInt(args[++i] || '3', 10);
         break;
+      case '--chapter':
+        options.chapter = parseInt(args[++i] || '0', 10);
+        break;
       case '--help':
       case '-h':
         printHelp();
@@ -111,10 +115,12 @@ Options:
   --verbose             Detailed logging per stage
   --output-dir <path>   Custom output directory (default: ./curriculum)
   --max-retries <num>   Max retries per concept (default: 3)
+  --chapter <num>       Process only a single chapter (e.g., --chapter 3)
   --help, -h            Show this help message
 
 Examples:
   pnpm curriculum:generate --pdf ./math-level-b.pdf --level B --subject math
+  pnpm curriculum:generate --pdf ./math-level-b.pdf --chapter 1 --verbose
   pnpm curriculum:generate --pdf ./math-level-b.pdf --verbose --dry-run
 `);
 }
@@ -151,6 +157,7 @@ export async function runPipelineCLI(): Promise<void> {
   logger.info(`Level:    ${options.level}`);
   logger.info(`Subject:  ${options.subject.charAt(0).toUpperCase() + options.subject.slice(1)}`);
   logger.info(`Output:   ${options.outputDir}`);
+  if (options.chapter) logger.info(`Chapter:  ${options.chapter} (single chapter mode)`);
   if (options.dryRun) logger.info('Mode:     Dry run (no files written)');
 
   const validationErrors = validateArgs(options);
@@ -185,6 +192,7 @@ export async function runPipelineCLI(): Promise<void> {
       levelCode: options.level.toUpperCase(),
       subject: options.subject,
       force: options.force,
+      chapterFilter: options.chapter,
       outputDir: options.outputDir,
       llmProvider: options.llmProvider || process.env.LLM_PROVIDER || 'openai',
       llmModel: options.llmModel || process.env.LLM_MODEL || 'gpt-4o-mini',
