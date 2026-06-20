@@ -1,43 +1,31 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  level: string;
+  level?: string;
 }
 
 interface AuthContextValue {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  login: (email: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (data: Record<string, unknown>) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const STORAGE_KEY = "learn-easy-token";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+
 function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
   try {
-    const tok = localStorage.getItem("learn-easy-token");
-    if (tok) return tok;
-    // Auto-login for dev/demo: get a real JWT from API
-    fetch("http://localhost:3001/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: "test2@test.com", password: "test123", role: "student" }),
-    })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.access_token) {
-          localStorage.setItem("learn-easy-token", d.access_token);
-          window.location.reload();
-        }
-      })
-      .catch(() => {});
-    return null;
+    return localStorage.getItem(STORAGE_KEY);
   } catch {
     return null;
   }
@@ -47,9 +35,9 @@ function setStoredToken(token: string | null): void {
   if (typeof window === "undefined") return;
   try {
     if (token) {
-      localStorage.setItem("learn-easy-token", token);
+      localStorage.setItem(STORAGE_KEY, token);
     } else {
-      localStorage.removeItem("learn-easy-token");
+      localStorage.removeItem(STORAGE_KEY);
     }
   } catch {
     /* noop */
@@ -60,31 +48,94 @@ function decodeToken(token: string): User | null {
   try {
     const payload = token.split(".")[1];
     const decoded = JSON.parse(atob(payload));
-    return { id: decoded.sub, name: decoded.name, email: decoded.email, level: decoded.level || "A" };
+    return { id: decoded.sub, name: "", email: decoded.email, level: decoded.level || "A" };
+  } catch {
+    return null;
+  }
+}
+
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = token.split(".")[1];
+    const decoded = JSON.parse(atob(payload));
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) return true;
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+async function apiPost(url: string, body: unknown) {
+  const res = await fetch(`${API_URL}${url}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || `Request failed (${res.status})`);
+  }
+  return data;
+}
+
+async function fetchUserProfile(token: string): Promise<User | null> {
+  try {
+    const decoded = decodeToken(token);
+    if (!decoded) return null;
+    const res = await fetch(`${API_URL}/students/${decoded.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const student = json.data || json;
+    return { id: student.id, name: student.name, email: student.email, level: student.level };
   } catch {
     return null;
   }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(getStoredToken);
-  const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const user = token ? decodeToken(token) : null;
+  useEffect(() => {
+    const stored = getStoredToken();
+    if (stored && !isTokenExpired(stored)) {
+      setToken(stored);
+      fetchUserProfile(stored).then((profile) => {
+        if (profile) setUser(profile);
+        setIsLoading(false);
+      }).catch(() => {
+        setStoredToken(null);
+        setIsLoading(false);
+      });
+    } else {
+      if (stored) setStoredToken(null);
+      setIsLoading(false);
+    }
+  }, []);
 
-  const login = useCallback(async (email: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 500));
+      const data = await apiPost("/auth/login", { email, password, role: "student" });
+      setStoredToken(data.access_token);
+      setToken(data.access_token);
+      const profile = await fetchUserProfile(data.access_token);
+      setUser(profile || data.user);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-      const mockToken = [
-        btoa(JSON.stringify({ alg: "HS256", typ: "JWT" })),
-        btoa(JSON.stringify({ sub: "student-1", name: "Alex", email, level: "A" })),
-        btoa(JSON.stringify({ sig: "mock-signature" })),
-      ].join(".");
-
-      setStoredToken(mockToken);
-      setToken(mockToken);
+  const signup = useCallback(async (formData: Record<string, unknown>) => {
+    setIsLoading(true);
+    try {
+      const data = await apiPost("/auth/signup/student", formData);
+      setStoredToken(data.access_token);
+      setToken(data.access_token);
+      setUser(data.user);
     } finally {
       setIsLoading(false);
     }
@@ -93,11 +144,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setStoredToken(null);
     setToken(null);
+    setUser(null);
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isLoading, login, logout, isAuthenticated: !!token }}
+      value={{ user, token, isLoading, login, signup, logout, isAuthenticated: !!token }}
     >
       {children}
     </AuthContext.Provider>

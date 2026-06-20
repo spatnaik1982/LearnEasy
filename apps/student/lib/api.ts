@@ -488,6 +488,20 @@ export async function fetchStudentProfile(
   return { data: null, error: res.error };
 }
 
+export async function updateStudentProfile(
+  studentId: string,
+  data: Record<string, unknown>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+  if (USE_MOCK) {
+    await new Promise((r) => setTimeout(r, 200));
+    return { data: { id: studentId, ...data }, error: null };
+  }
+  return apiFetch(`/students/${studentId}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
 // ── Onboarding ──────────────────────────────────────────────────
 
 export async function completeOnboarding(
