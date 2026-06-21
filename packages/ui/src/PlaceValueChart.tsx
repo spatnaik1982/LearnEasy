@@ -19,7 +19,7 @@ export interface PlaceValueChartProps {
   selectedDigit: number | null;
   activeColumn: number | null;
   onSelectDigit: (digit: number) => void;
-  onPlaceDigit: (column: number) => void;
+  onPlaceDigit: (digit: number, column: number) => void;
   onRemoveDigit: (column: number) => void;
   targetNumber?: number;
   showResult?: boolean;
@@ -49,9 +49,11 @@ const COLUMNS_LAKH = [
 function DraggableDigit({
   digit,
   isSelected,
+  onSelect,
 }: {
   digit: number;
   isSelected: boolean;
+  onSelect: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `digit-${digit}`,
@@ -69,15 +71,17 @@ function DraggableDigit({
       {...listeners}
       {...attributes}
       style={style}
+      onClick={onSelect}
       className={cn(
         "w-14 h-14 rounded-lg border-2 text-xl font-bold transition-colors duration-150",
         "touch-none select-none",
         isDragging && "opacity-50",
         isSelected
-          ? "bg-soft-blue text-white border-soft-blue"
+          ? "bg-soft-blue text-white border-soft-blue ring-2 ring-soft-blue ring-offset-2"
           : "bg-white border-soft-blue text-slate-text hover:bg-soft-blue/10",
       )}
-      aria-label={`Digit ${digit}`}
+      aria-label={`Digit ${digit}${isSelected ? ", selected" : ""}`}
+      aria-pressed={isSelected}
     >
       {digit}
     </button>
@@ -91,7 +95,7 @@ function ColumnCell({
   isEmpty,
   colResult,
   showLabels,
-  isOver,
+  hasSelectedDigit,
   onClick,
 }: {
   column: typeof COLUMNS_CRORE[number];
@@ -100,13 +104,15 @@ function ColumnCell({
   isEmpty: boolean;
   colResult: "correct" | "incorrect" | null;
   showLabels: boolean;
-  isOver: boolean;
+  hasSelectedDigit: boolean;
   onClick: () => void;
 }) {
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: `col-${idx}`,
     data: { column: idx },
   });
+
+  const canPlace = hasSelectedDigit && colResult === null;
 
   return (
     <div ref={setNodeRef} className="flex flex-col items-center">
@@ -118,17 +124,24 @@ function ColumnCell({
       <div
         role="gridcell"
         aria-label={column.ariaLabel}
-        tabIndex={0}
+        tabIndex={canPlace || !isEmpty ? 0 : -1}
         style={{ animation: isEmpty ? undefined : "dropAppear 200ms ease-out" }}
         className={cn(
           "flex items-center justify-center w-14 h-14 text-2xl font-bold select-none transition-colors duration-150 rounded-md",
           isEmpty && "border-2 border-dashed border-soft-blue bg-warm-off-white",
           !isEmpty && "bg-warm-off-white cursor-pointer",
           isOver && "!bg-soft-blue/10 !border-soft-blue !border-2",
+          canPlace && isEmpty && "cursor-pointer hover:!bg-soft-blue/5",
           colResult === 'correct' && "!border-muted-green !border-2",
           colResult === 'incorrect' && "!border-soft-coral !border-2"
         )}
         onClick={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onClick();
+          }
+        }}
       >
         {digit !== undefined ? digit : ''}
       </div>
@@ -140,9 +153,9 @@ export function PlaceValueChart({
   maxPlaces = 'crore',
   placedDigits,
   draggableDigits,
-  selectedDigit: _selectedDigit,
+  selectedDigit,
   activeColumn: _activeColumn,
-  onSelectDigit: _onSelectDigit,
+  onSelectDigit,
   onPlaceDigit,
   onRemoveDigit,
   targetNumber,
@@ -175,11 +188,13 @@ export function PlaceValueChart({
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     setActiveDraggedDigit(null);
-    const { over } = event;
+    const { active, over } = event;
     if (!over) return;
     const columnIdx = over.data.current?.column as number;
     if (columnIdx === undefined) return;
-    onPlaceDigit(columnIdx);
+    const digit = active.data.current?.digit as number | undefined;
+    if (digit === undefined) return;
+    onPlaceDigit(digit, columnIdx);
   }, [onPlaceDigit]);
 
   return (
@@ -195,6 +210,11 @@ export function PlaceValueChart({
   }
 `}</style>
       <div className="flex flex-col items-center gap-6">
+        <p className="text-sm font-medium text-on-surface-variant self-start">
+          {selectedDigit !== null
+            ? `Digit ${selectedDigit} selected — tap a column to place it`
+            : "Drag a digit to a column, or tap a digit then tap a column"}
+        </p>
         <div
           role="grid"
           aria-label="Place value chart"
@@ -215,9 +235,14 @@ export function PlaceValueChart({
                 isEmpty={isEmpty}
                 colResult={colResult}
                 showLabels={showLabels}
-                isOver={false}
+                hasSelectedDigit={selectedDigit !== null}
                 onClick={() => {
-                  if (!isEmpty) onRemoveDigit(idx);
+                  if (showResult) return;
+                  if (selectedDigit !== null) {
+                    onPlaceDigit(selectedDigit, idx);
+                  } else if (!isEmpty) {
+                    onRemoveDigit(idx);
+                  }
                 }}
               />
             );
@@ -229,7 +254,8 @@ export function PlaceValueChart({
             <DraggableDigit
               key={`digit-${digit}`}
               digit={digit}
-              isSelected={false}
+              isSelected={selectedDigit === digit}
+              onSelect={() => onSelectDigit(digit)}
             />
           ))}
         </div>

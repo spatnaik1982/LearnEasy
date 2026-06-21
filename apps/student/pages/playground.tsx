@@ -19,7 +19,8 @@ interface PlaygroundProps {
 }
 
 function yamlBlock(raw: string, index: number): string {
-  const docs = raw.split(/\n(?=- )/);
+  const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)+/, "");
+  const docs = stripped.split(/\n(?=- )/);
   return docs[index] || "";
 }
 

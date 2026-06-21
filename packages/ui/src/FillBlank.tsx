@@ -120,10 +120,10 @@ function BlankSlot({
             aria-label={`Clear blank ${index + 1}`}
             style={{
               position: "absolute",
-              top: "-8px",
-              right: "-8px",
-              width: "24px",
-              height: "24px",
+              top: "-14px",
+              right: "-14px",
+              width: "44px",
+              height: "44px",
               borderRadius: "50%",
               backgroundColor: "#E5989B",
               color: "white",
@@ -131,11 +131,11 @@ function BlankSlot({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "12px",
+              fontSize: "16px",
               cursor: "pointer",
               lineHeight: 1,
             }}
-            className="focus:outline-none focus:ring-2 focus:ring-soft-blue"
+            className="focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
           >
             ✕
           </button>

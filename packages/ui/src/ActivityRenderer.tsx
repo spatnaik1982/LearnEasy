@@ -247,6 +247,30 @@ export function ActivityRenderer({
     setPvcSelectedDigit(null);
   }, [activity.id]);
 
+  // Initialize grid/place-value state from YAML content for observe steps
+  useEffect(() => {
+    if (type === "grid_area") {
+      const yamlHighlighted = normalizedContent.highlighted as { row: number; col: number }[] | undefined;
+      if (yamlHighlighted) {
+        setGridHighlighted(yamlHighlighted);
+      }
+    }
+    if (type === "place_value_chart") {
+      const yamlDigits = normalizedContent.digits as (number | null)[] | undefined;
+      if (Array.isArray(yamlDigits)) {
+        const placed: Record<number, number> = {};
+        const columns = (normalizedContent.maxPlaces as "lakh" | "crore") === "lakh" ? 6 : 8;
+        yamlDigits.slice(-columns).forEach((d, i) => {
+          const colIdx = columns - yamlDigits.length + i;
+          if (d != null && colIdx >= 0) {
+            placed[colIdx] = d;
+          }
+        });
+        setPvcPlacedDigits(placed);
+      }
+    }
+  }, [activity.id, type, normalizedContent]);
+
   // Observe-step auto-complete timer
   const autoCompleteScheduledRef = useRef(false);
   useEffect(() => {
@@ -405,6 +429,13 @@ export function ActivityRenderer({
                 handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
               }
             }}
+            onConnect={(leftId, rightId) => {
+              const updated = { ...matchingConnections, [leftId]: rightId };
+              setMatchingConnections(updated);
+              setMatchingSelectedLeft(null);
+              setMatchingSelectedRight(null);
+              handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
+            }}
             onUndo={() => {
               const keys = Object.keys(matchingConnections);
               if (keys.length === 0) return;
@@ -431,9 +462,8 @@ export function ActivityRenderer({
             placements={dragPlacements}
             selectedItemId={dragSelectedItem}
             onSelectItem={(id) => setDragSelectedItem(id === dragSelectedItem ? null : id)}
-            onPlaceItem={(targetId) => {
-              if (!dragSelectedItem) return;
-              const updated = { ...dragPlacements, [dragSelectedItem]: targetId };
+            onPlaceItem={(itemId, targetId) => {
+              const updated = { ...dragPlacements, [itemId]: targetId };
               setDragPlacements(updated);
               setDragSelectedItem(null);
               handleResponse({ droppedPositions: updated });
@@ -596,9 +626,8 @@ export function ActivityRenderer({
             selectedDigit={pvcSelectedDigit}
             activeColumn={null}
             onSelectDigit={(digit) => setPvcSelectedDigit(digit === pvcSelectedDigit ? null : digit)}
-            onPlaceDigit={(column) => {
-              if (pvcSelectedDigit == null) return;
-              setPvcPlacedDigits((prev) => ({ ...prev, [column]: pvcSelectedDigit }));
+            onPlaceDigit={(digit, column) => {
+              setPvcPlacedDigits((prev) => ({ ...prev, [column]: digit }));
               setPvcSelectedDigit(null);
             }}
             onRemoveDigit={(column) => {

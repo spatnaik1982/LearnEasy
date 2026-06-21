@@ -313,3 +313,59 @@ export function getActivityFeedback(correct: boolean): string {
   const messages = correct ? correctMessages : incorrectMessages;
   return messages[Math.floor(Math.random() * messages.length)];
 }
+
+/**
+ * Returns an ALX-compliant guidance message based on the activity type.
+ * Guidance messages are concrete, action-oriented, and avoid abstract reasoning.
+ */
+export function getGuidanceMessage(type: string): string {
+  const messages: Record<string, string> = {
+    visual_counter: "Count each item one by one. Touch each item as you count.",
+    visual_counting: "Count each item one by one. Touch each item as you count.",
+    multiple_choice: "Read each choice carefully. Pick the one that answers the question.",
+    matching: "Draw a line from each item on the left to its match on the right.",
+    sequencing: "Put the items in the correct order from first to last.",
+    drag_drop: "Drag each item to its correct place.",
+    dragdrop: "Drag each item to its correct place.",
+    fill_blank: "Type or select the missing word to complete the sentence.",
+    fraction_visual: "Count the shaded parts and the total parts to find the fraction.",
+    place_value_chart: "Place each digit in the correct column (ones, tens, hundreds).",
+    grid_area: "Count the highlighted squares to find the area.",
+    chart_reader: "Look at the chart. Each bar shows a value.",
+    clock_time: "Look at where the hour and minute hands point.",
+    measurement_scale: "Read the number on the scale that lines up with the marker.",
+    story_question: "Read the story. Then pick the answer that correctly answers the question.",
+    real_world: "Think about how you would solve this in real life.",
+    real_world_task: "Think about how you would solve this in real life.",
+  };
+  return messages[type] ?? "Try solving the activity step by step.";
+}
+
+/**
+ * Returns a hint text string for a given activity content.
+ * Falls back from content.hints[] array, then to a type-specific generic hint.
+ */
+export function getHintText(
+  type: string,
+  content: Record<string, unknown>,
+  hintIndex: number,
+): string | null {
+  const hints = content.hints as string[] | undefined;
+  if (hints && hintIndex >= 0 && hintIndex < hints.length) {
+    return hints[hintIndex];
+  }
+  // Type-specific fallback hints
+  const fallbackHints: Record<string, string[]> = {
+    visual_counter: ["Try counting each item out loud.", "Point to each item as you count it."],
+    visual_counting: ["Try counting each item out loud.", "Point to each item as you count it."],
+    multiple_choice: ["Read the question again carefully.", "Eliminate choices you know are wrong first."],
+    fill_blank: ["Read the sentence again. What word makes sense here?", "Look for clues in the words around the blank."],
+    drag_drop: ["Look at each label carefully. Where does it belong?", "Try matching the easiest ones first."],
+    dragdrop: ["Look at each label carefully. Where does it belong?", "Try matching the easiest ones first."],
+  };
+  const fallback = fallbackHints[type];
+  if (fallback && hintIndex >= 0 && hintIndex < fallback.length) {
+    return fallback[hintIndex];
+  }
+  return null;
+}
