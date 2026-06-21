@@ -35,7 +35,16 @@ activities:
     type: fraction_visual
     order: 2
     content:
+      numerator: 1
+      denominator: 4
+      mode: circle
+      label: One fourth of a circle
+      interactive: false
       hints:
+        - The whole circle is divided into 4 equal parts.
+        - One part is shaded.
+        - That is 1/4 of the whole circle.
+        - Look at how many parts are shaded out of the total.
         - ""
   - step: independent_practice
     type: fraction_visual

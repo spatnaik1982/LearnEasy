@@ -1,0 +1,68 @@
+conceptId: area_counting
+chapter:
+  code: CH3
+  name: Understanding Area
+learningObjective: Count the area of shapes on a grid
+coreIdea: Area is the number of unit squares that cover a shape.
+examples:
+  - "A rectangle that is 3 units by 2 units has an area of 6 unit squares. 🔲"
+  - "A square that is 2 units by 2 units has an area of 4 unit squares. 🔲"
+  - "A shape that covers 5 unit squares has an area of 5. 🔲"
+misconceptions:
+  - Students may confuse area with perimeter when counting on a grid.
+  - Students may count the edges instead of the squares for area.
+  - Students may count the same square twice when finding the area.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - area_intro
+  - counting_1_10
+activities:
+  - step: observe
+    type: grid_area
+    order: 1
+    content:
+      rows: 5
+      cols: 5
+      mode: area
+      highlighted:
+        - row: 2
+          col: 2
+      interactive: false
+  - step: guided_practice
+    type: grid_area
+    order: 2
+    content:
+      rows: 5
+      cols: 5
+      mode: area
+      interactive: true
+      hints:
+        - Count the squares inside the shape.
+        - Each full square counts as 1.
+        - Add up all the squares to find the area.
+  - step: independent_practice
+    type: grid_area
+    order: 3
+    content:
+      rows: 5
+      cols: 5
+      mode: area
+      interactive: true
+  - step: mastery_check
+    type: grid_area
+    order: 4
+    content:
+      rows: 5
+      cols: 5
+      mode: area
+      interactive: true
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job counting areas!
+      encouragement: true

@@ -1,0 +1,86 @@
+conceptId: place_value_practice
+chapter:
+  code: CH1
+  name: Understanding Numbers from 1000 to 9999
+learningObjective: Place digits in the correct columns
+coreIdea: Each column holds one digit of a number, and the position determines its value.
+examples:
+  - 5 9 6 4 = 5964
+  - 1 8 3 4 2 = 18342
+  - 7 5 4 0 6 = 75406
+misconceptions:
+  - Order doesn't matter
+  - Same digit can be in multiple columns
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - place_value_understanding
+  - counting_1_10
+activities:
+  - step: observe
+    type: place_value_chart
+    order: 1
+    content:
+      description: Let's look at the number 5964.
+      chart:
+        thousands: 5
+        hundreds: 9
+        tens: 6
+        ones: 4
+  - step: guided_practice
+    type: place_value_chart
+    order: 2
+    content:
+      description: Look at the number 18342 placed in the chart.
+      chart:
+        ten_thousands: 1
+        thousands: 8
+        hundreds: 3
+        tens: 4
+        ones: 2
+      hints:
+        - Each digit goes in its own column.
+        - The first digit goes in the highest column.
+        - You're close! Check the leftmost column.
+        - Try again.
+        - ""
+  - step: independent_practice
+    type: multiple_choice
+    order: 3
+    content:
+      questions:
+        - question: What digit is in the hundreds place of 18342?
+          options:
+            - "1"
+            - "8"
+            - "3"
+            - "4"
+          correctIndex: 2
+  - step: mastery_check
+    type: multiple_choice
+    order: 4
+    content:
+      questions:
+        - question: What is the value of the digit 5 in 75406?
+          options:
+            - "5"
+            - "50"
+            - "500"
+            - "5000"
+          correctIndex: 3
+        - question: In 800500, which digit is in the ten-thousands place?
+          options:
+            - "8"
+            - "0"
+            - "5"
+            - "6"
+          correctIndex: 0
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job placing digits!
+      encouragement: true

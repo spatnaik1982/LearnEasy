@@ -3,7 +3,7 @@ export { Matching, type MatchingProps, type MatchingPair } from "./Matching";
 export { DragDrop, type DragDropProps, type DragDropItem, type DragDropTarget } from "./DragDrop";
 export { FillBlank, type FillBlankProps } from "./FillBlank";
 export { FractionVisualizer, type FractionVisualizerProps } from "./FractionVisualizer";
-export { GridCounter, type GridCounterProps } from "./GridCounter";
+export { GridCounter, computePerimeter, type GridCounterProps } from "./GridCounter";
 export { MultipleChoice, type MultipleChoiceProps, type MultipleChoiceOption } from "./MultipleChoice";
 export { Sequencing, type SequencingProps, type SequencingItem } from "./Sequencing";
 export { PositiveCompletion, type PositiveCompletionProps } from "./PositiveCompletion";

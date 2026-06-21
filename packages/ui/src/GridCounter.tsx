@@ -19,6 +19,28 @@ function cellKey(row: number, col: number) {
   return `${row},${col}`;
 }
 
+export function computePerimeter(
+  cells: { row: number; col: number }[],
+  rows: number,
+  cols: number
+): number {
+  if (cells.length === 0) return 0;
+  const cellSet = new Set(cells.map((c) => cellKey(c.row, c.col)));
+
+  let perimeter = 0;
+  for (const cell of cells) {
+    const up = cellSet.has(cellKey(cell.row - 1, cell.col));
+    const down = cellSet.has(cellKey(cell.row + 1, cell.col));
+    const left = cellSet.has(cellKey(cell.row, cell.col - 1));
+    const right = cellSet.has(cellKey(cell.row, cell.col + 1));
+    if (!up) perimeter++;
+    if (!down) perimeter++;
+    if (!left) perimeter++;
+    if (!right) perimeter++;
+  }
+  return perimeter;
+}
+
 export function GridCounter({
   rows,
   cols,
@@ -41,7 +63,12 @@ export function GridCounter({
   const highlightedSet = new Set(highlights.map((c) => cellKey(c.row, c.col)));
 
   const label = mode === "area" ? "Area" : "Perimeter";
-  const unit = mode === "area" ? (highlights.length === 1 ? "square" : "squares") : (highlights.length === 1 ? "unit" : "units");
+  const count = mode === "perimeter"
+    ? computePerimeter(highlights, rows, cols)
+    : highlights.length;
+  const unit = mode === "area"
+    ? (count === 1 ? "square" : "squares")
+    : (count === 1 ? "unit" : "units");
 
   const handleCellClick = useCallback(
     (row: number, col: number) => {
@@ -134,7 +161,7 @@ export function GridCounter({
           aria-live="polite"
           className="text-lg font-semibold text-slate-text text-left"
         >
-          {label}: {highlights.length} {unit}
+          {label}: {count} {unit}
         </div>
       )}
     </div>

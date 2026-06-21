@@ -1,0 +1,87 @@
+conceptId: reading_ruler
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Read a ruler in centimetres
+coreIdea: A ruler measures length in centimetres.
+examples:
+  - "A pencil that is 5 cm long reaches the 5 mark on the ruler. 📏"
+  - "A book that is 12 cm long reaches the 12 mark on the ruler. 📏"
+  - "An eraser that is 3 cm long reaches the 3 mark on the ruler. 📏"
+misconceptions:
+  - Students may start measuring from the edge of the ruler instead of the 0 mark.
+  - Students may count the marks instead of the spaces between them.
+  - Students may confuse centimetres with inches on a dual-scale ruler.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - number_recognition_1_10
+activities:
+  - step: observe
+    type: measurement_scale
+    order: 1
+    content:
+      type: ruler
+      min: 0
+      max: 15
+      step: 1
+      unit: cm
+      value: 5
+      showReading: true
+      showLabels: true
+      interactive: false
+  - step: guided_practice
+    type: measurement_scale
+    order: 2
+    content:
+      type: ruler
+      min: 0
+      max: 15
+      step: 1
+      unit: cm
+      value: 0
+      targetValue: 8
+      showReading: true
+      showLabels: true
+      interactive: true
+      hints:
+        - Find the 8 mark on the ruler.
+        - Each big line is one centimetre.
+        - Count from 0 to 8 to find the correct length.
+  - step: independent_practice
+    type: measurement_scale
+    order: 3
+    content:
+      type: ruler
+      min: 0
+      max: 20
+      step: 1
+      unit: cm
+      value: 0
+      targetValue: 12
+      showReading: true
+      showLabels: true
+      interactive: true
+  - step: mastery_check
+    type: measurement_scale
+    order: 4
+    content:
+      type: ruler
+      min: 0
+      max: 20
+      step: 1
+      unit: cm
+      value: 0
+      targetValue: 15
+      showReading: true
+      showLabels: true
+      interactive: true
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job reading the ruler!
+      encouragement: true

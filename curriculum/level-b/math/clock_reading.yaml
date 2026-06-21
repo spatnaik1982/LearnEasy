@@ -1,0 +1,74 @@
+conceptId: clock_reading
+chapter:
+  code: CH5
+  name: Units of Measurement
+learningObjective: Read times on a clock
+coreIdea: Clocks show the time using hour and minute hands.
+examples:
+  - "3:00 means the hour hand is at 3 and the minute hand is at 12. 🕐"
+  - "6:30 means the hour hand is between 6 and 7, and the minute hand is at 6. 🕐"
+  - "10:15 means the hour hand is past 10 and the minute hand is at 3. 🕐"
+misconceptions:
+  - Students may confuse the hour hand with the minute hand.
+  - Students may think the hour hand stays still while the minute hand moves.
+  - Students may read 3:00 as 12:15 because they confuse the hands.
+supports:
+  visual: true
+masteryCriteria: 0.8
+difficulty: beginner
+estimatedDuration: 20
+dependencies:
+  - number_recognition_1_10
+activities:
+  - step: observe
+    type: clock_time
+    order: 1
+    content:
+      hour: 3
+      minute: 0
+      mode: read
+      showDigital: true
+      interactive: false
+  - step: guided_practice
+    type: clock_time
+    order: 2
+    content:
+      hour: 6
+      minute: 30
+      mode: read
+      showDigital: true
+      interactive: false
+      hints:
+        - The hour hand is between 6 and 7.
+        - The minute hand is at 6, which means 30 minutes.
+        - That makes the time 6:30.
+  - step: independent_practice
+    type: clock_time
+    order: 3
+    content:
+      hour: 10
+      minute: 15
+      mode: set
+      showDigital: true
+      targetTime:
+        hour: 10
+        minute: 15
+      interactive: true
+  - step: mastery_check
+    type: clock_time
+    order: 4
+    content:
+      hour: 7
+      minute: 45
+      mode: set
+      showDigital: false
+      targetTime:
+        hour: 7
+        minute: 45
+      interactive: true
+  - step: positive_completion
+    type: visual_counting
+    order: 5
+    content:
+      message: Great job reading the clock!
+      encouragement: true

@@ -278,10 +278,10 @@ const Learn: NextPage = () => {
                         {COPY.whatAmIDoing}
                       </p>
                       <p className="text-lg font-medium text-slate-text">
-                        {act?.title ?? concept.title}
+                        {act?.title || concept.title}
                       </p>
                       <p className="mt-1 text-sm text-muted-teal">
-                        {COPY.howMuchWork}: {act ? (ACTIVITY_WORK_LABELS[act.type.replace(/-/g, "_")] ?? "Complete the activity") : "1 activity"}
+                        {COPY.howMuchWork}: {act ? COPY.completionObserveStep : "1 activity"}
                       </p>
                     </div>
                   );
