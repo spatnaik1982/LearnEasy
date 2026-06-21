@@ -1,0 +1,124 @@
+{
+  "conceptId": "comparing_numbers",
+  "chapter": {
+    "code": "CH1",
+    "name": "Understanding Numbers and Comparison"
+  },
+  "learningObjective": "Compare two or more numbers",
+  "coreIdea": "Students will learn to determine which numbers are larger or smaller.",
+  "examples": [
+    "5 > 3 (five is greater than three)",
+    "81,59,632 < 9,86,54,321",
+    "970 < 976"
+  ],
+  "misconceptions": [
+    "Students may confuse the symbols for greater than and less than.",
+    "Students might think that the number of digits determines which number is larger.",
+    "Some students may believe that numbers with more digits are always larger, regardless of their actual value."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "comparing_quantities",
+    "reading_numbers_1000_9999"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Here are 5 apples 🍏 and 3 oranges 🍊. Which is more?",
+        "visual": "Image showing 5 apples and 3 oranges"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "multiple_choice",
+      "order": 2,
+      "content": {
+        "questions": [
+          {
+            "question": "7 ___ 4",
+            "options": [
+              "<",
+              ">",
+              "="
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "sequencing",
+      "order": 3,
+      "content": {
+        "question": "Arrange these numbers from smallest to largest: 12, 5, 8.",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "12"
+          },
+          {
+            "id": "item-1",
+            "label": "5"
+          },
+          {
+            "id": "item-2",
+            "label": "8"
+          }
+        ],
+        "correctOrder": [
+          "item-1",
+          "item-2",
+          "item-0"
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which is greater: 15 or 10?",
+            "options": [
+              "15",
+              "10",
+              "Both are equal",
+              "Can't tell"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which is smaller: 3 or 7?",
+            "options": [
+              "3",
+              "7",
+              "Both are equal",
+              "Can't tell"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job comparing numbers! 🎉"
+      }
+    }
+  ]
+}

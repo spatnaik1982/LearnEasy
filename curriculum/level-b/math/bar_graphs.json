@@ -1,0 +1,172 @@
+{
+  "conceptId": "bar_graphs",
+  "chapter": {
+    "code": "CH7",
+    "name": "Data Representation and Interpretation"
+  },
+  "learningObjective": "Create and interpret bar graphs",
+  "coreIdea": "Bar graphs visually represent data for easy comparison.",
+  "examples": [
+    "📈 A bar graph showing rainfall by month.",
+    "📊 A bar graph of students' favorite fruits."
+  ],
+  "misconceptions": [
+    "Bar graphs can only represent numerical data, not categorical data.",
+    "The height of the bars in a bar graph does not represent the quantity accurately if the scale is not understood.",
+    "All bar graphs must have the same width for the bars to be comparable."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 25,
+  "dependencies": [
+    "data_collection",
+    "counting_1_10",
+    "comparing_quantities"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "chart_reader",
+      "order": 1,
+      "content": {
+        "type": "bar",
+        "data": [
+          {
+            "label": "January",
+            "value": 3
+          },
+          {
+            "label": "February",
+            "value": 5
+          },
+          {
+            "label": "March",
+            "value": 2
+          },
+          {
+            "label": "April",
+            "value": 4
+          }
+        ],
+        "title": "Rainfall by Month (cm)",
+        "showValues": true,
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "rain",
+            "label": "Rainfall"
+          },
+          {
+            "id": "month",
+            "label": "Month"
+          },
+          {
+            "id": "bar",
+            "label": "Bar Graph"
+          },
+          {
+            "id": "data",
+            "label": "Data Representation"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-concepts",
+            "label": "Concepts"
+          },
+          {
+            "id": "target-graph_elements",
+            "label": "Graph Elements"
+          }
+        ],
+        "expectedPositions": {
+          "rain": "target-concepts",
+          "month": "target-concepts",
+          "bar": "target-graph_elements",
+          "data": "target-graph_elements"
+        },
+        "hints": [
+          "The correct answer is Rainfall and Month. Let me show you...",
+          "Look at the labels carefully.",
+          "You're close! Check your groups.",
+          "Try to match the items with their categories.",
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "The ___ shows data visually using bars.",
+        "blanks": [
+          {
+            "id": "answer",
+            "position": 0,
+            "correctAnswer": "bar graph",
+            "options": [
+              "line graph",
+              "pie chart",
+              "bar graph",
+              "table"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What does a bar graph represent?",
+            "options": [
+              "Only numbers",
+              "Only categories",
+              "Both numbers and categories",
+              "None of the above"
+            ],
+            "correctIndex": 2
+          },
+          {
+            "question": "Which statement is true about bar graphs?",
+            "options": [
+              "All bars must be the same width",
+              "Height represents quantity",
+              "Bar graphs can only show one category",
+              "Bar graphs cannot show trends"
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job creating bar graphs!"
+        ],
+        "text": "You've completed the activities!"
+      }
+    }
+  ]
+}

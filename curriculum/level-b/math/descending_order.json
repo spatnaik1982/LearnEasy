@@ -1,0 +1,141 @@
+{
+  "conceptId": "descending_order",
+  "chapter": {
+    "code": "CH1",
+    "name": "Understanding Numbers from 1000 to 9999"
+  },
+  "learningObjective": "Arrange numbers in descending order",
+  "coreIdea": "Students learn to list numbers from largest to smallest.",
+  "examples": [
+    "7864 > 5695 > 5643 > 4963",
+    "9,845 > 67,833 > 64,569 > 8,765",
+    "1,56,154 > 17,865 > 8,927 > 485"
+  ],
+  "misconceptions": [
+    "Students may confuse descending order with ascending order.",
+    "Students may struggle to identify the largest number if they do not understand place value.",
+    "Students might believe that the order of numbers does not change their value."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "writing_numbers_1000_9999",
+    "comparing_numbers",
+    "ascending_order_numbers"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Here are some numbers: 7864, 5695, 5643, 4963. Let's see them in order! 📊",
+        "visuals": [
+          "7864",
+          "5695",
+          "5643",
+          "4963"
+        ]
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "sequencing",
+      "order": 2,
+      "content": {
+        "question": "Drag the numbers into the correct descending order:",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "4963"
+          },
+          {
+            "id": "item-1",
+            "label": "5643"
+          },
+          {
+            "id": "item-2",
+            "label": "5695"
+          },
+          {
+            "id": "item-3",
+            "label": "7864"
+          }
+        ],
+        "correctOrder": [
+          "item-3",
+          "item-2",
+          "item-1",
+          "item-0"
+        ],
+        "hints": [
+          "The correct answer is 7864, 5695, 5643, 4963. Let me show you...",
+          "Look at the largest number first.",
+          "You're close! Check your first number.",
+          "Try starting with the number that has the highest value.",
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "multiple_choice",
+      "order": 3,
+      "content": {
+        "questions": [
+          {
+            "question": "Arrange these numbers in descending order: 9,845, 67,833, 64,569, 8,765.",
+            "options": [
+              "8,765 > 9,845 > 64,569 > 67,833",
+              "67,833 > 64,569 > 9,845 > 8,765",
+              "9,845 > 67,833 > 64,569 > 8,765",
+              "64,569 > 67,833 > 9,845 > 8,765"
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the largest number?",
+            "options": [
+              "4963",
+              "5643",
+              "5695",
+              "7864"
+            ],
+            "correctIndex": 3
+          },
+          {
+            "question": "Which is in the correct order?",
+            "options": [
+              "7864 > 5695 > 5643 > 4963",
+              "4963 > 5643 > 5695 > 7864",
+              "5643 > 7864 > 5695 > 4963",
+              "5695 > 4963 > 5643 > 7864"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job! You arranged the numbers correctly! 🎉"
+      }
+    }
+  ]
+}

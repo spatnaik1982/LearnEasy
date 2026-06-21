@@ -1,0 +1,117 @@
+{
+  "conceptId": "ascending_order_numbers",
+  "chapter": {
+    "code": "CH1",
+    "name": "Understanding Numbers from 1000 to 9999"
+  },
+  "learningObjective": "Arrange numbers in ascending order",
+  "coreIdea": "Children will learn to list numbers from smallest to largest.",
+  "examples": [
+    "1789 < 2543 < 2913 < 5496",
+    "840 < 9345 < 53706 < 54905",
+    "4,564 < 5,645 < 8,793 < 9,873"
+  ],
+  "misconceptions": [
+    "Students may confuse ascending order with descending order.",
+    "Students might think that the number of digits determines the order of numbers.",
+    "Some students may struggle with comparing numbers that have different numbers of digits."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "comparing_numbers",
+    "reading_numbers_1000_9999",
+    "writing_numbers_1000_9999"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Look at these numbers: 1789, 2543, 2913, 5496. They are in ascending order! 📈"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "multiple_choice",
+      "order": 2,
+      "content": {
+        "questions": [
+          {
+            "question": "Arrange these numbers in ascending order: 840, 9345, 53706, 54905.",
+            "options": [
+              "840, 9345, 53706, 54905",
+              "9345, 840, 54905, 53706",
+              "53706, 840, 9345, 54905",
+              "54905, 53706, 840, 9345"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "multiple_choice",
+      "order": 3,
+      "content": {
+        "questions": [
+          {
+            "question": "Put these numbers in ascending order: 4564, 5645, 8793, 9873.",
+            "options": [
+              "4564, 5645, 8793, 9873",
+              "5645, 4564, 9873, 8793",
+              "8793, 9873, 5645, 4564",
+              "9873, 8793, 5645, 4564"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which of these is in ascending order?",
+            "options": [
+              "123, 456, 789, 1011",
+              "1011, 789, 456, 123",
+              "456, 123, 1011, 789",
+              "789, 1011, 123, 456"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "What comes first in ascending order?",
+            "options": [
+              "2345",
+              "1234",
+              "3456",
+              "4567"
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job arranging the numbers! Keep practicing! 🎉"
+      }
+    }
+  ]
+}

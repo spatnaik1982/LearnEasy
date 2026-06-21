@@ -1,0 +1,95 @@
+{
+  "conceptId": "perimeter_counting",
+  "chapter": {
+    "code": "CH3",
+    "name": "Understanding Perimeter"
+  },
+  "learningObjective": "Count the perimeter of shapes on a grid",
+  "coreIdea": "Perimeter is the total distance around a shape, counted as the number of unit edges.",
+  "examples": [
+    "A square that is 2 units wide has a perimeter of 8 units. 🔲",
+    "A rectangle that is 3 units by 2 units has a perimeter of 10 units. 🔲",
+    "A shape that covers 4 unit squares on the edge has a perimeter of 4 units. 🔲"
+  ],
+  "misconceptions": [
+    "Students may confuse perimeter with area when counting on a grid.",
+    "Students may count the inside squares instead of the edges for perimeter.",
+    "Students may forget to count all four sides when finding the perimeter."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "perimeter_intro",
+    "counting_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "grid_area",
+      "order": 1,
+      "content": {
+        "rows": 5,
+        "cols": 5,
+        "mode": "perimeter",
+        "highlighted": [
+          {
+            "row": 2,
+            "col": 2
+          }
+        ],
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "grid_area",
+      "order": 2,
+      "content": {
+        "rows": 5,
+        "cols": 5,
+        "mode": "perimeter",
+        "interactive": true,
+        "hints": [
+          "Count the edges around the shape.",
+          "Each side of a unit square is one edge.",
+          "Add up all the edges to find the perimeter."
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "grid_area",
+      "order": 3,
+      "content": {
+        "rows": 5,
+        "cols": 5,
+        "mode": "perimeter",
+        "interactive": true
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "grid_area",
+      "order": 4,
+      "content": {
+        "rows": 5,
+        "cols": 5,
+        "mode": "perimeter",
+        "interactive": true
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job counting perimeters!",
+        "encouragement": true
+      }
+    }
+  ]
+}

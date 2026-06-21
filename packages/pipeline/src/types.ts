@@ -49,11 +49,13 @@ export interface GeneratedConcept {
   dependencies: string[];
 }
 
+import type { ActivityContent } from '@learn-easy/db';
+
 export interface GeneratedActivity {
   step: 'observe' | 'guided_practice' | 'independent_practice' | 'mastery_check' | 'positive_completion';
   type: string;
   order: number;
-  content: Record<string, unknown>;
+  content: ActivityContent;
 }
 
 export interface ValidatedOutput {

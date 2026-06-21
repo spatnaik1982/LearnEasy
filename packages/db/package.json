@@ -2,12 +2,16 @@
   "name": "@learn-easy/db",
   "version": "0.0.0",
   "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "seed": "ts-node prisma/seed.ts",
     "curriculum:validate": "tsx src/cli/validate.ts",
+    "curriculum:migrate": "tsx src/cli/migrate-yaml-to-json.ts",
     "test": "vitest run"
   },
   "prisma": {

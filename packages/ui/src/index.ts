@@ -13,7 +13,7 @@ export { WorkSystemLayout, type WorkSystemLayoutProps } from "./WorkSystemLayout
 export { TransitionScreen, type TransitionScreenProps } from "./TransitionScreen";
 export { ActivityRenderer, type ActivityRendererProps } from "./ActivityRenderer";
 export { evaluateActivity, getHint, getActivityFeedback, getGuidanceMessage, getHintText } from "./activity-utils";
-export { normalizeContent } from "./normalize-content";
+export { normalizeContent, needsNormalization } from "./normalize-content";
 export { StoryQuestion, type StoryQuestionProps } from "./StoryQuestion";
 export { RealWorldTask, type RealWorldTaskProps } from "./RealWorldTask";
 export { ScaleReader, type ScaleReaderProps } from "./ScaleReader";
@@ -38,3 +38,4 @@ export { ActivityShell, type ActivityShellProps } from "./ActivityShell";
 export { OptionCard, type OptionCardProps } from "./OptionCard";
 export { ScenarioCard, type ScenarioCardProps } from "./ScenarioCard";
 export { NumberStepper, type NumberStepperProps } from "./NumberStepper";
+export { runRoundtrip, buildCorrectResponse } from './render-roundtrip';

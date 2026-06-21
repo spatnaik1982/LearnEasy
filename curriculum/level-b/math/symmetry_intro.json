@@ -1,0 +1,133 @@
+{
+  "conceptId": "symmetry_intro",
+  "chapter": {
+    "code": "CH7",
+    "name": "Geometry"
+  },
+  "learningObjective": "Identify symmetrical objects and figures",
+  "coreIdea": "Symmetrical figures can be divided into two equal parts.",
+  "examples": [
+    "🪞 A butterfly has symmetrical wings.",
+    "🛶 A kayak is symmetrical when split in half."
+  ],
+  "misconceptions": [
+    "All objects that look different cannot be symmetrical.",
+    "Symmetry only applies to shapes with straight lines, not curves.",
+    "If a shape has one line of symmetry, it cannot have more than one."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "basic_shapes"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Look at this butterfly. 🦋 It has two wings that are the same on both sides."
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "matching",
+      "order": 2,
+      "content": {
+        "pairs": [
+          {
+            "itemA": "a",
+            "itemB": "b"
+          }
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "items": [
+          {
+            "id": "butterfly",
+            "label": "Butterfly"
+          },
+          {
+            "id": "kayak",
+            "label": "Kayak"
+          },
+          {
+            "id": "tree",
+            "label": "Tree"
+          },
+          {
+            "id": "chair",
+            "label": "Chair"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-symmetrical_objects",
+            "label": "Symmetrical Objects"
+          },
+          {
+            "id": "target-not_symmetrical_objects",
+            "label": "Not Symmetrical Objects"
+          }
+        ],
+        "expectedPositions": {
+          "butterfly": "target-symmetrical_objects",
+          "kayak": "target-symmetrical_objects",
+          "tree": "target-not_symmetrical_objects",
+          "chair": "target-not_symmetrical_objects"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which of these is symmetrical?",
+            "options": [
+              "Butterfly",
+              "Tree",
+              "Chair",
+              "Car"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "How many symmetrical wings does a butterfly have?",
+            "options": [
+              "One",
+              "Two",
+              "Three",
+              "Four"
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job identifying symmetry!"
+        ],
+        "text": "You are getting better at finding symmetrical objects!"
+      }
+    }
+  ]
+}

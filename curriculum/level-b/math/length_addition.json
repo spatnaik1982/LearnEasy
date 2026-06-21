@@ -1,0 +1,115 @@
+{
+  "conceptId": "length_addition",
+  "chapter": {
+    "code": "CH5",
+    "name": "Understanding Lengths and Their Addition"
+  },
+  "learningObjective": "Add different lengths together",
+  "coreIdea": "Lengths can be added by aligning units properly.",
+  "examples": [
+    "2 km 300 m + 3 km 200 m = 5 km 500 m",
+    "4 m + 3 m 80 cm = 7 m 80 cm",
+    "1 km 500 m + 500 m = 2 km"
+  ],
+  "misconceptions": [
+    "Students may confuse different units of length, such as mixing kilometers with meters.",
+    "Students might forget to convert all lengths to the same unit before adding them together.",
+    "Students may struggle with the concept of carrying over when the sum exceeds the next unit (e.g., 100 cm = 1 m)."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "length_units",
+    "length_conversion",
+    "addition_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Let's add lengths! 2 km 300 m + 3 km 200 m = 5 km 500 m. 📏"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "___",
+        "blanks": [
+          {
+            "id": "b1",
+            "position": 0,
+            "correctAnswer": "?"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "1 km 500 m + 500 m = ___ km.",
+        "blanks": [
+          {
+            "id": "length",
+            "position": 0,
+            "correctAnswer": "2",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 2 km 300 m + 3 km 200 m?",
+            "options": [
+              "5 km 500 m",
+              "5 km 600 m",
+              "6 km 500 m",
+              "5 km 400 m"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "How many meters are in 4 m + 3 m 80 cm?",
+            "options": [
+              "7 m 80 cm",
+              "7 m 60 cm",
+              "8 m 80 cm",
+              "6 m 80 cm"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "description": "Great job! You added lengths successfully! 🎉"
+      }
+    }
+  ]
+}

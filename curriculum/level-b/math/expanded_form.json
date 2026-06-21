@@ -1,0 +1,143 @@
+{
+  "conceptId": "expanded_form",
+  "chapter": {
+    "code": "CH1",
+    "name": "Understanding Numbers from 1000 to 9999"
+  },
+  "learningObjective": "Write numbers in expanded form",
+  "coreIdea": "Expanded form shows the sum of each digit's place value.",
+  "examples": [
+    "75406 = 70000 + 5000 + 400 + 0 + 6",
+    "87965 = 80000 + 7000 + 900 + 60 + 5",
+    "395432 = 300000 + 90000 + 5000 + 400 + 30 + 2"
+  ],
+  "misconceptions": [
+    "Students may confuse expanded form with standard form, thinking they are the same.",
+    "Students might believe that expanded form only applies to numbers with non-zero digits in every place value.",
+    "Some students may think that expanded form is just writing the number out in words rather than showing the sum of place values."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "writing_numbers_1000_9999",
+    "place_value_understanding"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "place_value_chart",
+      "order": 1,
+      "content": {
+        "maxPlaces": "lakh",
+        "digits": [
+          0
+        ],
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "item"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "target"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0"
+        }
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "395432 = ___ + ___ + ___ + ___ + ___ + ___.",
+        "blanks": [
+          {
+            "id": "b0",
+            "position": 0,
+            "correctAnswer": "300000"
+          },
+          {
+            "id": "b1",
+            "position": 1,
+            "correctAnswer": "90000"
+          },
+          {
+            "id": "b2",
+            "position": 2,
+            "correctAnswer": "5000"
+          },
+          {
+            "id": "b3",
+            "position": 3,
+            "correctAnswer": "400"
+          },
+          {
+            "id": "b4",
+            "position": 4,
+            "correctAnswer": "30"
+          },
+          {
+            "id": "b5",
+            "position": 5,
+            "correctAnswer": "2"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the expanded form of 75406?",
+            "options": [
+              "70000 + 5000 + 400 + 0 + 6",
+              "7000 + 500 + 40 + 6",
+              "70000 + 500 + 40 + 6",
+              "70000 + 5000 + 400 + 60"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which number has an expanded form of 80000 + 7000 + 900 + 60 + 5?",
+            "options": [
+              "87965",
+              "98765",
+              "67895",
+              "56789"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job! You learned how to write numbers in expanded form! 🎉"
+      }
+    }
+  ]
+}
