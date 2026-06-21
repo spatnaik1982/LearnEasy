@@ -56,7 +56,7 @@ describe("Sequencing", () => {
     expect(screen.getByText("Second")).toBeInTheDocument();
   });
 
-  it("up/down buttons are 56x56px", () => {
+  it("renders drag handles and remove buttons", () => {
     render(
       <Sequencing
         items={defaultItems}
@@ -66,12 +66,10 @@ describe("Sequencing", () => {
         onReorder={() => {}}
       />,
     );
-    const upButtons = screen.getAllByLabelText(/move.*up/i);
-    const downButtons = screen.getAllByLabelText(/move.*down/i);
-    [...upButtons, ...downButtons].forEach((btn) => {
-      expect(btn.className).toMatch(/h-14/);
-      expect(btn.className).toMatch(/w-14/);
-    });
+    const dragHandles = screen.getAllByLabelText(/drag to reorder/i);
+    expect(dragHandles).toHaveLength(3);
+    const removeButtons = screen.getAllByLabelText(/remove/i);
+    expect(removeButtons).toHaveLength(3);
   });
 
   it("shows correct/incorrect positions when showResult", () => {
