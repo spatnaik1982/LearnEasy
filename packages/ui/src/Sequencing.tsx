@@ -1,6 +1,4 @@
-import { useState, useCallback } from "react";
 import { cn } from "./utils";
-import { useAccessibility } from "./useAccessibility";
 
 export interface SequencingItem {
   id: string;
@@ -10,157 +8,61 @@ export interface SequencingItem {
 
 export interface SequencingProps {
   items: SequencingItem[];
-  correctOrder: string[];
-  onComplete: (isCorrect: boolean, userOrder: string[]) => void;
-  className?: string;
+  userOrder: string[];
+  onAddItem: (id: string) => void;
+  onRemoveItem: (id: string) => void;
+  onReorder: (fromIndex: number, toIndex: number) => void;
+  showResult?: boolean;
+  correctOrder?: string[];
 }
 
 export function Sequencing({
   items,
+  userOrder,
+  onAddItem,
+  onRemoveItem,
+  onReorder,
+  showResult,
   correctOrder,
-  onComplete,
-  className,
 }: SequencingProps) {
-  const [available, setAvailable] = useState<SequencingItem[]>(items);
-  const [sequence, setSequence] = useState<SequencingItem[]>([]);
-  const [isComplete, setIsComplete] = useState(false);
-  const { announce } = useAccessibility();
+  const sequencedIds = new Set(userOrder);
+  const availableItems = items.filter((item) => !sequencedIds.has(item.id));
+  const sequencedItems = userOrder
+    .map((id) => items.find((item) => item.id === id))
+    .filter(Boolean) as SequencingItem[];
 
-  const handleAddToSequence = useCallback(
-    (item: SequencingItem) => {
-      if (isComplete) return;
-
-      const newSequence = [...sequence, item];
-      const newAvailable = available.filter((a) => a.id !== item.id);
-      setSequence(newSequence);
-      setAvailable(newAvailable);
-      announce(`${item.label} added to sequence at position ${newSequence.length}`);
-
-      if (newSequence.length === items.length) {
-        setIsComplete(true);
-        const correct = newSequence.every(
-          (s, i) => s.id === correctOrder[i],
-        );
-        announce(
-          correct
-            ? "Sequence complete! All items in correct order."
-            : "Sequence complete. Some items may be out of order.",
-        );
-        onComplete(correct, newSequence.map(s => s.id));
-      }
-    },
-    [sequence, available, items.length, correctOrder, onComplete, isComplete, announce],
-  );
-
-  const handleRemoveFromSequence = useCallback(
-    (item: SequencingItem) => {
-      if (isComplete) return;
-
-      setSequence((prev) => prev.filter((s) => s.id !== item.id));
-      setAvailable((prev) => [...prev, item]);
-      announce(`${item.label} removed from sequence`);
-    },
-    [isComplete, announce],
-  );
-
-  const handleMoveUp = useCallback(
-    (index: number) => {
-      if (index === 0 || isComplete) return;
-      const newSequence = [...sequence];
-      [newSequence[index - 1], newSequence[index]] = [
-        newSequence[index],
-        newSequence[index - 1],
-      ];
-      setSequence(newSequence);
-      announce(
-        `${sequence[index].label} moved up to position ${index}`,
-      );
-    },
-    [sequence, isComplete, announce],
-  );
-
-  const handleMoveDown = useCallback(
-    (index: number) => {
-      if (index === sequence.length - 1 || isComplete) return;
-      const newSequence = [...sequence];
-      [newSequence[index], newSequence[index + 1]] = [
-        newSequence[index + 1],
-        newSequence[index],
-      ];
-      setSequence(newSequence);
-      announce(
-        `${sequence[index].label} moved down to position ${index + 2}`,
-      );
-    },
-    [sequence, isComplete, announce],
-  );
-
-  const handleAvailableKeyDown = useCallback(
-    (e: React.KeyboardEvent, item: SequencingItem) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleAddToSequence(item);
-      }
-    },
-    [handleAddToSequence],
-  );
-
-  const handleSequenceKeyDown = useCallback(
-    (e: React.KeyboardEvent, item: SequencingItem) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleRemoveFromSequence(item);
-      }
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        const idx = sequence.findIndex((s) => s.id === item.id);
-        handleMoveUp(idx);
-      }
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        const idx = sequence.findIndex((s) => s.id === item.id);
-        handleMoveDown(idx);
-      }
-    },
-    [handleRemoveFromSequence, handleMoveUp, handleMoveDown, sequence],
-  );
+  const getResult = (itemId: string, index: number): "correct" | "incorrect" | undefined => {
+    if (!showResult || !correctOrder) return undefined;
+    return correctOrder[index] === itemId ? "correct" : "incorrect";
+  };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
+    <div className="flex flex-col gap-6" role="group" aria-label="Sequencing activity">
       <div role="group" aria-label="Available items">
         <p className="mb-3 text-sm font-medium text-on-surface-variant">
           Click items to add to sequence
         </p>
         <div className="flex flex-wrap gap-4" role="list" aria-label="Items to choose from">
-          {available.map((item) => (
+          {availableItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => handleAddToSequence(item)}
-              onKeyDown={(e) => handleAvailableKeyDown(e, item)}
+              onClick={() => onAddItem(item.id)}
+              className="min-h-[56px] rounded-lg border-2 border-slate-300 bg-white px-4 py-2 text-base font-medium text-slate-text hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
               role="listitem"
-              aria-grabbed="false"
-              aria-describedby="sequencing-instructions-available"
-              className={cn(
-                "min-h-[56px] rounded-lg border-2 px-4 py-2 text-base font-medium text-slate-text",
-                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
-                "border-slate-300 bg-white hover:border-slate-400",
-              )}
+              type="button"
             >
               {item.emoji && <span className="mr-2" aria-hidden="true">{item.emoji}</span>}
               {item.label}
             </button>
           ))}
         </div>
-        <div id="sequencing-instructions-available" className="sr-only">
-          Press Enter or Space to add an item to your sequence.
-        </div>
       </div>
 
       <div role="group" aria-label="Your sequence">
         <p className="mb-3 text-sm font-medium text-on-surface-variant">
-          Your sequence (click to remove, arrow keys to reorder)
+          Your sequence
         </p>
-        {sequence.length === 0 ? (
+        {sequencedItems.length === 0 ? (
           <div className="flex min-h-[52px] items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
             <span className="text-sm text-on-surface-variant">
               Select items above to build your sequence
@@ -168,67 +70,62 @@ export function Sequencing({
           </div>
         ) : (
           <div className="flex flex-col gap-2" role="list" aria-label="Your ordered sequence">
-            {sequence.map((item, index) => (
-              <div
-                key={item.id}
-                role="listitem"
-                aria-grabbed={!isComplete ? "true" : "false"}
-                aria-dropeffect={!isComplete ? "move" : "none"}
-                className={cn(
-                  "flex items-center gap-2 rounded-lg border-2 px-4 py-2",
-                  "border-slate-300 bg-white",
-                )}
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded bg-slate-200 text-sm font-bold text-slate-600">
-                  {index + 1}
-                </span>
-                <button
-                  onClick={() => handleRemoveFromSequence(item)}
-                  onKeyDown={(e) => handleSequenceKeyDown(e, item)}
+            {sequencedItems.map((item, index) => {
+              const result = getResult(item.id, index);
+              return (
+                <div
+                  key={item.id}
+                  data-result={result || undefined}
                   className={cn(
-                    "min-h-[56px] flex-1 text-left text-base font-medium text-slate-text",
-                    "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 rounded",
-                    "px-2",
+                    "flex items-center gap-3 rounded-lg border-2 px-3 py-2",
+                    result === "correct" && "border-muted-green",
+                    result === "incorrect" && "border-soft-coral",
+                    !result && "border-slate-300",
                   )}
-                  aria-label={`${item.label} at position ${index + 1}. Press Enter to remove, Arrow keys to reorder.`}
+                  role="listitem"
                 >
-                  {item.emoji && <span className="mr-2" aria-hidden="true">{item.emoji}</span>}
-                  {item.label}
-                </button>
-                <div className="flex flex-col gap-1">
-                  <button
-                    onClick={() => handleMoveUp(index)}
-                    disabled={index === 0 || isComplete}
+                  <span
                     className={cn(
-                      "flex h-5 w-7 items-center justify-center rounded text-xs font-bold",
-                      "focus:outline-none focus:ring-2 focus:ring-soft-blue",
-                      index > 0 && !isComplete
-                        ? "bg-slate-200 text-slate-600 hover:bg-slate-300"
-                        : "bg-slate-100 text-slate-300",
+                      "flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white",
+                      result === "correct" && "bg-muted-green",
+                      result === "incorrect" && "bg-soft-coral",
+                      !result && "bg-soft-blue",
                     )}
-                    aria-label={`Move ${item.label} up`}
-                    tabIndex={-1}
                   >
-                    ▲
-                  </button>
+                    {index + 1}
+                  </span>
                   <button
-                    onClick={() => handleMoveDown(index)}
-                    disabled={index === sequence.length - 1 || isComplete}
-                    className={cn(
-                      "flex h-5 w-7 items-center justify-center rounded text-xs font-bold",
-                      "focus:outline-none focus:ring-2 focus:ring-soft-blue",
-                      index < sequence.length - 1 && !isComplete
-                        ? "bg-slate-200 text-slate-600 hover:bg-slate-300"
-                        : "bg-slate-100 text-slate-300",
-                    )}
-                    aria-label={`Move ${item.label} down`}
-                    tabIndex={-1}
+                    onClick={() => onRemoveItem(item.id)}
+                    className="min-h-[56px] flex-1 rounded px-2 text-left text-base font-medium text-slate-text focus:outline-none focus:ring-2 focus:ring-soft-blue"
+                    type="button"
+                    aria-label={`Remove ${item.label}`}
                   >
-                    ▼
+                    {item.emoji && <span className="mr-2" aria-hidden="true">{item.emoji}</span>}
+                    {item.label}
                   </button>
+                  <div className="flex flex-col gap-1">
+                    <button
+                      onClick={() => onReorder(index, index - 1)}
+                      disabled={index === 0}
+                      className="flex h-14 w-14 items-center justify-center rounded-lg border-2 border-soft-blue text-sm font-bold text-soft-blue hover:bg-soft-blue/10 focus:outline-none focus:ring-2 focus:ring-soft-blue disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label={`Move ${item.label} up`}
+                      type="button"
+                    >
+                      ▲
+                    </button>
+                    <button
+                      onClick={() => onReorder(index, index + 1)}
+                      disabled={index === sequencedItems.length - 1}
+                      className="flex h-14 w-14 items-center justify-center rounded-lg border-2 border-soft-blue text-sm font-bold text-soft-blue hover:bg-soft-blue/10 focus:outline-none focus:ring-2 focus:ring-soft-blue disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label={`Move ${item.label} down`}
+                      type="button"
+                    >
+                      ▼
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

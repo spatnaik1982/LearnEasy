@@ -15,6 +15,7 @@ export interface FractionVisualizerProps {
   maxDenominator?: number;
   compare?: FractionVisualizerCompare;
   onShade?: (shaded: number) => void;
+  shadedCount?: number;
   className?: string;
 }
 
@@ -51,9 +52,19 @@ function FractionBar({
           fill={i < shaded ? '#76A5AF' : '#F9F7F2'}
           stroke="#374151"
           strokeWidth={1}
-          className={interactive ? 'cursor-pointer transition-opacity duration-200 hover:opacity-80' : ''}
+          tabIndex={interactive ? 0 : undefined}
+          role={interactive ? 'button' : undefined}
+          aria-pressed={interactive ? (i < shaded) : undefined}
+          aria-label={interactive ? `Part ${i + 1} of ${denominator}, ${i < shaded ? 'shaded' : 'not shaded'}` : undefined}
+          className={interactive ? 'cursor-pointer transition-opacity duration-200 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76A5AF]' : ''}
           onClick={() => {
             if (interactive && onShade) {
+              onShade(i < shaded ? shaded - 1 : shaded + 1);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (interactive && onShade && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
               onShade(i < shaded ? shaded - 1 : shaded + 1);
             }
           }}
@@ -108,9 +119,19 @@ function FractionCircle({
           fill={i < shaded ? '#EBC06D' : '#F9F7F2'}
           stroke="#374151"
           strokeWidth={1}
-          className={interactive ? 'cursor-pointer transition-opacity duration-200 hover:opacity-80' : ''}
+          tabIndex={interactive ? 0 : undefined}
+          role={interactive ? 'button' : undefined}
+          aria-pressed={interactive ? (i < shaded) : undefined}
+          aria-label={interactive ? `Part ${i + 1} of ${denominator}, ${i < shaded ? 'shaded' : 'not shaded'}` : undefined}
+          className={interactive ? 'cursor-pointer transition-opacity duration-200 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76A5AF]' : ''}
           onClick={() => {
             if (interactive && onShade) {
+              onShade(i < shaded ? shaded - 1 : shaded + 1);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (interactive && onShade && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
               onShade(i < shaded ? shaded - 1 : shaded + 1);
             }
           }}
@@ -132,6 +153,7 @@ export function FractionVisualizer({
   maxDenominator = 12,
   compare,
   onShade,
+  shadedCount,
   className,
 }: FractionVisualizerProps) {
   const labelText = label ?? `${numerator}/${denominator}`;
@@ -143,6 +165,8 @@ export function FractionVisualizer({
       </div>
     );
   }
+
+  const actualShaded = shadedCount ?? numerator;
 
   function renderSingleFraction(_num: number, den: number, shaded: number) {
     return mode === 'circle' ? (
@@ -156,6 +180,14 @@ export function FractionVisualizer({
   const wholes = Math.floor(numerator / denominator);
   const remainder = numerator % denominator;
 
+  const compareSymbol = compare
+    ? (() => {
+        const leftValue = numerator / denominator;
+        const rightValue = compare.numerator / compare.denominator;
+        return leftValue === rightValue ? "=" : leftValue > rightValue ? ">" : "<";
+      })()
+    : null;
+
   return (
     <div className={cn('flex flex-col items-center gap-2', className)}>
       {isImproper ? (
@@ -165,7 +197,7 @@ export function FractionVisualizer({
           {renderSingleFraction(remainder, denominator, remainder)}
         </div>
       ) : (
-        renderSingleFraction(numerator, denominator, numerator)
+        renderSingleFraction(numerator, denominator, actualShaded)
       )}
 
       {showLabel && (
@@ -184,7 +216,7 @@ export function FractionVisualizer({
             )}
             <span className="text-sm text-slate-text">{numerator}/{denominator}</span>
           </div>
-          <span className="text-2xl text-slate-text">=</span>
+          <span className="text-2xl text-slate-text" data-testid="compare-symbol">{compareSymbol}</span>
           <div className="flex flex-col items-center gap-1">
             {mode === 'bar' ? (
               <FractionBar denominator={compare.denominator} shaded={compare.numerator} />

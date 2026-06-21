@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { cn } from "./utils";
 
 export interface ScaleReaderProps {
@@ -23,6 +23,14 @@ function clampAndSnap(v: number, min: number, max: number, step: number) {
   return Math.round(clamped / step) * step;
 }
 
+function getEventPos(e: React.MouseEvent<SVGSVGElement> | React.TouchEvent<SVGSVGElement>) {
+  if ("touches" in e) {
+    const touch = e.touches[0];
+    return { x: touch.clientX, y: touch.clientY };
+  }
+  return { x: e.clientX, y: e.clientY };
+}
+
 export function ScaleReader({
   type,
   min,
@@ -39,6 +47,8 @@ export function ScaleReader({
   width,
   className,
 }: ScaleReaderProps) {
+  const svgRef = useRef<SVGSVGElement>(null);
+
   if (min >= max) {
     return (
       <div
@@ -61,6 +71,38 @@ export function ScaleReader({
       onValueChange?.(clampAndSnap(newVal, min, max, step));
     },
     [min, max, step, onValueChange]
+  );
+
+  const handleSvgClick = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      if (!interactive || !onValueChange || !svgRef.current) return;
+      const svg = svgRef.current;
+      const rect = svg.getBoundingClientRect();
+      const svgWidth = rect.width || parseFloat(svg.getAttribute("width") || "300");
+      const svgHeight = rect.height || parseFloat(svg.getAttribute("height") || "60");
+
+      if (type === "ruler") {
+        const pad = 20;
+        const drawableW = svgWidth - 2 * pad;
+        const x = e.clientX - rect.left;
+        const ratioX = Math.max(0, Math.min(1, (x - pad) / drawableW));
+        const newVal = min + ratioX * (max - min);
+        onValueChange(clampAndSnap(newVal, min, max, step));
+      } else {
+        const isThermometer = type === "thermometer";
+        const pad = 5;
+        const bulbRadius = isThermometer ? 10 : 0;
+        const bulbCenterY = svgHeight - pad - bulbRadius;
+        const columnBottom = isThermometer ? bulbCenterY - bulbRadius : svgHeight - pad;
+        const columnTop = pad;
+        const columnH = columnBottom - columnTop;
+        const y = e.clientY - rect.top;
+        const ratioY = Math.max(0, Math.min(1, (columnBottom - y) / columnH));
+        const newVal = min + ratioY * (max - min);
+        onValueChange(clampAndSnap(newVal, min, max, step));
+      }
+    },
+    [interactive, onValueChange, type, min, max, step]
   );
 
   const majorMarks = useMemo(() => {
@@ -101,6 +143,7 @@ export function ScaleReader({
       aria-valuemax={max}
       aria-valuenow={safeValue}
       className="mt-1 w-full"
+      style={{ height: "56px" }}
     />
   ) : null;
 
@@ -109,6 +152,20 @@ export function ScaleReader({
       {reading}
     </div>
   ) : null;
+
+  function renderTargetIndicator(x: number, yStart: number, yEnd: number) {
+    return (
+      <line
+        x1={x}
+        y1={yStart}
+        x2={x}
+        y2={yEnd}
+        stroke="#76A5AF"
+        strokeWidth={2}
+        strokeDasharray="6 3"
+      />
+    );
+  }
 
   if (type === "ruler") {
     const w = width ?? 300;
@@ -119,11 +176,14 @@ export function ScaleReader({
     return (
       <div className={cn("flex flex-col", className)}>
         <svg
+          ref={svgRef}
           width={w}
           height={h}
           viewBox={`0 0 ${w} ${h}`}
           role="img"
           aria-label={ariaLabel}
+          onClick={handleSvgClick}
+          style={{ cursor: interactive ? "pointer" : "default" }}
         >
           <rect width={w} height={h} fill="white" stroke="#374151" strokeWidth={1} rx={4} />
           {minorMarks.map((m, i) => (
@@ -143,7 +203,7 @@ export function ScaleReader({
               <g key={`major-${m.value}`}>
                 <line x1={x} y1={0} x2={x} y2={h - 10} stroke="#374151" strokeWidth={1.5} />
                 {showLabels && (
-                  <text x={x} y={h - 2} textAnchor="middle" fontSize={9} fill="#374151">
+                  <text x={x} y={h - 2} textAnchor="middle" fontSize={14} fill="#374151">
                     {m.value}
                   </text>
                 )}
@@ -166,16 +226,10 @@ export function ScaleReader({
               />
             </g>
           )}
-          {targetValue != null && (
-            <line
-              x1={pad + ((targetValue - min) / (max - min)) * drawableW}
-              y1={0}
-              x2={pad + ((targetValue - min) / (max - min)) * drawableW}
-              y2={h}
-              stroke="#76A5AF"
-              strokeWidth={2}
-              strokeDasharray="4 2"
-            />
+          {targetValue != null && renderTargetIndicator(
+            pad + ((targetValue - min) / (max - min)) * drawableW,
+            0,
+            h
           )}
         </svg>
         {slider}
@@ -204,11 +258,14 @@ export function ScaleReader({
   return (
     <div className={cn("flex flex-col items-center", className)}>
       <svg
+        ref={svgRef}
         width={svgWidth}
         height={svgH}
         viewBox={`0 0 ${svgWidth} ${svgH}`}
         role="img"
         aria-label={ariaLabel}
+        onClick={handleSvgClick}
+        style={{ cursor: interactive ? "pointer" : "default" }}
       >
         {majorMarks.map((m) => {
           const y = columnBottom - m.pos * columnH;
@@ -216,7 +273,7 @@ export function ScaleReader({
             <g key={`major-${m.value}`}>
               <line x1={scaleX} y1={y} x2={scaleX + 10} y2={y} stroke="#374151" strokeWidth={1} />
               {showLabels && (
-                <text x={scaleX + 12} y={y + 3} fontSize={8} fill="#374151">
+                <text x={scaleX + 12} y={y + 5} fontSize={14} fill="#374151">
                   {m.value}
                 </text>
               )}
@@ -257,6 +314,7 @@ export function ScaleReader({
             y2={columnBottom - ((targetValue - min) / (max - min)) * columnH}
             stroke="#76A5AF"
             strokeWidth={2}
+            strokeDasharray="6 3"
           />
         )}
       </svg>

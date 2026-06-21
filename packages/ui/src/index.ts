@@ -33,3 +33,7 @@ export { LearningCard, type LearningCardProps } from "./LearningCard";
 export { LessonTopBar, type LessonTopBarProps } from "./LessonTopBar";
 export { LessonSidebar, type LessonSidebarProps } from "./LessonSidebar";
 export { LessonBottomNav, type LessonBottomNavProps } from "./LessonBottomNav";
+export { ActivityShell, type ActivityShellProps } from "./ActivityShell";
+export { OptionCard, type OptionCardProps } from "./OptionCard";
+export { ScenarioCard, type ScenarioCardProps } from "./ScenarioCard";
+export { NumberStepper, type NumberStepperProps } from "./NumberStepper";

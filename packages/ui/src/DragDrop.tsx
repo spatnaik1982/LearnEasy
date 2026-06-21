@@ -1,6 +1,4 @@
-import { useState, useCallback, useRef } from "react";
 import { cn } from "./utils";
-import { useAccessibility } from "./useAccessibility";
 
 export interface DragDropItem {
   id: string;
@@ -16,134 +14,55 @@ export interface DragDropTarget {
 export interface DragDropProps {
   items: DragDropItem[];
   targets: DragDropTarget[];
-  onDrop: (itemId: string, targetId: string) => void;
-  onComplete?: (placements: Record<string, string>) => void;
-  className?: string;
+  placements: Record<string, string>;
+  selectedItemId: string | null;
+  onSelectItem: (id: string) => void;
+  onPlaceItem: (targetId: string) => void;
+  onRemoveItem: (itemId: string) => void;
+  showResult?: boolean;
+  correctPlacements?: Record<string, string>;
 }
 
-export function DragDrop({ items, targets, onDrop, onComplete, className }: DragDropProps) {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [placed, setPlaced] = useState<Map<string, string>>(new Map());
-  const itemsContainerRef = useRef<HTMLDivElement>(null);
-  const targetsContainerRef = useRef<HTMLDivElement>(null);
-  const { announce } = useAccessibility();
+export function DragDrop({
+  items,
+  targets,
+  placements,
+  selectedItemId,
+  onSelectItem,
+  onPlaceItem,
+  onRemoveItem,
+  showResult,
+  correctPlacements,
+}: DragDropProps) {
+  const placedIds = new Set(Object.keys(placements));
+  const unplacedItems = items.filter((item) => !placedIds.has(item.id));
 
-  const handleItemClick = useCallback(
-    (itemId: string) => {
-      setSelectedItem(itemId);
-      const item = items.find((i) => i.id === itemId);
-      announce(`Selected ${item?.label || itemId}. Press Tab to move to targets, then Enter to place.`);
-    },
-    [items, announce],
-  );
-
-  const handleTargetClick = useCallback(
-    (targetId: string) => {
-      if (!selectedItem) return;
-
-      const item = items.find((i) => i.id === selectedItem);
-      const target = targets.find((t) => t.id === targetId);
-      setPlaced((prev) => new Map(prev).set(selectedItem, targetId));
-      announce(`Placed ${item?.label || selectedItem} into ${target?.label || targetId}`);
-      onDrop(selectedItem, targetId);
-
-      // Check completion: current placed count + 1 (this item)
-      if (placed.size + 1 >= items.length) {
-        const placements: Record<string, string> = {};
-        placed.forEach((v, k) => { placements[k] = v; });
-        placements[selectedItem] = targetId;
-        onComplete?.(placements);
-      }
-
-      setSelectedItem(null);
-    },
-    [selectedItem, onDrop, onComplete, items, targets, placed, announce],
-  );
-
-  const handleItemKeyDown = useCallback(
-    (e: React.KeyboardEvent, itemId: string, index: number) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleItemClick(itemId);
-        return;
-      }
-      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-        e.preventDefault();
-        const nextIndex = Math.min(index + 1, items.length - 1);
-        const buttons = itemsContainerRef.current?.querySelectorAll("button");
-        if (buttons && buttons[nextIndex]) {
-          (buttons[nextIndex] as HTMLButtonElement).focus();
-        }
-        return;
-      }
-      if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        const prevIndex = Math.max(index - 1, 0);
-        const buttons = itemsContainerRef.current?.querySelectorAll("button");
-        if (buttons && buttons[prevIndex]) {
-          (buttons[prevIndex] as HTMLButtonElement).focus();
-        }
-        return;
-      }
-    },
-    [handleItemClick, items.length],
-  );
-
-  const handleTargetKeyDown = useCallback(
-    (e: React.KeyboardEvent, targetId: string, index: number) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleTargetClick(targetId);
-        return;
-      }
-      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-        e.preventDefault();
-        const nextIndex = Math.min(index + 1, targets.length - 1);
-        const buttons = targetsContainerRef.current?.querySelectorAll("button");
-        if (buttons && buttons[nextIndex]) {
-          (buttons[nextIndex] as HTMLButtonElement).focus();
-        }
-        return;
-      }
-      if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        const prevIndex = Math.max(index - 1, 0);
-        const buttons = targetsContainerRef.current?.querySelectorAll("button");
-        if (buttons && buttons[prevIndex]) {
-          (buttons[prevIndex] as HTMLButtonElement).focus();
-        }
-        return;
-      }
-    },
-    [handleTargetClick, targets.length],
-  );
+  const getResult = (itemId: string): "correct" | "incorrect" | undefined => {
+    if (!showResult || !correctPlacements) return undefined;
+    return correctPlacements[itemId] === placements[itemId]
+      ? "correct"
+      : "incorrect";
+  };
 
   return (
-    <div className={cn("flex gap-4", className)}>
+    <div className="flex flex-col gap-6" role="group" aria-label="Drag and drop activity">
       <div role="group" aria-label="Available items">
-        <p className="mb-3 text-sm font-medium text-on-surface-variant">Items</p>
-        <div ref={itemsContainerRef} className="flex flex-col gap-4" role="list" aria-label="Drag items list">
-          {items.map((item, index) => {
-            const isPlaced = placed.has(item.id);
-            const isSelected = selectedItem === item.id;
+        <div className="flex flex-wrap gap-4" role="list" aria-label="Items to place">
+          {unplacedItems.map((item) => {
+            const isSelected = selectedItemId === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => handleItemClick(item.id)}
-                onKeyDown={(e) => handleItemKeyDown(e, item.id, index)}
-                role="listitem"
+                onClick={() => onSelectItem(item.id)}
                 className={cn(
-                  "min-h-[56px] rounded-lg border-2 px-4 py-2 text-left text-base font-medium text-slate-text",
+                  "min-h-[56px] rounded-lg border-2 px-4 py-2 text-base font-medium text-slate-text",
                   "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
-                  isPlaced && "opacity-40",
-                  isSelected && !isPlaced
+                  isSelected
                     ? "border-soft-blue bg-soft-blue/10"
                     : "border-slate-300 bg-white hover:border-slate-400",
                 )}
+                role="listitem"
                 aria-pressed={isSelected}
-                aria-disabled={isPlaced}
-                disabled={isPlaced}
-                aria-describedby={isPlaced ? undefined : "drag-instructions"}
               >
                 {item.emoji && <span className="mr-2" aria-hidden="true">{item.emoji}</span>}
                 {item.label}
@@ -151,54 +70,82 @@ export function DragDrop({ items, targets, onDrop, onComplete, className }: Drag
             );
           })}
         </div>
-        {items.length > 0 && (
-          <div id="drag-instructions" className="sr-only">
-            Use Arrow keys to move between items, Enter or Space to select, Tab to switch to targets.
-          </div>
-        )}
       </div>
 
-      <div role="group" aria-label="Target zones">
-        <p className="mb-3 text-sm font-medium text-on-surface-variant">Targets</p>
-        <div ref={targetsContainerRef} className="flex flex-col gap-4" role="list" aria-label="Drop targets list">
-          {targets.map((target, index) => {
-            const placedItemId = [...placed.entries()].find(
-              ([, tId]) => tId === target.id,
-            )?.[0];
-            const placedItem = placedItemId
-              ? items.find((i) => i.id === placedItemId)
-              : null;
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2" role="group" aria-label="Target zones">
+        {targets.map((target) => {
+          const targetItems = items.filter(
+            (item) => placements[item.id] === target.id,
+          );
+          const isEmpty = targetItems.length === 0;
 
-            return (
-              <button
-                key={target.id}
-                onClick={() => handleTargetClick(target.id)}
-                onKeyDown={(e) => handleTargetKeyDown(e, target.id, index)}
-                role="listitem"
-                className={cn(
-                  "min-h-[56px] rounded-lg border-2 border-dashed px-4 py-2 text-left text-base font-medium",
-                  "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
-                  placedItem
-                    ? "border-muted-green bg-muted-green/10 text-muted-green"
-                    : selectedItem
-                      ? "border-soft-blue bg-soft-blue/10 text-on-surface-variant"
-                      : "border-slate-300 bg-slate-50 text-on-surface-variant",
-                )}
-                aria-label={`Target: ${target.label}${placedItem ? `, contains ${placedItem.label}` : ", empty"}`}
-                aria-dropeffect={selectedItem && !placedItem ? "move" : "none"}
-              >
-                {placedItem ? (
-                  <>
-                    {placedItem.emoji && <span className="mr-2" aria-hidden="true">{placedItem.emoji}</span>}
-                    {placedItem.label}
-                  </>
-                ) : (
-                  target.label
-                )}
-              </button>
-            );
-          })}
-        </div>
+          return (
+            <div
+              key={target.id}
+              data-target={target.id}
+              className={cn(
+                "flex flex-col gap-3 rounded-lg border-2 px-4 py-3",
+                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
+                isEmpty
+                  ? "border-dashed border-slate-300 bg-slate-50"
+                  : "border-solid border-slate-300 bg-white",
+                selectedItemId && !isEmpty && "cursor-pointer",
+              )}
+              role="button"
+              tabIndex={0}
+              aria-label={`Target: ${target.label}${isEmpty ? ", empty" : ""}`}
+              onClick={() => selectedItemId && onPlaceItem(target.id)}
+              onKeyDown={(e) => {
+                if ((e.key === "Enter" || e.key === " ") && selectedItemId) {
+                  e.preventDefault();
+                  onPlaceItem(target.id);
+                }
+              }}
+            >
+              <span className="text-sm font-medium text-on-surface-variant">
+                {target.label}
+              </span>
+              {isEmpty && (
+                <span className="text-sm text-on-surface-variant">
+                  Drop items here
+                </span>
+              )}
+              {targetItems.map((item) => {
+                const result = getResult(item.id);
+                return (
+                  <div
+                    key={item.id}
+                    data-result={result || undefined}
+                    className={cn(
+                      "flex items-center gap-2 rounded-lg border px-3 py-2",
+                      result === "correct" && "border-muted-green",
+                      result === "incorrect" && "border-soft-coral",
+                      !result && "border-slate-200",
+                    )}
+                  >
+                    <span className="flex-1 text-base font-medium text-slate-text">
+                      {item.emoji && <span className="mr-2" aria-hidden="true">{item.emoji}</span>}
+                      {item.label}
+                    </span>
+                    {!showResult && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRemoveItem(item.id);
+                        }}
+                        className="flex h-8 w-8 items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue"
+                        aria-label={`Remove ${item.label}`}
+                        type="button"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
