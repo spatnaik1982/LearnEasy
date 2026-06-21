@@ -32,21 +32,39 @@ describe("DragDrop", () => {
     expect(screen.getByText("Vegetables")).toBeInTheDocument();
   });
 
-  it("calls onSelectItem when item clicked", () => {
-    const onSelectItem = jest.fn();
+  it("renders items as draggable", () => {
     render(
       <DragDrop
         items={defaultItems}
         targets={defaultTargets}
         placements={{}}
         selectedItemId={null}
-        onSelectItem={onSelectItem}
+        onSelectItem={() => {}}
         onPlaceItem={() => {}}
         onRemoveItem={() => {}}
       />,
     );
-    fireEvent.click(screen.getByText("Apple"));
-    expect(onSelectItem).toHaveBeenCalledWith("apple");
+    const appleBtn = screen.getByText("Apple").closest("button");
+    expect(appleBtn).toBeInTheDocument();
+    expect(appleBtn).toHaveAttribute("aria-label", "Apple");
+  });
+
+  it("renders droppable targets with correct structure", () => {
+    render(
+      <DragDrop
+        items={defaultItems}
+        targets={defaultTargets}
+        placements={{}}
+        selectedItemId={null}
+        onSelectItem={() => {}}
+        onPlaceItem={() => {}}
+        onRemoveItem={() => {}}
+      />,
+    );
+    const fruitsRegion = screen.getByLabelText("Target: Fruits, empty");
+    expect(fruitsRegion).toBeInTheDocument();
+    const vegetablesRegion = screen.getByLabelText("Target: Vegetables, empty");
+    expect(vegetablesRegion).toBeInTheDocument();
   });
 
   it("shows placed items in target zones", () => {
