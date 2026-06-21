@@ -12,7 +12,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const PUBLIC_ROUTES = ["/login", "/signup", "/calm-zone"];
+const PUBLIC_ROUTES = ["/login", "/signup", "/calm-zone", "/playground"];
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -28,7 +28,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     if (!isPublic && !isAuthenticated) {
       redirected.current = true;
       router.replace("/login");
-    } else if (isPublic && isAuthenticated && router.pathname !== "/calm-zone") {
+    } else if (isPublic && isAuthenticated && router.pathname !== "/calm-zone" && router.pathname !== "/playground") {
       redirected.current = true;
       router.replace("/");
     }
