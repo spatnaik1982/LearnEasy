@@ -22,7 +22,7 @@ export function OptionCard({
   onClick,
 }: OptionCardProps) {
   const showCorrect = showResult && isCorrect;
-  const showIncorrect = showResult && !isCorrect;
+  const showIncorrect = showResult && isSelected && !isCorrect;
 
   const borderColor = showCorrect
     ? "#8FB996"

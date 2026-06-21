@@ -32,10 +32,16 @@ describe('OptionCard', () => {
     expect(screen.getByTestId('option-card')).toHaveStyle('borderColor: #8FB996');
   });
 
-  it('shows incorrect state when showResult and not isCorrect', () => {
-    render(<OptionCard letter="A" label="Apple" isSelected={false} isCorrect={false} showResult={true} onClick={() => {}} />);
+  it('shows incorrect state when showResult and selected and not isCorrect', () => {
+    render(<OptionCard letter="A" label="Apple" isSelected={true} isCorrect={false} showResult={true} onClick={() => {}} />);
     expect(screen.getByText('✗')).toBeInTheDocument();
     expect(screen.getByTestId('option-card')).toHaveStyle('borderColor: #E5989B');
+  });
+
+  it('shows letter badge when showResult and not selected and not isCorrect', () => {
+    render(<OptionCard letter="A" label="Apple" isSelected={false} isCorrect={false} showResult={true} onClick={() => {}} />);
+    expect(screen.getByText('A')).toBeInTheDocument();
+    expect(screen.queryByText('✗')).not.toBeInTheDocument();
   });
 
   it('has aria-selected attribute', () => {
