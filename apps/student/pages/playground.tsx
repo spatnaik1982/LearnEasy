@@ -4,6 +4,7 @@ import yaml from "js-yaml";
 import { useState } from "react";
 import { ActivityRenderer, AppShell } from "@learn-easy/ui";
 import type { GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 
 interface ActivityExample {
   type: string;
@@ -50,7 +51,11 @@ const Playground: NextPage<PlaygroundProps> = ({ rawYaml, examples }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   return (
-    <AppShell variant="student" footer={null}>
+    <>
+      <Head>
+        <title>Activity Playground — Arin Learn</title>
+      </Head>
+      <AppShell variant="student" footer={null}>
       <div className="mx-auto max-w-content px-4 py-8">
         <h1 className="mb-2 text-3xl font-bold text-slate-text">
           Activity Type Playground
@@ -147,20 +152,25 @@ const Playground: NextPage<PlaygroundProps> = ({ rawYaml, examples }) => {
         </div>
       </div>
     </AppShell>
+    </>
   );
 };
 
 export const getStaticProps: GetStaticProps<PlaygroundProps> = async () => {
-  const filePath = path.join(process.cwd(), "lib", "activity-examples.yaml");
-  const rawYaml = fs.readFileSync(filePath, "utf-8");
-  const examples = yaml.load(rawYaml) as ActivityExample[];
+  try {
+    const filePath = path.join(process.cwd(), "lib", "activity-examples.yaml");
+    const rawYaml = fs.readFileSync(filePath, "utf-8");
+    const examples = yaml.load(rawYaml) as ActivityExample[];
 
-  return {
-    props: {
-      rawYaml,
-      examples,
-    },
-  };
+    return {
+      props: {
+        rawYaml,
+        examples,
+      },
+    };
+  } catch {
+    return { notFound: true };
+  }
 };
 
 export default Playground;
