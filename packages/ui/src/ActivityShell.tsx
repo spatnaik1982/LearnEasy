@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { cn } from "./utils";
 import { CheckCircle2, RefreshCw, Lightbulb } from "lucide-react";
 
@@ -52,6 +53,17 @@ export function ActivityShell({
 }: ActivityShellProps) {
   const hintLabel = getHintLabel(hintLevel);
   const showHintButton = !isObserveStep && hintAvailable && hintLabel !== null && isCorrect !== true;
+
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
+  const tryAgainButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isCorrect === true) {
+      continueButtonRef.current?.focus();
+    } else if (isCorrect === false) {
+      tryAgainButtonRef.current?.focus();
+    }
+  }, [isCorrect]);
 
   return (
     <div className="flex flex-col">
@@ -209,6 +221,7 @@ export function ActivityShell({
             </div>
             {isCorrect ? (
               <button
+                ref={continueButtonRef}
                 onClick={onContinue}
                 style={{
                   backgroundColor: "#8FB996",
@@ -220,6 +233,7 @@ export function ActivityShell({
               </button>
             ) : (
               <button
+                ref={tryAgainButtonRef}
                 onClick={onTryAgain}
                 style={{
                   border: "2px solid #E5989B",

@@ -24,6 +24,15 @@ export function OptionCard({
   const showCorrect = showResult && isCorrect;
   const showIncorrect = showResult && isSelected && !isCorrect;
 
+  const ariaLabel = [
+    `Option ${letter}: ${label}`,
+    isSelected && !showResult && 'selected',
+    showCorrect && 'correct answer',
+    showIncorrect && 'incorrect',
+  ]
+    .filter(Boolean)
+    .join(', ');
+
   const borderColor = showCorrect
     ? "#8FB996"
     : showIncorrect
@@ -51,6 +60,7 @@ export function OptionCard({
       aria-selected={isSelected}
       aria-disabled={disabled}
       disabled={disabled}
+      aria-label={ariaLabel}
       onClick={onClick}
       data-testid="option-card"
       className={cn(

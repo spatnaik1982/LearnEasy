@@ -109,7 +109,7 @@ export function ActivityRenderer({
   // PlaceValueChart-specific state
   const [pvcPlacedDigits, setPvcPlacedDigits] = useState<Record<number, number>>({});
   const [pvcSelectedDigit, setPvcSelectedDigit] = useState<number | null>(null);
-  const [pvcActiveColumn, setPvcActiveColumn] = useState<number | null>(null);
+
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
   const isObserveStep = stepLabel === "observe";
@@ -245,8 +245,31 @@ export function ActivityRenderer({
     setGridHighlighted([]);
     setPvcPlacedDigits({});
     setPvcSelectedDigit(null);
-    setPvcActiveColumn(null);
   }, [activity.id]);
+
+  // Initialize grid/place-value state from YAML content for observe steps
+  useEffect(() => {
+    if (type === "grid_area") {
+      const yamlHighlighted = normalizedContent.highlighted as { row: number; col: number }[] | undefined;
+      if (yamlHighlighted) {
+        setGridHighlighted(yamlHighlighted);
+      }
+    }
+    if (type === "place_value_chart") {
+      const yamlDigits = normalizedContent.digits as (number | null)[] | undefined;
+      if (Array.isArray(yamlDigits)) {
+        const placed: Record<number, number> = {};
+        const columns = (normalizedContent.maxPlaces as "lakh" | "crore") === "lakh" ? 6 : 8;
+        yamlDigits.slice(-columns).forEach((d, i) => {
+          const colIdx = columns - yamlDigits.length + i;
+          if (d != null && colIdx >= 0) {
+            placed[colIdx] = d;
+          }
+        });
+        setPvcPlacedDigits(placed);
+      }
+    }
+  }, [activity.id, type, normalizedContent]);
 
   // Observe-step auto-complete timer
   const autoCompleteScheduledRef = useRef(false);
@@ -406,6 +429,13 @@ export function ActivityRenderer({
                 handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
               }
             }}
+            onConnect={(leftId, rightId) => {
+              const updated = { ...matchingConnections, [leftId]: rightId };
+              setMatchingConnections(updated);
+              setMatchingSelectedLeft(null);
+              setMatchingSelectedRight(null);
+              handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
+            }}
             onUndo={() => {
               const keys = Object.keys(matchingConnections);
               if (keys.length === 0) return;
@@ -432,12 +462,10 @@ export function ActivityRenderer({
             placements={dragPlacements}
             selectedItemId={dragSelectedItem}
             onSelectItem={(id) => setDragSelectedItem(id === dragSelectedItem ? null : id)}
-            onPlaceItem={(targetId) => {
-              if (!dragSelectedItem) return;
-              const updated = { ...dragPlacements, [dragSelectedItem]: targetId };
+            onPlaceItem={(itemId, targetId) => {
+              const updated = { ...dragPlacements, [itemId]: targetId };
               setDragPlacements(updated);
               setDragSelectedItem(null);
-              const allPlaced = dragItems.every((item) => item.id in updated || item.id === dragSelectedItem);
               handleResponse({ droppedPositions: updated });
             }}
             onRemoveItem={(itemId) => {
@@ -596,12 +624,10 @@ export function ActivityRenderer({
             placedDigits={pvcPlacedDigits}
             draggableDigits={pvcDraggableDigits}
             selectedDigit={pvcSelectedDigit}
-            activeColumn={pvcActiveColumn}
+            activeColumn={null}
             onSelectDigit={(digit) => setPvcSelectedDigit(digit === pvcSelectedDigit ? null : digit)}
-            onPlaceDigit={(column) => {
-              if (pvcSelectedDigit == null) return;
-              setPvcPlacedDigits((prev) => ({ ...prev, [column]: pvcSelectedDigit }));
-              setPvcActiveColumn(null);
+            onPlaceDigit={(digit, column) => {
+              setPvcPlacedDigits((prev) => ({ ...prev, [column]: digit }));
               setPvcSelectedDigit(null);
             }}
             onRemoveDigit={(column) => {

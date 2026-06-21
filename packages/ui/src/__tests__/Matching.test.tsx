@@ -7,19 +7,27 @@ const defaultPairs = [
   { id: "3", itemA: "Cow", itemB: "Moo" },
 ];
 
+const noop = () => {};
+
+function renderMatching(overrides: Record<string, unknown> = {}) {
+  return render(
+    <Matching
+      pairs={defaultPairs}
+      connections={{}}
+      selectedLeftId={null}
+      selectedRightId={null}
+      onSelectLeft={noop}
+      onSelectRight={noop}
+      onConnect={noop}
+      onUndo={noop}
+      {...overrides}
+    />,
+  );
+}
+
 describe("Matching", () => {
   it("renders left and right columns", () => {
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={{}}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={() => {}}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-      />,
-    );
+    renderMatching();
     expect(screen.getByText("Cat")).toBeInTheDocument();
     expect(screen.getByText("Dog")).toBeInTheDocument();
     expect(screen.getByText("Cow")).toBeInTheDocument();
@@ -28,96 +36,54 @@ describe("Matching", () => {
     expect(screen.getByText("Moo")).toBeInTheDocument();
   });
 
-  it("calls onSelectLeft when left item clicked", () => {
-    const onSelectLeft = jest.fn();
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={{}}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={onSelectLeft}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-      />,
-    );
-    fireEvent.click(screen.getByText("Cat"));
-    expect(onSelectLeft).toHaveBeenCalledWith("1");
-  });
-
   it("calls onSelectRight when right item clicked", () => {
     const onSelectRight = jest.fn();
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={{}}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={() => {}}
-        onSelectRight={onSelectRight}
-        onUndo={() => {}}
-      />,
-    );
+    renderMatching({ onSelectRight });
     fireEvent.click(screen.getByText("Meow"));
     expect(onSelectRight).toHaveBeenCalledWith("1");
   });
 
-  it("shows matched pairs with green styling", () => {
+  it("calls onSelectLeft when left item clicked", () => {
+    const onSelectLeft = jest.fn();
+    renderMatching({ onSelectLeft });
+    fireEvent.click(screen.getByText("Cat"));
+    expect(onSelectLeft).toHaveBeenCalledWith("1");
+  });
+
+  it("applies matched styling", () => {
     const connections = { "1": "1", "2": "2" };
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={connections}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={() => {}}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-      />,
-    );
-    const matchedLeft = screen.getByText("Cat").closest("[data-matched]");
-    const matchedRight = screen.getByText("Meow").closest("[data-matched]");
-    expect(matchedLeft).toHaveAttribute("data-matched", "true");
-    expect(matchedRight).toHaveAttribute("data-matched", "true");
+    renderMatching({ connections });
+    const matchedCat = screen.getByText("Cat").closest("button");
+    const matchedMeow = screen.getByText("Meow").closest("button");
+    expect(matchedCat?.className).toContain("border-muted-green");
+    expect(matchedMeow?.className).toContain("border-muted-green");
   });
 
   it("shows correct/incorrect when showResult", () => {
     const correctPairs = { "1": "1", "2": "2", "3": "3" };
     const connections = { "1": "1", "2": "1", "3": "3" };
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={connections}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={() => {}}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-        showResult={true}
-        correctPairs={correctPairs}
-      />,
-    );
-    const correctLeft = screen.getByText("Cat").closest("[data-result]");
-    const incorrectLeft = screen.getByText("Dog").closest("[data-result]");
-    expect(correctLeft).toHaveAttribute("data-result", "correct");
-    expect(incorrectLeft).toHaveAttribute("data-result", "incorrect");
+    renderMatching({ connections, correctPairs, showResult: true });
+    const correctLeft = screen.getByText("Cat").closest("button");
+    const incorrectLeft = screen.getByText("Dog").closest("button");
+    expect(correctLeft?.className).toContain("border-muted-green");
+    expect(incorrectLeft?.className).toContain("border-soft-coral");
   });
 
   it("all buttons meet 56px min height", () => {
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={{}}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={() => {}}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-      />,
-    );
-    const items = screen.getAllByRole("listitem");
-    items.forEach((btn) => {
+    const { container } = renderMatching();
+    const buttons = container.querySelectorAll("button");
+    buttons.forEach((btn) => {
       expect(btn.className).toMatch(/min-h/);
     });
+  });
+
+  it("shows undo button when connections exist", () => {
+    renderMatching({ connections: { "1": "1" } });
+    expect(screen.getByLabelText("Undo last match")).toBeInTheDocument();
+  });
+
+  it("hides undo button when no connections", () => {
+    renderMatching();
+    expect(screen.queryByLabelText("Undo last match")).not.toBeInTheDocument();
   });
 });
