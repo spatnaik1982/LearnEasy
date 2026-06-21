@@ -1,5 +1,6 @@
 import { cn } from "./utils";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { NumberStepper } from "./NumberStepper";
 
 export interface ClockWidgetProps {
   hour?: number;
@@ -19,6 +20,7 @@ export function ClockWidget({
   interactive = false,
   mode = "set",
   showDigital = false,
+  targetTime,
   onTimeChange,
   size = 250,
   className,
@@ -29,7 +31,7 @@ export function ClockWidget({
   const radius = size / 2;
   const center = size / 2;
 
-  const hourAngle = ((hour % 12) / 12) * 360 + (minute / 60) * 30;
+  const hourAngle = ((hour % 12) * 30) + (minute / 60) * 30;
   const minuteAngle = (minute / 60) * 360;
 
   const getAngleFromEvent = useCallback(
@@ -120,10 +122,17 @@ export function ClockWidget({
     };
   });
 
-  const canInteract = interactive && mode === "set";
+  const canInteract = interactive;
+
+  const targetLabel = targetTime
+    ? `Set the clock to ${targetTime.hour}:${String(targetTime.minute).padStart(2, "0")}`
+    : null;
 
   return (
     <div className={cn("flex flex-col items-center", className)}>
+      {targetLabel && (
+        <p className="mb-3 text-lg font-semibold text-slate-text">{targetLabel}</p>
+      )}
       <svg
         ref={svgRef}
         width={size}
@@ -215,36 +224,26 @@ export function ClockWidget({
           {hour}:{String(minute).padStart(2, "0")}
         </span>
       )}
-      {canInteract && (
-        <div className="flex gap-4 mt-4">
-          <label className="flex flex-col items-center text-slate-text text-sm">
-            Hour
-            <input
-              type="range"
-              min={1}
-              max={12}
-              step={1}
-              value={hour}
-              onChange={(e) =>
-                onTimeChange?.(Number(e.target.value), minute)
-              }
-              className="w-24"
-            />
-          </label>
-          <label className="flex flex-col items-center text-slate-text text-sm">
-            Minute
-            <input
-              type="range"
-              min={0}
-              max={59}
-              step={5}
-              value={minute}
-              onChange={(e) =>
-                onTimeChange?.(hour, Number(e.target.value))
-              }
-              className="w-24"
-            />
-          </label>
+      {canInteract && mode === "set" && (
+        <div className="flex gap-6 mt-4">
+          <NumberStepper
+            value={hour}
+            min={1}
+            max={12}
+            step={1}
+            label="Hour"
+            onChange={(h) => onTimeChange?.(h, minute)}
+            wrap
+          />
+          <NumberStepper
+            value={minute}
+            min={0}
+            max={55}
+            step={5}
+            label="Minute"
+            onChange={(m) => onTimeChange?.(hour, m)}
+            wrap
+          />
         </div>
       )}
     </div>
