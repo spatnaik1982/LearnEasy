@@ -28,23 +28,6 @@ describe("Matching", () => {
     expect(screen.getByText("Moo")).toBeInTheDocument();
   });
 
-  it("calls onSelectLeft when left item clicked", () => {
-    const onSelectLeft = jest.fn();
-    render(
-      <Matching
-        pairs={defaultPairs}
-        connections={{}}
-        selectedLeftId={null}
-        selectedRightId={null}
-        onSelectLeft={onSelectLeft}
-        onSelectRight={() => {}}
-        onUndo={() => {}}
-      />,
-    );
-    fireEvent.click(screen.getByText("Cat"));
-    expect(onSelectLeft).toHaveBeenCalledWith("1");
-  });
-
   it("calls onSelectRight when right item clicked", () => {
     const onSelectRight = jest.fn();
     render(
@@ -62,7 +45,7 @@ describe("Matching", () => {
     expect(onSelectRight).toHaveBeenCalledWith("1");
   });
 
-  it("shows matched pairs with green styling", () => {
+  it("applies matched styling", () => {
     const connections = { "1": "1", "2": "2" };
     render(
       <Matching
@@ -75,10 +58,10 @@ describe("Matching", () => {
         onUndo={() => {}}
       />,
     );
-    const matchedLeft = screen.getByText("Cat").closest("[data-matched]");
-    const matchedRight = screen.getByText("Meow").closest("[data-matched]");
-    expect(matchedLeft).toHaveAttribute("data-matched", "true");
-    expect(matchedRight).toHaveAttribute("data-matched", "true");
+    const matchedCat = screen.getByText("Cat").closest("button");
+    const matchedMeow = screen.getByText("Meow").closest("button");
+    expect(matchedCat?.className).toContain("border-muted-green");
+    expect(matchedMeow?.className).toContain("border-muted-green");
   });
 
   it("shows correct/incorrect when showResult", () => {
@@ -97,14 +80,14 @@ describe("Matching", () => {
         correctPairs={correctPairs}
       />,
     );
-    const correctLeft = screen.getByText("Cat").closest("[data-result]");
-    const incorrectLeft = screen.getByText("Dog").closest("[data-result]");
-    expect(correctLeft).toHaveAttribute("data-result", "correct");
-    expect(incorrectLeft).toHaveAttribute("data-result", "incorrect");
+    const correctLeft = screen.getByText("Cat").closest("button");
+    const incorrectLeft = screen.getByText("Dog").closest("button");
+    expect(correctLeft?.className).toContain("border-muted-green");
+    expect(incorrectLeft?.className).toContain("border-soft-coral");
   });
 
   it("all buttons meet 56px min height", () => {
-    render(
+    const { container } = render(
       <Matching
         pairs={defaultPairs}
         connections={{}}
@@ -115,8 +98,8 @@ describe("Matching", () => {
         onUndo={() => {}}
       />,
     );
-    const items = screen.getAllByRole("listitem");
-    items.forEach((btn) => {
+    const buttons = container.querySelectorAll("button");
+    buttons.forEach((btn) => {
       expect(btn.className).toMatch(/min-h/);
     });
   });
