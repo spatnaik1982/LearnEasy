@@ -1,6 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
 import { cn } from "./utils";
-import { useAccessibility } from "./useAccessibility";
+import { OptionCard } from "./OptionCard";
 
 export interface MultipleChoiceOption {
   id: string;
@@ -11,119 +10,41 @@ export interface MultipleChoiceOption {
 export interface MultipleChoiceProps {
   question: string;
   options: MultipleChoiceOption[];
-  correctIndex: number;
-  onSelect: (isCorrect: boolean, selectedIndex: number) => void;
-  className?: string;
+  selectedIndex: number | null;
+  onSelect: (index: number) => void;
+  showResult?: boolean;
+  correctIndex?: number;
 }
+
+const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 export function MultipleChoice({
   question,
   options,
-  correctIndex,
+  selectedIndex,
   onSelect,
-  className,
+  showResult,
+  correctIndex,
 }: MultipleChoiceProps) {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [hasAnswered, setHasAnswered] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const { announce } = useAccessibility();
-
-  // Announce question changes to screen readers
-  useEffect(() => {
-    announce(`Question: ${question}. ${options.length} options available.`);
-  }, [question, options.length, announce]);
-
-  const handleSelect = useCallback(
-    (index: number) => {
-      if (hasAnswered) return;
-
-      const correct = index === correctIndex;
-      setSelectedId(options[index].id);
-      setHasAnswered(true);
-      setIsCorrect(correct);
-      announce(correct ? "Correct! Well done." : "Let's try again");
-
-      if (correct) {
-        onSelect(true, index);
-      } else {
-        // Reset after a brief delay so user can retry
-        setTimeout(() => {
-          setSelectedId(null);
-          setHasAnswered(false);
-          setIsCorrect(false);
-        }, 1200);
-      }
-    },
-    [hasAnswered, correctIndex, options, onSelect, announce],
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent, index: number) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleSelect(index);
-      }
-    },
-    [handleSelect],
-  );
-
   return (
-    <div className={cn("flex flex-col", className)} role="group" aria-label="Multiple choice question">
+    <div className="flex flex-col" role="group" aria-label="Multiple choice question">
       <p className="mb-4 text-lg font-semibold text-slate-text" id="mc-question">
         {question}
       </p>
-      <div className="flex flex-col gap-4" role="listbox" aria-labelledby="mc-question">
-        {options.map((option, index) => {
-          const isSelected = selectedId === option.id;
-          return (
-            <button
-              key={option.id}
-              onClick={() => handleSelect(index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              role="option"
-              aria-selected={isSelected}
-              className={cn(
-                "min-h-[56px] rounded-lg border-2 px-4 py-3 text-left text-base font-medium text-slate-text",
-                "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
-                !hasAnswered && "border-slate-300 bg-white hover:border-slate-400",
-                hasAnswered &&
-                  isSelected &&
-                  isCorrect &&
-                  "border-muted-green bg-muted-green/10 text-muted-green",
-                hasAnswered &&
-                  isSelected &&
-                  !isCorrect &&
-                  "border-soft-coral bg-soft-coral/10 text-soft-coral",
-                hasAnswered &&
-                  !isSelected &&
-                  index === correctIndex &&
-                  "border-muted-green bg-muted-green/10 text-muted-green",
-                hasAnswered && !isSelected && index !== correctIndex && "border-outline-variant bg-slate-50 text-on-surface-variant",
-              )}
-              disabled={hasAnswered}
-            >
-              {option.emoji && <span className="mr-3" aria-hidden="true">{option.emoji}</span>}
-              <span>{option.label}</span>
-              {hasAnswered && isSelected && (
-                <span className="ml-auto text-sm font-semibold" aria-live="polite">
-                  {isCorrect ? "Correct!" : "Let's try again"}
-                </span>
-              )}
-            </button>
-          );
-        })}
+      <div className="flex flex-col gap-3" role="listbox" aria-labelledby="mc-question">
+        {options.map((option, index) => (
+          <OptionCard
+            key={option.id}
+            letter={LETTERS[index]}
+            label={option.label}
+            emoji={option.emoji}
+            isSelected={selectedIndex === index}
+            isCorrect={showResult && index === correctIndex}
+            showResult={showResult}
+            onClick={() => onSelect(index)}
+          />
+        ))}
       </div>
-      {hasAnswered && (
-        <p
-          className={cn(
-            "mt-4 text-center text-base font-semibold",
-            isCorrect ? "text-muted-green" : "text-soft-coral",
-          )}
-          aria-live="polite"
-        >
-          {isCorrect ? "That's right! Well done." : "Let's try that again"}
-        </p>
-      )}
     </div>
   );
 }
