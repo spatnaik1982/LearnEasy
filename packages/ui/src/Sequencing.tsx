@@ -77,7 +77,7 @@ function SortableSequenceItem({
         type="button"
         {...attributes}
         {...listeners}
-        className="flex h-10 w-10 cursor-grab items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue active:cursor-grabbing"
+        className="flex h-10 w-10 min-h-[44px] min-w-[44px] cursor-grab items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue active:cursor-grabbing"
         aria-label={`Drag to reorder ${item.label}`}
       >
         ⠿
@@ -101,7 +101,7 @@ function SortableSequenceItem({
 
       <button
         onClick={onRemove}
-        className="flex h-10 w-10 items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue"
+        className="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue"
         aria-label={`Remove ${item.label}`}
         type="button"
       >
@@ -162,6 +162,12 @@ export function Sequencing({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <style>{`
+  @keyframes dropAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+`}</style>
       <div className="flex flex-col gap-6" role="group" aria-label="Sequencing activity">
         <div role="group" aria-label="Available items">
           <p className="mb-3 text-sm font-medium text-on-surface-variant">

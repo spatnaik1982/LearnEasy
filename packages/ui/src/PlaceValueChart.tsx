@@ -119,6 +119,7 @@ function ColumnCell({
         role="gridcell"
         aria-label={column.ariaLabel}
         tabIndex={0}
+        style={{ animation: isEmpty ? undefined : "dropAppear 200ms ease-out" }}
         className={cn(
           "flex items-center justify-center w-14 h-14 text-2xl font-bold select-none transition-colors duration-150 rounded-md",
           isEmpty && "border-2 border-dashed border-soft-blue bg-warm-off-white",
@@ -187,6 +188,12 @@ export function PlaceValueChart({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <style>{`
+  @keyframes dropAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+`}</style>
       <div className="flex flex-col items-center gap-6">
         <div
           role="grid"

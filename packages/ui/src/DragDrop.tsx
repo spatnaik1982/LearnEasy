@@ -135,6 +135,7 @@ function DroppableTarget({
           <div
             key={item.id}
             data-result={result || undefined}
+            style={{ animation: "dropAppear 200ms ease-out" }}
             className={cn(
               "flex items-center gap-2 rounded-lg border px-3 py-2",
               result === "correct" && "border-muted-green",
@@ -152,7 +153,7 @@ function DroppableTarget({
                   e.stopPropagation();
                   onRemoveItem(item.id);
                 }}
-                className="flex h-8 w-8 items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue"
+                className="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus:ring-2 focus:ring-soft-blue"
                 aria-label={`Remove ${item.label}`}
                 type="button"
               >
@@ -213,6 +214,12 @@ export function DragDrop({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <style>{`
+  @keyframes dropAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+`}</style>
       <div className="flex flex-col gap-6" role="group" aria-label="Drag and drop activity">
         <div role="group" aria-label="Available items">
           <div className="flex flex-wrap gap-4" role="list" aria-label="Items to place">

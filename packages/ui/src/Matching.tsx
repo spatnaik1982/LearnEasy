@@ -69,7 +69,7 @@ function DraggableLeftItem({
       type="button"
       {...listeners}
       {...attributes}
-      style={style}
+      style={{ ...style, animation: isMatched ? "dropAppear 200ms ease-out" : undefined }}
       className={cn(
         "min-h-[56px] rounded-lg px-4 py-3 text-left text-lg font-medium text-slate-text",
         "border-l-4 border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2",
@@ -110,6 +110,7 @@ function DroppableRightItem({
       ref={setNodeRef}
       type="button"
       onClick={isMatched ? undefined : onActivate}
+      style={{ animation: isMatched ? "dropAppear 200ms ease-out" : undefined }}
       className={cn(
         "min-h-[56px] rounded-lg px-4 py-3 text-left text-lg font-medium text-slate-text",
         "border-l-4 border-muted-teal focus:outline-none focus:ring-2 focus:ring-muted-teal focus:ring-offset-2",
@@ -182,6 +183,12 @@ export function Matching({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <style>{`
+  @keyframes dropAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+`}</style>
       <div className="flex gap-6" role="group" aria-label="Matching activity">
         <div className="flex flex-col gap-4" role="list" aria-label="Left column items">
           {pairs.map((pair) => {
