@@ -109,7 +109,7 @@ export function ActivityRenderer({
   // PlaceValueChart-specific state
   const [pvcPlacedDigits, setPvcPlacedDigits] = useState<Record<number, number>>({});
   const [pvcSelectedDigit, setPvcSelectedDigit] = useState<number | null>(null);
-  const [pvcActiveColumn, setPvcActiveColumn] = useState<number | null>(null);
+
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
   const isObserveStep = stepLabel === "observe";
@@ -245,7 +245,6 @@ export function ActivityRenderer({
     setGridHighlighted([]);
     setPvcPlacedDigits({});
     setPvcSelectedDigit(null);
-    setPvcActiveColumn(null);
   }, [activity.id]);
 
   // Observe-step auto-complete timer
@@ -596,12 +595,11 @@ export function ActivityRenderer({
             placedDigits={pvcPlacedDigits}
             draggableDigits={pvcDraggableDigits}
             selectedDigit={pvcSelectedDigit}
-            activeColumn={pvcActiveColumn}
+            activeColumn={null}
             onSelectDigit={(digit) => setPvcSelectedDigit(digit === pvcSelectedDigit ? null : digit)}
             onPlaceDigit={(column) => {
               if (pvcSelectedDigit == null) return;
               setPvcPlacedDigits((prev) => ({ ...prev, [column]: pvcSelectedDigit }));
-              setPvcActiveColumn(null);
               setPvcSelectedDigit(null);
             }}
             onRemoveDigit={(column) => {

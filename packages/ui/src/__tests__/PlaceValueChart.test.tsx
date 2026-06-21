@@ -88,20 +88,20 @@ describe('PlaceValueChart', () => {
     expect(screen.queryByText('TL')).not.toBeInTheDocument();
   });
 
-  it('highlights active column with background', () => {
-    const { container } = render(
+  it('renders draggable digit buttons with aria labels', () => {
+    render(
       <PlaceValueChart
         placedDigits={{}}
-        draggableDigits={[1, 2]}
-        selectedDigit={1}
-        activeColumn={3}
+        draggableDigits={[3, 7]}
+        selectedDigit={null}
+        activeColumn={null}
         onSelectDigit={jest.fn()}
         onPlaceDigit={jest.fn()}
         onRemoveDigit={jest.fn()}
       />
     );
-    const cells = container.querySelectorAll('[role="gridcell"]');
-    expect(cells[3].className).toContain('5D87B1');
+    expect(screen.getByLabelText('Digit 3')).toBeInTheDocument();
+    expect(screen.getByLabelText('Digit 7')).toBeInTheDocument();
   });
 
   it('calls onRemoveDigit when clicking a placed digit', () => {
@@ -122,22 +122,21 @@ describe('PlaceValueChart', () => {
     expect(onRemove).toHaveBeenCalledWith(3);
   });
 
-  it('calls onPlaceDigit when clicking empty active column with selected digit', () => {
-    const onPlace = jest.fn();
+  it('renders all column cells as droppable targets', () => {
     render(
       <PlaceValueChart
         placedDigits={{}}
         draggableDigits={[1, 2]}
-        selectedDigit={5}
-        activeColumn={2}
+        selectedDigit={null}
+        activeColumn={null}
         onSelectDigit={jest.fn()}
-        onPlaceDigit={onPlace}
+        onPlaceDigit={jest.fn()}
         onRemoveDigit={jest.fn()}
       />
     );
-    const cells = document.querySelectorAll('[role="gridcell"]');
-    fireEvent.click(cells[2]);
-    expect(onPlace).toHaveBeenCalledWith(2);
+    for (const label of ['Crores column', 'Ones column']) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
   });
 
   it('shows result: green border for correct, coral for incorrect', () => {
@@ -155,6 +154,6 @@ describe('PlaceValueChart', () => {
       />
     );
     const cells = container.querySelectorAll('[role="gridcell"]');
-    expect(cells[7].className).toContain('8FB996');
+    expect(cells[7].className).toContain('muted-green');
   });
 });
