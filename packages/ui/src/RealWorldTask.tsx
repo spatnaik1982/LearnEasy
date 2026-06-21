@@ -1,13 +1,15 @@
 import { useState, useCallback } from "react";
 import { cn } from "./utils";
+import { ScenarioCard } from "./ScenarioCard";
 
 export interface RealWorldTaskProps {
   scenario: string;
   taskDescription: string;
   visualExample?: string;
   hint?: string;
-  onComplete: () => void;
-  className?: string;
+  response?: string;
+  onResponseChange: (text: string) => void;
+  isCompleted?: boolean;
 }
 
 export function RealWorldTask({
@@ -15,48 +17,67 @@ export function RealWorldTask({
   taskDescription,
   visualExample,
   hint,
-  onComplete,
-  className,
+  response = "",
+  onResponseChange,
 }: RealWorldTaskProps) {
-  const [isCompleted, setIsCompleted] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
-  const handleComplete = useCallback(() => {
-    setIsCompleted(true);
-    onComplete();
-  }, [onComplete]);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      onResponseChange(e.target.value);
+    },
+    [onResponseChange],
+  );
 
   const toggleHint = useCallback(() => {
     setShowHint((prev) => !prev);
   }, []);
 
-  return (
-    <div className={cn("flex flex-col gap-6", className)}>
-      {/* Scenario */}
-      <div
-        className="rounded-xl border-2 border-soft-amber/30 bg-soft-amber/5 p-5"
-        role="region"
-        aria-label="Scenario"
-      >
-        {visualExample && (
-          <span className="mb-3 block text-3xl" aria-hidden="true">
-            {visualExample}
-          </span>
-        )}
-        <p className="text-base leading-relaxed text-slate-text">
-          {scenario}
-        </p>
-      </div>
+  const hasHint = hint !== undefined && hint !== "";
 
-      {/* Task description */}
+  return (
+    <div className="flex flex-col gap-6">
+      <ScenarioCard
+        text={scenario}
+        visual={visualExample}
+        collapsible={false}
+        readAloud={true}
+      />
+
       <div>
-        <p className="text-lg font-semibold text-slate-text" id="task-description">
+        <p
+          className="text-[20px] font-semibold text-slate-text"
+          style={{ fontWeight: 500 }}
+          id="task-description"
+        >
           {taskDescription}
         </p>
       </div>
 
-      {/* Hint toggle */}
-      {hint && (
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="task-response"
+          className="text-base font-medium text-slate-text"
+        >
+          What did you find?
+        </label>
+        <textarea
+          id="task-response"
+          value={response}
+          onChange={handleChange}
+          placeholder="Type what you observed..."
+          className={cn(
+            "w-full rounded-lg border border-gray-300 bg-white px-4 py-3",
+            "text-[18px] text-slate-text placeholder-gray-400",
+            "focus:outline-none focus:ring-2 focus:ring-soft-blue focus:border-transparent",
+            "resize-none",
+          )}
+          style={{ minHeight: "56px" }}
+          rows={1}
+        />
+      </div>
+
+      {hasHint && (
         <div className="flex flex-col gap-2">
           <button
             onClick={toggleHint}
@@ -68,7 +89,7 @@ export function RealWorldTask({
             aria-expanded={showHint}
             aria-controls="task-hint"
           >
-            {showHint ? "Hide hint" : "Need help?"}
+            {showHint ? "Hide hint" : "Need Help?"}
           </button>
 
           {showHint && (
@@ -78,65 +99,9 @@ export function RealWorldTask({
               role="alert"
               aria-live="polite"
             >
-              <span className="font-semibold">💡 Hint:</span> {hint}
+              <span className="font-semibold">Hint:</span> {hint}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Empty hint toggle placeholder */}
-      {!hint && (
-        <div className="flex flex-col gap-2">
-          <button
-            onClick={toggleHint}
-            className={cn(
-              "self-start rounded-lg border border-soft-amber px-4 py-2 text-sm font-medium text-soft-amber",
-              "focus:outline-none focus:ring-2 focus:ring-soft-amber focus:ring-offset-2",
-              "hover:bg-soft-amber/10 transition-colors duration-150",
-            )}
-            aria-expanded={showHint}
-          >
-            {showHint ? "Hide hint" : "Need help?"}
-          </button>
-
-          {showHint && (
-            <div
-              className="rounded-lg border border-soft-amber bg-soft-amber/10 px-4 py-3 text-sm text-slate-text"
-              role="alert"
-              aria-live="polite"
-            >
-              No additional hints available for this task.
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* I did it! button */}
-      {!isCompleted && (
-        <button
-          onClick={handleComplete}
-          className={cn(
-            "min-h-[56px] w-full max-w-xs rounded-xl bg-muted-green px-8 py-4 text-lg font-semibold text-white",
-            "focus:outline-none focus:ring-2 focus:ring-muted-green focus:ring-offset-2",
-            "hover:bg-muted-green/90 active:bg-muted-green/80",
-            "transition-colors duration-200",
-          )}
-          aria-label="I did it! Mark task as completed"
-        >
-          I did it! 🎉
-        </button>
-      )}
-
-      {/* Completion message */}
-      {isCompleted && (
-        <div
-          className="rounded-lg bg-muted-green/10 px-6 py-4 text-center"
-          role="status"
-          aria-live="polite"
-        >
-          <p className="text-lg font-bold text-muted-green">
-            Great work completing the task! 🌟
-          </p>
         </div>
       )}
     </div>
