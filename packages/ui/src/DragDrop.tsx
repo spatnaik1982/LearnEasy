@@ -38,7 +38,7 @@ export interface DragDropProps {
 function DraggableItem({
   item,
   isSelected,
-  showResult,
+  showResult: _showResult,
   result,
 }: {
   item: DragDropItem;
@@ -84,7 +84,7 @@ function DraggableItem({
 function DroppableTarget({
   target,
   placedItems,
-  selectedItemId,
+  selectedItemId: _selectedItemId,
   showResult,
   getResult,
   onRemoveItem,
@@ -201,7 +201,7 @@ export function DragDrop({
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     setActiveItem(null);
-    const { active, over } = event;
+    const { over } = event;
     if (!over) return;
     const targetId = over.data.current?.target?.id as string | undefined;
     if (!targetId) return;

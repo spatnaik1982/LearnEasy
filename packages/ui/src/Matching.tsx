@@ -132,7 +132,7 @@ function DroppableRightItem({
 export function Matching({
   pairs,
   connections,
-  selectedLeftId,
+  selectedLeftId: _selectedLeftId,
   selectedRightId,
   onSelectLeft,
   onSelectRight,
@@ -193,7 +193,6 @@ export function Matching({
         <div className="flex flex-col gap-4" role="list" aria-label="Left column items">
           {pairs.map((pair) => {
             const matched = isMatched(pair.id);
-            const selected = selectedLeftId === pair.id;
             const result = getResult(pair.id);
             return (
               <DraggableLeftItem

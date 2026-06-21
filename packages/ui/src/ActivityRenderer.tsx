@@ -436,7 +436,6 @@ export function ActivityRenderer({
               const updated = { ...dragPlacements, [dragSelectedItem]: targetId };
               setDragPlacements(updated);
               setDragSelectedItem(null);
-              const allPlaced = dragItems.every((item) => item.id in updated || item.id === dragSelectedItem);
               handleResponse({ droppedPositions: updated });
             }}
             onRemoveItem={(itemId) => {

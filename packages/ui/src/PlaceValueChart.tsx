@@ -175,7 +175,7 @@ export function PlaceValueChart({
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     setActiveDraggedDigit(null);
-    const { active, over } = event;
+    const { over } = event;
     if (!over) return;
     const columnIdx = over.data.current?.column as number;
     if (columnIdx === undefined) return;
