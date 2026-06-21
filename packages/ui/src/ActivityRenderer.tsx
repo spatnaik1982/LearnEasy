@@ -352,6 +352,8 @@ export function ActivityRenderer({
     { correct: boolean }[]
   >([]);
   const [retryKey, setRetryKey] = useState(0);
+  const [filledAnswers, setFilledAnswers] = useState<Record<string, string | number>>({});
+  const [activeBlankId, setActiveBlankId] = useState<string | null>(null);
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
   const normalizedContent = useMemo(
@@ -436,6 +438,8 @@ export function ActivityRenderer({
     setCompleted(false);
     setMultiQuestionIndex(0);
     setMultiQuestionResponses([]);
+    setFilledAnswers({});
+    setActiveBlankId(null);
   }, [activity.id]);
 
   const matchedPairIdsRef = useRef<string[]>([]);
@@ -698,8 +702,9 @@ export function ActivityRenderer({
                 key={multiQuestionIndex}
                 question={q.question}
                 options={options}
-                correctIndex={q.correctIndex}
-                onSelect={(isCorrect) => {
+                selectedIndex={null}
+                onSelect={(index) => {
+                  const isCorrect = index === q.correctIndex;
                   if (!isCorrect) return;
                   const updated = [...multiQuestionResponses];
                   updated[multiQuestionIndex] = { correct: true };
@@ -710,6 +715,8 @@ export function ActivityRenderer({
                     setMultiQuestionIndex((prev) => prev + 1);
                   }
                 }}
+                showResult={false}
+                correctIndex={q.correctIndex}
               />
             </div>
           );
@@ -726,36 +733,47 @@ export function ActivityRenderer({
                 emoji?: string;
               }>) ?? []
             }
-            correctIndex={(activity.content.correctIndex as number) ?? 0}
-            onSelect={(_isCorrect, selectedIndex) => {
+            selectedIndex={null}
+            onSelect={(selectedIndex) => {
               handleComplete({ selectedIndex });
             }}
+            showResult={completed}
+            correctIndex={(activity.content.correctIndex as number) ?? 0}
           />
         );
       }
 
-      case "story_question":
+      case "story_question": {
+        const storyQuestions = (normalizedContent.questions as Array<{
+          question: string;
+          options: string[];
+          correctIndex: number;
+        }>) ?? [];
+        const storyCurrentIndex = multiQuestionIndex;
+        const currentSQ = storyQuestions[storyCurrentIndex];
         return (
           <StoryQuestion
             scenario={(normalizedContent.scenario as string) ?? ""}
-            questions={
-              (normalizedContent.questions as Array<{
-                question: string;
-                options: string[];
-                correctIndex: number;
-              }>) ?? []
-            }
-            visual={(normalizedContent.visual as string) ?? undefined}
-            onComplete={(responses) => {
-              const lastResponse = responses[responses.length - 1];
-              handleComplete({
-                selectedIndex: lastResponse?.selectedIndex ?? -1,
-                correct: lastResponse?.correct ?? false,
-                responses,
-              });
+            questions={storyQuestions}
+            currentQuestionIndex={storyCurrentIndex}
+            selectedIndex={null}
+            onSelect={(index) => {
+              const isCorrect = index === currentSQ.correctIndex;
+              if (!isCorrect) return;
+              const updated = [...multiQuestionResponses];
+              updated[storyCurrentIndex] = { correct: true };
+              if (storyCurrentIndex + 1 >= storyQuestions.length) {
+                handleComplete({ correct: true, responses: updated });
+              } else {
+                setMultiQuestionResponses(updated);
+                setMultiQuestionIndex((prev) => prev + 1);
+              }
             }}
+            showResult={completed}
+            visual={(normalizedContent.visual as string) ?? undefined}
           />
         );
+      }
 
       case "real_world":
       case "real_world_task":
@@ -874,10 +892,25 @@ export function ActivityRenderer({
       case "fill_blank":
         return (
           <FillBlank
+            key={retryKey}
             template={(normalizedContent.template as string) ?? ''}
             blanks={(normalizedContent.blanks as { id: string; position: number; correctAnswer: string | number; options?: (string | number)[] }[]) ?? []}
             mode={(normalizedContent.mode as 'select' | 'type') ?? 'select'}
-            onComplete={(answers) => handleComplete({ answers })}
+            filledAnswers={filledAnswers}
+            activeBlankId={activeBlankId}
+            onBlankActivate={(id) => setActiveBlankId(id)}
+            onBlankFill={(id, value) => {
+              setFilledAnswers((prev) => ({ ...prev, [id]: value }));
+              setActiveBlankId(null);
+            }}
+            onBlankClear={(id) => {
+              setFilledAnswers((prev) => {
+                const next = { ...prev };
+                delete next[id];
+                return next;
+              });
+            }}
+            showResult={completed}
           />
         );
 
