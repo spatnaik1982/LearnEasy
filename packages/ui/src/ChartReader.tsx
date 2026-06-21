@@ -21,6 +21,8 @@ function computeMax(data: { value: number }[]): number {
   return Math.max(...data.map((d) => d.value), 0);
 }
 
+const CHART_HEIGHT = 300;
+
 export const ChartReader: React.FC<ChartReaderProps> = ({
   type,
   data,
@@ -37,7 +39,8 @@ export const ChartReader: React.FC<ChartReaderProps> = ({
       <div
         role="img"
         aria-label={title ?? "No data to display"}
-        className={cn("flex items-center justify-center min-h-[200px] text-slate-400", className)}
+        className={cn("flex items-center justify-center text-slate-400", className)}
+        style={{ minHeight: CHART_HEIGHT }}
       >
         No data to display
       </div>
@@ -50,57 +53,107 @@ export const ChartReader: React.FC<ChartReaderProps> = ({
     ? `Chart showing ${title}: ${data.map((d) => `${d.label} ${d.value}`).join(", ")}`
     : `Chart with ${data.length} items: ${data.map((d) => `${d.label} ${d.value}`).join(", ")}`;
 
+  const gridlines = [25, 50, 75, 100].map((pct) => ({
+    pct,
+    value: Math.round((effectiveMax * pct) / 100),
+  }));
+
   if (type === "bar") {
     return (
       <div
         role="img"
         aria-label={chartAriaLabel}
-        className={cn("min-h-[200px] flex items-end justify-center gap-4 py-4", className)}
+        className={cn("relative", className)}
+        style={{ height: CHART_HEIGHT }}
       >
-        {data.map((item) => {
-          const pct = effectiveMax > 0 ? (item.value / effectiveMax) * 100 : 0;
-          const isSelected = selectedLabel === item.label;
-          return (
-            <div key={item.label} className="flex flex-col items-center gap-1">
-              {showValues && (
-                <span className="text-sm font-medium text-slate-600">{item.value}</span>
-              )}
-              <div
-                data-bar
-                role={interactive ? "button" : "presentation"}
-                tabIndex={interactive ? 0 : undefined}
-                aria-label={`${item.label}: ${item.value}`}
-                aria-pressed={interactive ? isSelected : undefined}
-                className={cn(
-                  "w-12 rounded-t-sm transition-all duration-200",
-                  interactive && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76A5AF]",
-                  isSelected ? "ring-2 ring-[#76A5AF]" : ""
-                )}
-                style={{
-                  height: `${Math.max(pct, 1)}%`,
-                  backgroundColor: "#5D87B1",
-                  filter: interactive && !isSelected ? undefined : undefined,
-                }}
-                onMouseEnter={(e) => {
-                  if (interactive) (e.currentTarget as HTMLElement).style.filter = "brightness(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  if (interactive) (e.currentTarget as HTMLElement).style.filter = "";
-                }}
-                onClick={() => {
-                  if (interactive && onSelect) onSelect(item.label);
-                }}
-                onKeyDown={(e) => {
-                  if (interactive && onSelect && (e.key === "Enter" || e.key === " ")) {
-                    e.preventDefault();
-                    onSelect(item.label);
-                  }
-                }}
+        <svg
+          width="100%"
+          height="100%"
+          viewBox={`0 0 ${data.length * 80 + 60} ${CHART_HEIGHT}`}
+          className="overflow-visible"
+        >
+          {gridlines.map((gl) => (
+            <g key={gl.pct}>
+              <line
+                x1={50}
+                y1={CHART_HEIGHT - (gl.pct / 100) * (CHART_HEIGHT - 40) - 10}
+                x2={data.length * 80 + 50}
+                y2={CHART_HEIGHT - (gl.pct / 100) * (CHART_HEIGHT - 40) - 10}
+                stroke="#E5E7EB"
+                strokeWidth={1}
               />
-              <span className="text-sm text-slate-600">{item.label}</span>
-            </div>
-          );
-        })}
+              <text
+                x={45}
+                y={CHART_HEIGHT - (gl.pct / 100) * (CHART_HEIGHT - 40) - 5}
+                textAnchor="end"
+                fontSize={14}
+                fill="#6B7280"
+              >
+                {gl.value}
+              </text>
+            </g>
+          ))}
+          {data.map((item, idx) => {
+            const pct = effectiveMax > 0 ? (item.value / effectiveMax) * 100 : 0;
+            const isSelected = selectedLabel === item.label;
+            const barHeight = Math.max((pct / 100) * (CHART_HEIGHT - 60), 2);
+            const barX = 60 + idx * 80;
+            const barWidth = 48;
+            return (
+              <g key={item.label}>
+                <rect
+                  x={barX}
+                  y={CHART_HEIGHT - 30 - barHeight}
+                  width={barWidth}
+                  height={barHeight}
+                  fill="#5D87B1"
+                  rx={4}
+                  style={{
+                    transition: "height 300ms ease-out",
+                    animation: "none",
+                  }}
+                  className={cn(
+                    interactive && "cursor-pointer",
+                    isSelected && "ring-2 ring-[#76A5AF]"
+                  )}
+                  role={interactive ? "button" : "presentation"}
+                  tabIndex={interactive ? 0 : undefined}
+                  aria-label={`${item.label}: ${item.value}`}
+                  aria-pressed={interactive ? isSelected : undefined}
+                  onClick={() => {
+                    if (interactive && onSelect) onSelect(item.label);
+                  }}
+                  onKeyDown={(e) => {
+                    if (interactive && onSelect && (e.key === "Enter" || e.key === " ")) {
+                      e.preventDefault();
+                      onSelect(item.label);
+                    }
+                  }}
+                />
+                {showValues && (
+                  <text
+                    x={barX + barWidth / 2}
+                    y={CHART_HEIGHT - 40 - barHeight}
+                    textAnchor="middle"
+                    fontSize={14}
+                    fill="#374151"
+                  >
+                    {item.value}
+                  </text>
+                )}
+                <text
+                  x={barX + barWidth / 2}
+                  y={CHART_HEIGHT - 10}
+                  textAnchor="middle"
+                  fontSize={14}
+                  fill="#6B7280"
+                >
+                  {item.label}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
 
         <table className="sr-only">
           <caption>{title ?? "Chart data"}</caption>
@@ -127,11 +180,13 @@ export const ChartReader: React.FC<ChartReaderProps> = ({
     <div
       role="img"
       aria-label={chartAriaLabel}
-      className={cn("min-h-[200px] flex flex-col gap-3 py-4", className)}
+      className={cn("flex flex-col gap-3 py-4", className)}
     >
+      <div className="text-sm text-slate-500 mb-1">Each {data[0]?.emoji ?? "●"} = 1</div>
       {data.map((item) => {
         const isSelected = selectedLabel === item.label;
         const emoji = item.emoji ?? "●";
+        const showAll = item.value <= 20;
         const repeatCount = Math.min(item.value, 20);
         return (
           <div
@@ -160,8 +215,11 @@ export const ChartReader: React.FC<ChartReaderProps> = ({
               {Array.from({ length: repeatCount }, (_, i) => (
                 <span key={i}>{emoji}</span>
               ))}
+              {!showAll && <span>...({item.value})</span>}
             </span>
-            <span className="text-sm text-slate-500">({item.value})</span>
+            {showAll && (
+              <span className="text-sm text-slate-500">({item.value})</span>
+            )}
           </div>
         );
       })}

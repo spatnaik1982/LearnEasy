@@ -10,7 +10,7 @@ describe("ChartReader", () => {
 
   it("renders bar chart with correct number of bars", () => {
     const { container } = render(<ChartReader type="bar" data={data} />);
-    const bars = container.querySelectorAll("[data-bar]");
+    const bars = container.querySelectorAll("rect");
     expect(bars.length).toBe(3);
   });
 
@@ -43,5 +43,32 @@ describe("ChartReader", () => {
     const { container } = render(<ChartReader type="bar" data={data} />);
     const table = container.querySelector("table");
     expect(table).toBeInTheDocument();
+  });
+
+  it("renders Y-axis gridlines at 25/50/75/100%", () => {
+    const { container } = render(<ChartReader type="bar" data={data} />);
+    const lines = container.querySelectorAll("line");
+    expect(lines.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("pictograph shows Each = 1 legend", () => {
+    render(<ChartReader type="pictograph" data={data} />);
+    expect(screen.getByText(/Each.*= 1/)).toBeInTheDocument();
+  });
+
+  it("pictograph shows ...(N) for values over 20", () => {
+    render(
+      <ChartReader
+        type="pictograph"
+        data={[{ label: "Stars", value: 25, emoji: "⭐" }]}
+      />
+    );
+    expect(screen.getByText(/\(25\)/)).toBeInTheDocument();
+  });
+
+  it("has fixed height 300px", () => {
+    const { container } = render(<ChartReader type="bar" data={data} />);
+    const img = container.querySelector('[role="img"]');
+    expect(img).toHaveStyle({ height: "300px" });
   });
 });
