@@ -493,7 +493,7 @@ async function main() {
 
 async function seedUsers() {
   const bcrypt = await import('bcryptjs');
-  const hashed = await bcrypt.hash('test123', 10);
+  const hashed = await bcrypt.default.hash('test123', 10);
 
   const testParent = await prisma.parent.upsert({
     where: { email: 'testparent@learn-easy.com' },
