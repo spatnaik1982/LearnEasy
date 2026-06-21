@@ -68,4 +68,26 @@ describe('FractionVisualizer', () => {
     render(<FractionVisualizer numerator={3} denominator={4} label="three-fourths" showLabel />);
     expect(screen.getByText('three-fourths')).toBeInTheDocument();
   });
+
+  it('SVG parts have tabIndex and role=button when interactive', () => {
+    render(<FractionVisualizer numerator={2} denominator={4} mode="bar" interactive shadedCount={2} onShade={jest.fn()} />);
+    const parts = document.querySelectorAll("[role='button']");
+    expect(parts.length).toBe(4);
+    parts.forEach((part) => expect(part).toHaveAttribute("tabindex", "0"));
+  });
+
+  it('compare mode shows correct symbol (> )', () => {
+    render(<FractionVisualizer numerator={1} denominator={2} compare={{ numerator: 1, denominator: 3 }} />);
+    expect(screen.getByTestId('compare-symbol')).toHaveTextContent('>');
+  });
+
+  it('compare mode shows correct symbol (=)', () => {
+    render(<FractionVisualizer numerator={1} denominator={2} compare={{ numerator: 2, denominator: 4 }} />);
+    expect(screen.getByTestId('compare-symbol')).toHaveTextContent('=');
+  });
+
+  it('compare mode shows correct symbol (<)', () => {
+    render(<FractionVisualizer numerator={1} denominator={3} compare={{ numerator: 1, denominator: 2 }} />);
+    expect(screen.getByTestId('compare-symbol')).toHaveTextContent('<');
+  });
 });
