@@ -3,8 +3,10 @@ import { GridCounter, computePerimeter } from "../GridCounter";
 
 describe("GridCounter", () => {
   it("renders grid with correct dimensions", () => {
-    const { container } = render(<GridCounter rows={3} cols={4} />);
-    const cells = container.querySelectorAll('[role="gridcell"]');
+    const { container } = render(
+      <GridCounter rows={3} cols={4} highlighted={[]} onHighlight={jest.fn()} onClearAll={jest.fn()} />
+    );
+    const cells = container.querySelectorAll('[role="gridcell"], [role="button"]');
     expect(cells.length).toBe(12);
   });
 
@@ -17,6 +19,8 @@ describe("GridCounter", () => {
           { row: 0, col: 0 },
           { row: 1, col: 1 },
         ]}
+        onHighlight={jest.fn()}
+        onClearAll={jest.fn()}
       />,
     );
     const cells = container.querySelectorAll('[data-highlighted="true"]');
@@ -31,24 +35,44 @@ describe("GridCounter", () => {
         highlighted={[{ row: 0, col: 0 }]}
         showCount
         mode="area"
+        onHighlight={jest.fn()}
+        onClearAll={jest.fn()}
       />,
     );
     expect(screen.getByText(/Area: 1 square/)).toBeInTheDocument();
   });
 
   it("has accessible grid role", () => {
-    render(<GridCounter rows={3} cols={3} />);
+    render(
+      <GridCounter rows={3} cols={3} highlighted={[]} onHighlight={jest.fn()} onClearAll={jest.fn()} />
+    );
     expect(screen.getByRole("grid")).toBeInTheDocument();
   });
 
   it("handles interactive cell click", () => {
     const onHighlight = jest.fn();
     render(
-      <GridCounter rows={2} cols={2} interactive onHighlight={onHighlight} />,
+      <GridCounter rows={2} cols={2} highlighted={[]} interactive onHighlight={onHighlight} onClearAll={jest.fn()} />
     );
-    const cells = screen.getAllByRole("gridcell");
+    const cells = screen.getAllByRole("button");
     fireEvent.click(cells[0]);
     expect(onHighlight).toHaveBeenCalledWith([{ row: 0, col: 0 }]);
+  });
+
+  it("calls onClearAll when clear button clicked", () => {
+    const onClearAll = jest.fn();
+    render(
+      <GridCounter
+        rows={2}
+        cols={2}
+        highlighted={[{ row: 0, col: 0 }]}
+        interactive
+        onHighlight={jest.fn()}
+        onClearAll={onClearAll}
+      />
+    );
+    fireEvent.click(screen.getByText("Clear All"));
+    expect(onClearAll).toHaveBeenCalled();
   });
 });
 
@@ -78,7 +102,6 @@ describe("computePerimeter", () => {
   });
 
   it("L-shape (3x1 + 2x1) has perimeter 10", () => {
-    // Cells forming an L: (0,0), (1,0), (2,0), (2,1)
     const cells = [
       { row: 0, col: 0 },
       { row: 1, col: 0 },
