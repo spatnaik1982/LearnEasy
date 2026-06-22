@@ -210,6 +210,9 @@ export function PlaceValueChart({
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .pvc-drop { animation: none !important; }
+  }
 `}</style>
       <div className="flex flex-col items-center gap-6">
         <p className="text-sm font-medium text-on-surface-variant self-start">
@@ -217,12 +220,13 @@ export function PlaceValueChart({
             ? `Digit ${selectedDigit} selected — tap a column to place it`
             : "Drag a digit to a column, or tap a digit then tap a column"}
         </p>
-        <div
-          role="grid"
-          aria-label="Place value chart"
-          style={gridStyle}
-          className="grid gap-px"
-        >
+        <div className="w-full overflow-x-auto pb-2">
+          <div
+            role="grid"
+            aria-label="Place value chart"
+            style={gridStyle}
+            className="grid gap-px"
+          >
           {columns.map((col, idx) => {
             const digit = idx in placedDigits ? placedDigits[idx] : undefined;
             const isEmpty = digit === undefined;
@@ -249,6 +253,7 @@ export function PlaceValueChart({
               />
             );
           })}
+          </div>
         </div>
 
         <div role="radiogroup" aria-label="Digit bank" className="flex flex-wrap gap-2 justify-center">

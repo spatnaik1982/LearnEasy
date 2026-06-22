@@ -183,7 +183,7 @@ export function ActivityRenderer({
       setHintsUsed((prev) => prev + 1);
       setHintText(hint);
     } else {
-      setHintText(hintText ? null : "Think about what the question is asking you.");
+      setHintText(hintText ? null : "Read the instructions again. Try one step at a time.");
     }
   }, [hintsUsed, type, activity.content, hintText]);
 

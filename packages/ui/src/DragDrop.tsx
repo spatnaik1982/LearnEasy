@@ -152,9 +152,8 @@ function DroppableTarget({
           <div
             key={item.id}
             data-result={result || undefined}
-            style={{ animation: "dropAppear 200ms ease-out" }}
             className={cn(
-              "flex items-center gap-2 rounded-lg border px-3 py-2",
+              "dd-drop flex items-center gap-2 rounded-lg border px-3 py-2",
               result === "correct" && "border-muted-green",
               result === "incorrect" && "border-soft-coral",
               !result && "border-slate-200",
@@ -237,6 +236,9 @@ export function DragDrop({
   @keyframes dropAppear {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dd-drop { animation: none !important; }
   }
 `}</style>
       <div className="flex flex-col gap-6" role="group" aria-label="Drag and drop activity">

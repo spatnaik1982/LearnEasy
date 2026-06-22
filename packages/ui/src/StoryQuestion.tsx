@@ -1,4 +1,4 @@
-import { cn } from "./utils";
+
 import { ScenarioCard } from "./ScenarioCard";
 import { OptionCard } from "./OptionCard";
 

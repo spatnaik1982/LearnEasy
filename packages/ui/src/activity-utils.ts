@@ -305,18 +305,17 @@ export function getLeveledHint(
 }
 
 const correctMessages = [
-  "That's right! Well done!",
-  "Great job! You got it!",
-  "Excellent work!",
-  "Perfect! You're doing great!",
-  "Awesome! Keep it up!",
+  "That is right.",
+  "You got the correct answer.",
+  "Good work.",
+  "You answered correctly.",
 ];
 
 const incorrectMessages = [
-  "Let's try that again.",
-  "Not quite — give it another go.",
-  "Almost there, try once more!",
-  "Keep trying — you can do it!",
+  "Let us try that again.",
+  "Not quite. Try again.",
+  "Almost. Try once more.",
+  "Keep trying. You can do it.",
 ];
 
 /**
@@ -333,25 +332,25 @@ export function getActivityFeedback(correct: boolean): string {
  */
 export function getGuidanceMessage(type: string): string {
   const messages: Record<string, string> = {
-    visual_counter: "Count each item one by one. Touch each item as you count.",
-    visual_counting: "Count each item one by one. Touch each item as you count.",
-    multiple_choice: "Read each choice carefully. Pick the one that answers the question.",
-    matching: "Draw a line from each item on the left to its match on the right.",
-    sequencing: "Put the items in the correct order from first to last.",
-    drag_drop: "Drag each item to its correct place.",
-    dragdrop: "Drag each item to its correct place.",
-    fill_blank: "Type or select the missing word to complete the sentence.",
-    fraction_visual: "Count the shaded parts and the total parts to find the fraction.",
-    place_value_chart: "Place each digit in the correct column (ones, tens, hundreds).",
-    grid_area: "Count the highlighted squares to find the area.",
+    visual_counter: "Count each item. Touch each item as you count.",
+    visual_counting: "Count each item. Touch each item as you count.",
+    multiple_choice: "Read each choice. Pick the one that answers the question.",
+    matching: "Tap an item on the left, then tap its match on the right.",
+    sequencing: "Tap items to add them. Drag to reorder from first to last.",
+    drag_drop: "Drag each item to its correct place. Or tap an item, then tap a target.",
+    dragdrop: "Drag each item to its correct place. Or tap an item, then tap a target.",
+    fill_blank: "Type the missing word. Or pick from the options.",
+    fraction_visual: "Count the shaded parts. Then count the total parts.",
+    place_value_chart: "Place each digit in the correct column.",
+    grid_area: "Count the highlighted squares.",
     chart_reader: "Look at the chart. Each bar shows a value.",
-    clock_time: "Look at where the hour and minute hands point.",
-    measurement_scale: "Read the number on the scale that lines up with the marker.",
-    story_question: "Read the story. Then pick the answer that correctly answers the question.",
-    real_world: "Think about how you would solve this in real life.",
-    real_world_task: "Think about how you would solve this in real life.",
+    clock_time: "Look at the hour hand. Then look at the minute hand.",
+    measurement_scale: "Read the number on the scale.",
+    story_question: "Read the story. Then pick the correct answer.",
+    real_world: "Think about what you would do.",
+    real_world_task: "Think about what you would do.",
   };
-  return messages[type] ?? "Try solving the activity step by step.";
+  return messages[type] ?? "Read the question. Pick the correct answer.";
 }
 
 /**
@@ -369,12 +368,21 @@ export function getHintText(
   }
   // Type-specific fallback hints
   const fallbackHints: Record<string, string[]> = {
-    visual_counter: ["Try counting each item out loud.", "Point to each item as you count it."],
-    visual_counting: ["Try counting each item out loud.", "Point to each item as you count it."],
-    multiple_choice: ["Read the question again carefully.", "Eliminate choices you know are wrong first."],
-    fill_blank: ["Read the sentence again. What word makes sense here?", "Look for clues in the words around the blank."],
-    drag_drop: ["Look at each label carefully. Where does it belong?", "Try matching the easiest ones first."],
-    dragdrop: ["Look at each label carefully. Where does it belong?", "Try matching the easiest ones first."],
+    visual_counter: ["Count each item aloud.", "Point to each item as you count."],
+    visual_counting: ["Count each item aloud.", "Point to each item as you count."],
+    matching: ["Tap an item on the left, then tap its match on the right.", "Try matching items you know first."],
+    sequencing: ["Tap items to add them to your sequence.", "Think about what comes first, next, and last."],
+    multiple_choice: ["Read each choice. Pick the one that answers the question.", "Eliminate choices you know are wrong first."],
+    fill_blank: ["Read the sentence again. What word fits?", "Look for clues near the blank."],
+    drag_drop: ["Look at each label. Where does it belong?", "Try placing items you know first."],
+    dragdrop: ["Look at each label. Where does it belong?", "Try placing items you know first."],
+    fraction_visual: ["Count the shaded parts.", "The bottom number shows the total parts."],
+    place_value_chart: ["Look at each column label. Place one digit in each column.", "Start from the rightmost column."],
+    grid_area: ["Count the highlighted squares one by one.", "Each square is one unit."],
+    chart_reader: ["Look at each bar. The tallest bar shows the largest value.", "Read the label under each bar."],
+    clock_time: ["Look at the short hand. That shows the hour.", "Look at the long hand. That shows the minutes."],
+    measurement_scale: ["Read the number that lines up with the marker.", "Count the marks between numbers."],
+    story_question: ["Read the story again.", "Find the sentence that answers the question."],
   };
   const fallback = fallbackHints[type];
   if (fallback && hintIndex >= 0 && hintIndex < fallback.length) {
