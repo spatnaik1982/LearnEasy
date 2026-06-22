@@ -888,14 +888,14 @@
   {
     "type": "measurement_scale",
     "step": "observe",
-    "description": "A ruler showing 12 cm. Observe mode: the reading is displayed for the learner to see.\n",
+    "description": "A crayon is placed next to a ruler. The ruler shows the crayon is 8 cm long. See how the red marker lines up with the number.\n",
     "content": {
       "type": "ruler",
       "min": 0,
       "max": 30,
       "step": 1,
       "unit": "cm",
-      "value": 12,
+      "value": 8,
       "interactive": false,
       "showReading": true,
       "showLabels": true
@@ -904,14 +904,14 @@
   {
     "type": "measurement_scale",
     "step": "guided_practice",
-    "description": "A thermometer showing 38°C. Body temperature reading practice.\n",
+    "description": "The thermometer outside shows it is 30°C today. That is warm enough to play outside.\n",
     "content": {
       "type": "thermometer",
-      "min": 35,
-      "max": 42,
-      "step": 1,
+      "min": 0,
+      "max": 50,
+      "step": 5,
       "unit": "°C",
-      "value": 38,
+      "value": 30,
       "interactive": false,
       "showReading": true,
       "showLabels": true
@@ -920,13 +920,14 @@
   {
     "type": "measurement_scale",
     "step": "independent_practice",
-    "description": "A measuring cylinder with 150 mL. Learner positions the indicator to match the target value.\n",
+    "description": "You are making lemonade. The recipe needs 150 mL of water. Move the indicator to show exactly 150 mL.\n",
     "content": {
       "type": "cylinder",
       "min": 0,
       "max": 200,
       "step": 10,
       "unit": "mL",
+      "value": 0,
       "interactive": true,
       "targetValue": 150,
       "showReading": true,
