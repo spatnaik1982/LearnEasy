@@ -1,0 +1,996 @@
+[
+  {
+    "type": "visual_counting",
+    "step": "observe",
+    "description": "Count 5 apples in a basket. Observe step: items are displayed with count shown.\n",
+    "content": {
+      "description": "Apples in a basket",
+      "items": [
+        "🍎"
+      ],
+      "count": 5,
+      "text": "There are five apples."
+    }
+  },
+  {
+    "type": "visual_counting",
+    "step": "guided_practice",
+    "description": "Count the stars on a page. Guided practice: child selects the correct number after counting.\n",
+    "content": {
+      "description": "Count the stars",
+      "items": [
+        "⭐"
+      ],
+      "count": 7,
+      "text": "Count each star carefully."
+    }
+  },
+  {
+    "type": "visual_counting",
+    "step": "independent_practice",
+    "description": "Addition with two groups. Count birds on left and right branches, then find the total.\n",
+    "content": {
+      "description": "Birds on branches",
+      "left": [
+        "🐦",
+        "🐦",
+        "🐦"
+      ],
+      "right": [
+        "🐦",
+        "🐦"
+      ],
+      "sum": 5,
+      "text": "How many birds in all?"
+    }
+  },
+  {
+    "type": "matching",
+    "step": "guided_practice",
+    "description": "Match each number to its written name. Basic number-word recognition practice.\n",
+    "content": {
+      "description": "Match number to word",
+      "pairs": [
+        {
+          "itemA": "1",
+          "itemB": "one"
+        },
+        {
+          "itemA": "2",
+          "itemB": "two"
+        },
+        {
+          "itemA": "3",
+          "itemB": "three"
+        }
+      ]
+    }
+  },
+  {
+    "type": "matching",
+    "step": "independent_practice",
+    "description": "Match each object to the category it belongs to. Everyday objects from home and school.\n",
+    "content": {
+      "description": "Match object to category",
+      "pairs": [
+        {
+          "itemA": "🍎",
+          "itemB": "Fruit"
+        },
+        {
+          "itemA": "🥕",
+          "itemB": "Vegetable"
+        },
+        {
+          "itemA": "🍞",
+          "itemB": "Bread"
+        }
+      ]
+    }
+  },
+  {
+    "type": "matching",
+    "step": "guided_practice",
+    "description": "Match each word to the correct picture description. Simple everyday vocabulary matching.\n",
+    "content": {
+      "description": "Match word to picture",
+      "pairs": [
+        {
+          "itemA": "Sun",
+          "itemB": "☀️"
+        },
+        {
+          "itemA": "Moon",
+          "itemB": "🌙"
+        },
+        {
+          "itemA": "Star",
+          "itemB": "⭐"
+        }
+      ]
+    }
+  },
+  {
+    "type": "drag_drop",
+    "step": "guided_practice",
+    "description": "Drag each item into the correct group: Plants or Animals.\n",
+    "content": {
+      "description": "Sort into plants or animals",
+      "items": [
+        {
+          "id": "mango",
+          "label": "Mango",
+          "emoji": "🥭"
+        },
+        {
+          "id": "cow",
+          "label": "Cow",
+          "emoji": "🐄"
+        },
+        {
+          "id": "rose",
+          "label": "Rose",
+          "emoji": "🌹"
+        },
+        {
+          "id": "fish",
+          "label": "Fish",
+          "emoji": "🐟"
+        }
+      ],
+      "targets": [
+        {
+          "id": "plants",
+          "label": "Plants"
+        },
+        {
+          "id": "animals",
+          "label": "Animals"
+        }
+      ],
+      "expectedPositions": {
+        "mango": "plants",
+        "rose": "plants",
+        "cow": "animals",
+        "fish": "animals"
+      }
+    }
+  },
+  {
+    "type": "drag_drop",
+    "step": "independent_practice",
+    "description": "Sort modes of transport into Land, Water, or Air groups.\n",
+    "content": {
+      "description": "Sort transport by where it moves",
+      "items": [
+        {
+          "id": "bus",
+          "label": "Bus",
+          "emoji": "🚌"
+        },
+        {
+          "id": "boat",
+          "label": "Boat",
+          "emoji": "⛵"
+        },
+        {
+          "id": "plane",
+          "label": "Airplane",
+          "emoji": "✈️"
+        },
+        {
+          "id": "cycle",
+          "label": "Bicycle",
+          "emoji": "🚲"
+        },
+        {
+          "id": "ship",
+          "label": "Ship",
+          "emoji": "🚢"
+        },
+        {
+          "id": "helicopter",
+          "label": "Helicopter",
+          "emoji": "🚁"
+        }
+      ],
+      "targets": [
+        {
+          "id": "land",
+          "label": "Land"
+        },
+        {
+          "id": "water",
+          "label": "Water"
+        },
+        {
+          "id": "air",
+          "label": "Air"
+        }
+      ],
+      "expectedPositions": {
+        "bus": "land",
+        "cycle": "land",
+        "boat": "water",
+        "ship": "water",
+        "plane": "air",
+        "helicopter": "air"
+      }
+    }
+  },
+  {
+    "type": "drag_drop",
+    "step": "mastery_check",
+    "description": "Sort everyday items into Needs or Wants. Real-world decision making practice.\n",
+    "content": {
+      "description": "Sort needs and wants",
+      "items": [
+        {
+          "id": "water",
+          "label": "Water",
+          "emoji": "💧"
+        },
+        {
+          "id": "toy",
+          "label": "Toy",
+          "emoji": "🧸"
+        },
+        {
+          "id": "food",
+          "label": "Food",
+          "emoji": "🍚"
+        },
+        {
+          "id": "candy",
+          "label": "Candy",
+          "emoji": "🍬"
+        }
+      ],
+      "targets": [
+        {
+          "id": "needs",
+          "label": "Needs"
+        },
+        {
+          "id": "wants",
+          "label": "Wants"
+        }
+      ],
+      "expectedPositions": {
+        "water": "needs",
+        "food": "needs",
+        "toy": "wants",
+        "candy": "wants"
+      }
+    }
+  },
+  {
+    "type": "sequencing",
+    "step": "independent_practice",
+    "description": "Arrange the plant life cycle in the correct order: seed planted, water makes it grow, flower blooms.\n",
+    "content": {
+      "description": "Plant life cycle order",
+      "items": [
+        {
+          "id": "seed",
+          "label": "The seed is planted",
+          "emoji": "🌱"
+        },
+        {
+          "id": "water",
+          "label": "Water makes it grow",
+          "emoji": "💧"
+        },
+        {
+          "id": "flower",
+          "label": "A flower blooms",
+          "emoji": "🌸"
+        }
+      ],
+      "correctOrder": [
+        "seed",
+        "water",
+        "flower"
+      ]
+    }
+  },
+  {
+    "type": "sequencing",
+    "step": "guided_practice",
+    "description": "Put the daily morning routine in order: wake up, brush teeth, eat breakfast, go to school.\n",
+    "content": {
+      "description": "Morning routine order",
+      "items": [
+        {
+          "id": "wake",
+          "label": "Wake up",
+          "emoji": "🛏️"
+        },
+        {
+          "id": "brush",
+          "label": "Brush teeth",
+          "emoji": "🪥"
+        },
+        {
+          "id": "eat",
+          "label": "Eat breakfast",
+          "emoji": "🍞"
+        },
+        {
+          "id": "school",
+          "label": "Go to school",
+          "emoji": "🎒"
+        }
+      ],
+      "correctOrder": [
+        "wake",
+        "brush",
+        "eat",
+        "school"
+      ]
+    }
+  },
+  {
+    "type": "sequencing",
+    "step": "independent_practice",
+    "description": "Arrange the steps for washing hands properly.\n",
+    "content": {
+      "description": "Hand washing steps",
+      "items": [
+        {
+          "id": "wet",
+          "label": "Wet hands",
+          "emoji": "🚰"
+        },
+        {
+          "id": "soap",
+          "label": "Apply soap",
+          "emoji": "🧼"
+        },
+        {
+          "id": "scrub",
+          "label": "Scrub for 20 seconds",
+          "emoji": "🤲"
+        },
+        {
+          "id": "rinse",
+          "label": "Rinse with water",
+          "emoji": "🚿"
+        },
+        {
+          "id": "dry",
+          "label": "Dry with towel",
+          "emoji": "🧴"
+        }
+      ],
+      "correctOrder": [
+        "wet",
+        "soap",
+        "scrub",
+        "rinse",
+        "dry"
+      ]
+    }
+  },
+  {
+    "type": "multiple_choice",
+    "step": "mastery_check",
+    "description": "Count items and pick the correct number. Two questions about apples and stars.\n",
+    "content": {
+      "questions": [
+        {
+          "question": "How many apples? 🍎🍎",
+          "options": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "question": "How many stars? ⭐⭐⭐⭐⭐",
+          "options": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  },
+  {
+    "type": "multiple_choice",
+    "step": "mastery_check",
+    "description": "Identify the shape name from a visual description.\n",
+    "content": {
+      "questions": [
+        {
+          "question": "Which shape has 3 sides?",
+          "options": [
+            "Circle",
+            "Triangle",
+            "Square",
+            "Star"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which shape has 4 equal sides?",
+          "options": [
+            "Triangle",
+            "Circle",
+            "Square",
+            "Rectangle"
+          ],
+          "correctIndex": 2
+        }
+      ]
+    }
+  },
+  {
+    "type": "multiple_choice",
+    "step": "mastery_check",
+    "description": "Answer questions about a fruit stall scenario — prices and quantity counting.\n",
+    "content": {
+      "questions": [
+        {
+          "question": "One mango costs ₹10. How much for 2 mangoes?",
+          "options": [
+            "₹10",
+            "₹15",
+            "₹20",
+            "₹25"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "question": "Ravi has ₹50. He buys a pencil for ₹5. How much is left?",
+          "options": [
+            "₹35",
+            "₹40",
+            "₹45",
+            "₹55"
+          ],
+          "correctIndex": 2
+        }
+      ]
+    }
+  },
+  {
+    "type": "story_question",
+    "step": "guided_practice",
+    "description": "Short story about planting a seed. Answer what Ravi planted and what happened after one week.\n",
+    "content": {
+      "scenario": "Ravi planted a seed. He watered it every day. After one week, a small green plant grew.",
+      "questions": [
+        {
+          "question": "What did Ravi plant?",
+          "options": [
+            "A flower",
+            "A seed",
+            "A tree"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "question": "What happened after one week?",
+          "options": [
+            "It rained",
+            "A plant grew",
+            "Ravi went to school"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  },
+  {
+    "type": "story_question",
+    "step": "guided_practice",
+    "description": "A story about a girl buying vegetables at the market. Answer questions about what she bought and the total cost.\n",
+    "content": {
+      "scenario": "Meera went to the market. She bought 3 carrots for ₹5 each. She gave the shopkeeper ₹20.",
+      "questions": [
+        {
+          "question": "How many carrots did Meera buy?",
+          "options": [
+            "1",
+            "2",
+            "3",
+            "5"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "question": "How much money did Meera give?",
+          "options": [
+            "₹5",
+            "₹10",
+            "₹15",
+            "₹20"
+          ],
+          "correctIndex": 3
+        }
+      ]
+    }
+  },
+  {
+    "type": "story_question",
+    "step": "mastery_check",
+    "description": "A story about a class picnic. Children count how many students are going and how many sandwiches are needed.\n",
+    "content": {
+      "scenario": "A class of 10 students is going for a picnic. Each child brings 2 sandwiches. 3 children are absent on the picnic day.",
+      "questions": [
+        {
+          "question": "How many children went for the picnic?",
+          "options": [
+            "7",
+            "10",
+            "3",
+            "13"
+          ],
+          "correctIndex": 0
+        },
+        {
+          "question": "How many sandwiches are there in total?",
+          "options": [
+            "10",
+            "14",
+            "20",
+            "7"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  },
+  {
+    "type": "real_world",
+    "step": "independent_practice",
+    "description": "Find and report numbers seen at home. Look at a clock, remote, or calendar and tell what numbers you see.\n",
+    "content": {
+      "scenario": "Look around your room. Can you find a clock with numbers?",
+      "taskDescription": "Find something at home that has numbers on it.",
+      "prompt": "What numbers do you see on the clock?",
+      "expectedAnswer": "1 to 12"
+    }
+  },
+  {
+    "type": "real_world",
+    "step": "independent_practice",
+    "description": "Count the windows and doors in your home. Observe, count, and report the numbers.\n",
+    "content": {
+      "scenario": "Walk around your home and count how many doors you see.",
+      "taskDescription": "Count the doors and windows in your house.",
+      "prompt": "How many doors are there in your home?",
+      "expectedAnswer": "Answers will vary"
+    }
+  },
+  {
+    "type": "real_world",
+    "step": "independent_practice",
+    "description": "Find rectangular objects at home or school. Identify shapes in the real environment.\n",
+    "content": {
+      "scenario": "Look for objects that have a rectangle shape.",
+      "taskDescription": "Find three rectangular objects around you.",
+      "prompt": "Name one rectangular object you found.",
+      "expectedAnswer": "A book, a table, a phone"
+    }
+  },
+  {
+    "type": "fraction_visual",
+    "step": "observe",
+    "description": "Show 3/4 of a circle shaded. Observe mode: display only, no interaction needed.\n",
+    "content": {
+      "numerator": 3,
+      "denominator": 4,
+      "mode": "circle",
+      "label": "3/4",
+      "showLabel": true,
+      "interactive": false
+    }
+  },
+  {
+    "type": "fraction_visual",
+    "step": "guided_practice",
+    "description": "Show 1/2 of a bar shaded. Guided practice with label visible.\n",
+    "content": {
+      "numerator": 1,
+      "denominator": 2,
+      "mode": "bar",
+      "label": "1/2",
+      "showLabel": true,
+      "interactive": false
+    }
+  },
+  {
+    "type": "fraction_visual",
+    "step": "independent_practice",
+    "description": "Compare 1/4 and 2/4 using circle mode. Side-by-side fraction comparison.\n",
+    "content": {
+      "numerator": 1,
+      "denominator": 4,
+      "mode": "circle",
+      "label": "1/4",
+      "showLabel": true,
+      "interactive": false,
+      "compare": {
+        "numerator": 2,
+        "denominator": 4
+      }
+    }
+  },
+  {
+    "type": "place_value_chart",
+    "step": "observe",
+    "description": "Observe the number 543 displayed in a place value chart up to hundreds. Shows digits in correct columns.\n",
+    "content": {
+      "maxPlaces": "lakh",
+      "digits": [
+        null,
+        null,
+        null,
+        5,
+        4,
+        3
+      ],
+      "targetNumber": 543,
+      "interactive": false,
+      "showLabels": true
+    }
+  },
+  {
+    "type": "place_value_chart",
+    "step": "guided_practice",
+    "description": "Build the number 289 by dragging digits into the correct place value columns.\n",
+    "content": {
+      "maxPlaces": "lakh",
+      "digits": [
+        null,
+        null,
+        null,
+        2,
+        8,
+        9
+      ],
+      "targetNumber": 289,
+      "interactive": true,
+      "draggableDigits": [
+        2,
+        8,
+        9
+      ],
+      "showLabels": true
+    }
+  },
+  {
+    "type": "place_value_chart",
+    "step": "independent_practice",
+    "description": "Build the number 1053 on a place value chart up to thousands. Includes a zero placeholder.\n",
+    "content": {
+      "maxPlaces": "lakh",
+      "digits": [
+        null,
+        null,
+        1,
+        0,
+        5,
+        3
+      ],
+      "targetNumber": 1053,
+      "interactive": true,
+      "draggableDigits": [
+        1,
+        0,
+        5,
+        3
+      ],
+      "showLabels": true
+    }
+  },
+  {
+    "type": "grid_area",
+    "step": "observe",
+    "description": "Observe a 6×8 grid with 2 cells highlighted. Shows area concept by counting filled cells.\n",
+    "content": {
+      "rows": 6,
+      "cols": 8,
+      "mode": "area",
+      "highlighted": [
+        {
+          "row": 1,
+          "col": 1
+        },
+        {
+          "row": 1,
+          "col": 2
+        }
+      ],
+      "interactive": false,
+      "maxHighlights": 48,
+      "cellSize": 40,
+      "showCount": true
+    }
+  },
+  {
+    "type": "grid_area",
+    "step": "guided_practice",
+    "description": "A 5×5 grid showing perimeter mode. 4 cells on the boundary are highlighted to illustrate perimeter counting.\n",
+    "content": {
+      "rows": 5,
+      "cols": 5,
+      "mode": "perimeter",
+      "highlighted": [
+        {
+          "row": 0,
+          "col": 0
+        },
+        {
+          "row": 0,
+          "col": 1
+        },
+        {
+          "row": 1,
+          "col": 0
+        }
+      ],
+      "interactive": false,
+      "maxHighlights": 25,
+      "cellSize": 44,
+      "showCount": true
+    }
+  },
+  {
+    "type": "grid_area",
+    "step": "independent_practice",
+    "description": "A 4×6 grid in area mode. Child fills cells to match a target count of 6 cells.\n",
+    "content": {
+      "rows": 4,
+      "cols": 6,
+      "mode": "area",
+      "interactive": true,
+      "maxHighlights": 24,
+      "cellSize": 44,
+      "showCount": true
+    }
+  },
+  {
+    "type": "chart_reader",
+    "step": "observe",
+    "description": "Bar chart showing favorite sports: Cricket, Football, and Hockey with their vote counts.\n",
+    "content": {
+      "type": "bar",
+      "data": [
+        {
+          "label": "Cricket",
+          "value": 12,
+          "emoji": "🏏"
+        },
+        {
+          "label": "Football",
+          "value": 8,
+          "emoji": "⚽"
+        },
+        {
+          "label": "Hockey",
+          "value": 5,
+          "emoji": "🏑"
+        }
+      ],
+      "title": "Favorite Sports",
+      "showValues": true,
+      "interactive": false
+    }
+  },
+  {
+    "type": "chart_reader",
+    "step": "guided_practice",
+    "description": "Pictograph showing fruit sales: Mango, Banana, and Apple with emoji icons representing quantities.\n",
+    "content": {
+      "type": "pictograph",
+      "data": [
+        {
+          "label": "Mango",
+          "value": 10,
+          "emoji": "🥭"
+        },
+        {
+          "label": "Banana",
+          "value": 7,
+          "emoji": "🍌"
+        },
+        {
+          "label": "Apple",
+          "value": 9,
+          "emoji": "🍎"
+        }
+      ],
+      "title": "Fruit Stall Sales",
+      "showValues": true,
+      "interactive": false
+    }
+  },
+  {
+    "type": "chart_reader",
+    "step": "independent_practice",
+    "description": "Bar chart of daily screen time in hours. Child selects which activity has the most time.\n",
+    "content": {
+      "type": "bar",
+      "data": [
+        {
+          "label": "Study",
+          "value": 3,
+          "emoji": "📚"
+        },
+        {
+          "label": "Play",
+          "value": 2,
+          "emoji": "🎮"
+        },
+        {
+          "label": "TV",
+          "value": 1,
+          "emoji": "📺"
+        }
+      ],
+      "title": "Daily Screen Time",
+      "showValues": true,
+      "interactive": true,
+      "correctLabel": "Study"
+    }
+  },
+  {
+    "type": "clock_time",
+    "step": "observe",
+    "description": "Display a clock showing 3:45. Observe mode with digital readout visible.\n",
+    "content": {
+      "hour": 3,
+      "minute": 45,
+      "mode": "read",
+      "showDigital": true,
+      "interactive": false,
+      "size": 250
+    }
+  },
+  {
+    "type": "clock_time",
+    "step": "guided_practice",
+    "description": "Display a clock at 7:30. Learner reads the time with digital readout for verification.\n",
+    "content": {
+      "hour": 7,
+      "minute": 30,
+      "mode": "read",
+      "showDigital": true,
+      "interactive": false,
+      "size": 250
+    }
+  },
+  {
+    "type": "clock_time",
+    "step": "independent_practice",
+    "description": "Set the clock to 9:15. Learner moves the hands to match the target time.\n",
+    "content": {
+      "hour": 6,
+      "minute": 0,
+      "mode": "set",
+      "showDigital": true,
+      "interactive": true,
+      "targetTime": {
+        "hour": 9,
+        "minute": 15
+      },
+      "size": 250
+    }
+  },
+  {
+    "type": "measurement_scale",
+    "step": "observe",
+    "description": "A ruler showing 12 cm. Observe mode: the reading is displayed for the learner to see.\n",
+    "content": {
+      "type": "ruler",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "cm",
+      "value": 12,
+      "interactive": false,
+      "showReading": true,
+      "showLabels": true
+    }
+  },
+  {
+    "type": "measurement_scale",
+    "step": "guided_practice",
+    "description": "A thermometer showing 38°C. Body temperature reading practice.\n",
+    "content": {
+      "type": "thermometer",
+      "min": 35,
+      "max": 42,
+      "step": 1,
+      "unit": "°C",
+      "value": 38,
+      "interactive": false,
+      "showReading": true,
+      "showLabels": true
+    }
+  },
+  {
+    "type": "measurement_scale",
+    "step": "independent_practice",
+    "description": "A measuring cylinder with 150 mL. Learner positions the indicator to match the target value.\n",
+    "content": {
+      "type": "cylinder",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "mL",
+      "interactive": true,
+      "targetValue": 150,
+      "showReading": true,
+      "showLabels": true
+    }
+  },
+  {
+    "type": "fill_blank",
+    "step": "guided_practice",
+    "description": "Complete the equation 3 + ___ = 8 by selecting the correct number from available options.\n",
+    "content": {
+      "template": "3 + ___ = 8",
+      "blanks": [
+        {
+          "id": "blank_1",
+          "position": 0,
+          "correctAnswer": "5",
+          "options": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        }
+      ],
+      "mode": "select"
+    }
+  },
+  {
+    "type": "fill_blank",
+    "step": "independent_practice",
+    "description": "Fill in the missing numbers in a sequence: 2, 4, __, 8, 10. Select the correct answer from options.\n",
+    "content": {
+      "template": "2, 4, __, 8, 10",
+      "blanks": [
+        {
+          "id": "blank_1",
+          "position": 0,
+          "correctAnswer": "6",
+          "options": [
+            "5",
+            "6",
+            "7",
+            "9"
+          ]
+        }
+      ],
+      "mode": "select"
+    }
+  },
+  {
+    "type": "fill_blank",
+    "step": "mastery_check",
+    "description": "Complete two equations: 5 + __ = 9 and __ + 3 = 7. Type mode: learner types the answer.\n",
+    "content": {
+      "template": "5 + __ = 9",
+      "blanks": [
+        {
+          "id": "blank_1",
+          "position": 0,
+          "correctAnswer": "4"
+        }
+      ],
+      "mode": "type"
+    }
+  }
+]
