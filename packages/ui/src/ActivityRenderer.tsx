@@ -8,28 +8,14 @@ import {
   getGuidanceMessage,
   getHintText,
 } from "./activity-utils";
-import { VisualCounter } from "./VisualCounter";
-import { Matching } from "./Matching";
-import { DragDrop } from "./DragDrop";
-import { Sequencing } from "./Sequencing";
-import { MultipleChoice } from "./MultipleChoice";
-import { StoryQuestion } from "./StoryQuestion";
-import { RealWorldTask } from "./RealWorldTask";
-import { FractionVisualizer } from "./FractionVisualizer";
-import { PlaceValueChart } from "./PlaceValueChart";
-import { GridCounter, computePerimeter } from "./GridCounter";
-import { ChartReader } from "./ChartReader";
-import { ClockWidget } from "./ClockWidget";
-import { ScaleReader } from "./ScaleReader";
-import { FillBlank } from "./FillBlank";
+import { getAdapter } from "./adapters";
+import type { LifecycleState } from "./adapters/adapter-interface";
 
 const OBSERVE_STEP_AUTO_COMPLETABLE_TYPES = [
   "visual_counter", "visual_counting", "fraction_visual",
   "place_value_chart", "grid_area", "chart_reader",
   "clock_time", "measurement_scale",
 ] as const;
-
-type LifecycleState = "idle" | "interacting" | "submitted" | "correct" | "incorrect";
 
 interface MultiQuestionResponse {
   correct: boolean;
@@ -86,32 +72,8 @@ export function ActivityRenderer({
   const [multiQuestionIndex, setMultiQuestionIndex] = useState(0);
   const [multiQuestionResponses, setMultiQuestionResponses] = useState<MultiQuestionResponse[]>([]);
 
-  // Fill-blank specific state
-  const [filledAnswers, setFilledAnswers] = useState<Record<string, string | number>>({});
-  const [activeBlankId, setActiveBlankId] = useState<string | null>(null);
-
-  // Matching-specific state
-  const [matchingConnections, setMatchingConnections] = useState<Record<string, string>>({});
-  const [matchingSelectedLeft, setMatchingSelectedLeft] = useState<string | null>(null);
-  const [matchingSelectedRight, setMatchingSelectedRight] = useState<string | null>(null);
-
-  // DragDrop-specific state
-  const [dragPlacements, setDragPlacements] = useState<Record<string, string>>({});
-  const [dragSelectedItem, setDragSelectedItem] = useState<string | null>(null);
-
-  // Sequencing-specific state
-  const [seqUserOrder, setSeqUserOrder] = useState<string[]>([]);
-
-  // RealWorldTask-specific state
-  const [realWorldResponse, setRealWorldResponse] = useState("");
-
-  // GridCounter-specific state
-  const [gridHighlighted, setGridHighlighted] = useState<{ row: number; col: number }[]>([]);
-
-  // PlaceValueChart-specific state
-  const [pvcPlacedDigits, setPvcPlacedDigits] = useState<Record<number, number>>({});
-  const [pvcSelectedDigit, setPvcSelectedDigit] = useState<number | null>(null);
-
+  // Per-type adapter state (replaces all per-type state vars)
+  const [adapterState, setAdapterState] = useState<Record<string, unknown>>({});
 
   const type = activity.type?.toLowerCase().replace(/-/g, "_") ?? "";
   const isObserveStep = stepLabel === "observe";
@@ -121,6 +83,8 @@ export function ActivityRenderer({
     () => normalizeContent(type, activity.content),
     [type, activity.content],
   );
+
+  const adapter = useMemo(() => getAdapter(type), [type]);
 
   const activityLabel = type.replace(/_/g, ' ');
 
@@ -223,7 +187,7 @@ export function ActivityRenderer({
     }
   }, [hintsUsed, type, activity.content, hintText]);
 
-  // Reset on activity change
+  // Reset and initialize adapter state on activity change
   useEffect(() => {
     startTimeRef.current = Date.now();
     attemptsRef.current = 0;
@@ -236,43 +200,10 @@ export function ActivityRenderer({
     setHasInteracted(false);
     setMultiQuestionIndex(0);
     setMultiQuestionResponses([]);
-    setFilledAnswers({});
-    setActiveBlankId(null);
-    setMatchingConnections({});
-    setMatchingSelectedLeft(null);
-    setMatchingSelectedRight(null);
-    setDragPlacements({});
-    setDragSelectedItem(null);
-    setSeqUserOrder([]);
-    setRealWorldResponse("");
-    setGridHighlighted([]);
-    setPvcPlacedDigits({});
-    setPvcSelectedDigit(null);
-  }, [activity.id]);
-
-  // Initialize grid/place-value state from YAML content for observe steps
-  useEffect(() => {
-    if (type === "grid_area") {
-      const yamlHighlighted = normalizedContent.highlighted as { row: number; col: number }[] | undefined;
-      if (yamlHighlighted) {
-        setGridHighlighted(yamlHighlighted);
-      }
+    if (adapter) {
+      setAdapterState(adapter.getInitialState(normalizedContent));
     }
-    if (type === "place_value_chart") {
-      const yamlDigits = normalizedContent.digits as (number | null)[] | undefined;
-      if (Array.isArray(yamlDigits)) {
-        const placed: Record<number, number> = {};
-        const columns = (normalizedContent.maxPlaces as "lakh" | "crore") === "lakh" ? 6 : 8;
-        yamlDigits.slice(-columns).forEach((d, i) => {
-          const colIdx = columns - yamlDigits.length + i;
-          if (d != null && colIdx >= 0) {
-            placed[colIdx] = d;
-          }
-        });
-        setPvcPlacedDigits(placed);
-      }
-    }
-  }, [activity.id, type, normalizedContent]);
+  }, [activity.id, adapter, normalizedContent]);
 
   // Observe-step auto-complete timer
   const autoCompleteScheduledRef = useRef(false);
@@ -306,460 +237,32 @@ export function ActivityRenderer({
     return () => clearTimeout(timer);
   }, [activity.id, type, isObserveStep, disableObserveStepAutoComplete, observeStepAutoCompleteDelayMs, onComplete]);
 
-  const renderActivityContent = () => {
-    switch (type) {
-      case "visual_counter":
-      case "visual_counting": {
-        const left = activity.content.left;
-        const right = activity.content.right;
-        const isAddition = Array.isArray(left) || Array.isArray(right) || typeof left === "number" || typeof right === "number";
-        const additionSum = (activity.content.sum as number | undefined)
-          ?? (Array.isArray(left) ? left.length : 0) + (Array.isArray(right) ? right.length : 0);
-        const count = isAddition ? additionSum : ((normalizedContent.count as number) ?? 0);
-        const emoji = (normalizedContent.emoji as string) ?? (normalizedContent.items as string[])?.[0] ?? "🔢";
-        const size = (normalizedContent.size as "sm" | "md" | "lg") ?? "md";
-
-        if (isAddition && isObserveStep) {
-          const leftItems = Array.isArray(left) ? (left as string[]) : [];
-          const rightItems = Array.isArray(right) ? (right as string[]) : [];
-          const leftEmoji = leftItems[0] ?? (Array.isArray(right) ? right[0] : undefined) ?? "🔢";
-          const rightEmoji = rightItems[0] ?? leftEmoji;
-          return (
-            <div className="flex flex-col items-center gap-4 sm:gap-6">
-              <div className="flex items-center justify-center gap-4">
-                <VisualCounter count={leftItems.length} emoji={leftEmoji} size={size} showCount />
-                <span className="text-3xl font-bold text-slate-text">+</span>
-                <VisualCounter count={rightItems.length} emoji={rightEmoji} size={size} showCount />
-                <span className="text-3xl font-bold text-slate-text">=</span>
-                <span className="text-3xl font-bold text-slate-text">{additionSum}</span>
-              </div>
-            </div>
-          );
-        }
-
-        if (isAddition) {
-          const leftItems = Array.isArray(left) ? (left as string[]) : [];
-          const rightItems = Array.isArray(right) ? (right as string[]) : [];
-          const leftEmoji = leftItems[0] ?? (Array.isArray(right) ? right[0] : undefined) ?? "🔢";
-          const rightEmoji = rightItems[0] ?? leftEmoji;
-          return (
-            <div className="flex flex-col items-center gap-4 sm:gap-6">
-              <div className="flex items-center justify-center gap-4">
-                <VisualCounter count={leftItems.length} emoji={leftEmoji} size={size} showCount={false} />
-                <span className="text-3xl font-bold text-slate-text">+</span>
-                <VisualCounter count={rightItems.length} emoji={rightEmoji} size={size} showCount={false} />
-              </div>
-              <div className="flex flex-wrap justify-center gap-3">
-                {Array.from({ length: Math.max(10, Math.min(additionSum + 2, 20)) }, (_, i) => i + 1).map((n) => (
-                  <button
-                    key={n}
-                    onClick={() => handleResponse({ count: n })}
-                    className={cn(
-                      "flex h-14 w-14 items-center justify-center rounded-xl border-2 text-lg font-bold motion-safe:transition-colors motion-safe:duration-150",
-                      userResponse?.count === n
-                        ? "border-soft-blue bg-soft-blue/10 text-soft-blue"
-                        : "border-slate-300 bg-white text-slate-text hover:border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue"
-                    )}
-                    aria-label={`Select ${n}`}
-                  >
-                    {n}
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        }
-
-        if (isObserveStep) {
-          return (
-            <div className="flex flex-col items-center gap-4">
-              <VisualCounter count={count} emoji={emoji} size={size} showCount />
-            </div>
-          );
-        }
-
-        return (
-          <div className="flex flex-col items-center gap-4 sm:gap-6">
-            <VisualCounter count={count} emoji={emoji} size={size} showCount={false} />
-            <div className="flex flex-wrap justify-center gap-3">
-              {Array.from({ length: Math.max(10, Math.min(count + 2, 20)) }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  onClick={() => handleResponse({ count: n })}
-                  className={cn(
-                    "flex h-14 w-14 items-center justify-center rounded-xl border-2 text-lg font-bold motion-safe:transition-colors motion-safe:duration-150",
-                    userResponse?.count === n
-                      ? "border-soft-blue bg-soft-blue/10 text-soft-blue"
-                      : "border-slate-300 bg-white text-slate-text hover:border-soft-blue focus:outline-none focus:ring-2 focus:ring-soft-blue"
-                  )}
-                  aria-label={`Select ${n}`}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      case "matching": {
-        const matchingPairs = (normalizedContent.pairs as Array<{ id: string; itemA: string; itemB: string }>) ?? [];
-        const matchingCorrectPairs: Record<string, string> = {};
-        matchingPairs.forEach((p) => { matchingCorrectPairs[p.id] = p.id; });
-        return (
-          <Matching
-            pairs={matchingPairs}
-            connections={matchingConnections}
-            selectedLeftId={matchingSelectedLeft}
-            selectedRightId={matchingSelectedRight}
-            onSelectLeft={(id) => {
-              setMatchingSelectedLeft(id);
-              if (matchingSelectedRight) {
-                const updated = { ...matchingConnections, [id]: matchingSelectedRight };
-                setMatchingConnections(updated);
-                setMatchingSelectedLeft(null);
-                setMatchingSelectedRight(null);
-                handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
-              }
-            }}
-            onSelectRight={(id) => {
-              setMatchingSelectedRight(id);
-              if (matchingSelectedLeft) {
-                const updated = { ...matchingConnections, [matchingSelectedLeft]: id };
-                setMatchingConnections(updated);
-                setMatchingSelectedLeft(null);
-                setMatchingSelectedRight(null);
-                handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
-              }
-            }}
-            onConnect={(leftId, rightId) => {
-              const updated = { ...matchingConnections, [leftId]: rightId };
-              setMatchingConnections(updated);
-              setMatchingSelectedLeft(null);
-              setMatchingSelectedRight(null);
-              handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
-            }}
-            onUndo={() => {
-              const keys = Object.keys(matchingConnections);
-              if (keys.length === 0) return;
-              const lastKey = keys[keys.length - 1];
-              const updated = { ...matchingConnections };
-              delete updated[lastKey];
-              setMatchingConnections(updated);
-              handleResponse({ pairs: Object.keys(updated).map((k) => ({ id: k, correct: updated[k] === matchingCorrectPairs[k] })) });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            correctPairs={matchingCorrectPairs}
-          />
-        );
-      }
-
-      case "drag_drop":
-      case "dragdrop": {
-        const dragItems = (normalizedContent.items as Array<{ id: string; label: string; emoji?: string }>) ?? [];
-        const dragTargets = (normalizedContent.targets as Array<{ id: string; label: string }>) ?? [];
-        return (
-          <DragDrop
-            items={dragItems}
-            targets={dragTargets}
-            placements={dragPlacements}
-            selectedItemId={dragSelectedItem}
-            onSelectItem={(id) => setDragSelectedItem(id === dragSelectedItem ? null : id)}
-            onPlaceItem={(itemId, targetId) => {
-              const updated = { ...dragPlacements, [itemId]: targetId };
-              setDragPlacements(updated);
-              setDragSelectedItem(null);
-              handleResponse({ droppedPositions: updated });
-            }}
-            onRemoveItem={(itemId) => {
-              const updated = { ...dragPlacements };
-              delete updated[itemId];
-              setDragPlacements(updated);
-              handleResponse({ droppedPositions: updated });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            correctPlacements={normalizedContent.expectedPositions as Record<string, string> | undefined}
-          />
-        );
-      }
-
-      case "sequencing": {
-        const seqItems = (normalizedContent.items as Array<{ id: string; label: string; emoji?: string }>) ?? [];
-        return (
-          <Sequencing
-            items={seqItems}
-            userOrder={seqUserOrder}
-            onAddItem={(id) => {
-              const updated = [...seqUserOrder, id];
-              setSeqUserOrder(updated);
-              handleResponse({ order: updated });
-            }}
-            onRemoveItem={(id) => {
-              const updated = seqUserOrder.filter((i) => i !== id);
-              setSeqUserOrder(updated);
-              handleResponse({ order: updated });
-            }}
-            onReorder={(fromIndex, toIndex) => {
-              const updated = [...seqUserOrder];
-              const [moved] = updated.splice(fromIndex, 1);
-              updated.splice(toIndex, 0, moved);
-              setSeqUserOrder(updated);
-              handleResponse({ order: updated });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            correctOrder={normalizedContent.correctOrder as string[] | undefined}
-          />
-        );
-      }
-
-      case "multiple_choice": {
-        const rawQuestions = activity.content.questions as Array<{
-          question?: string;
-          text?: string;
-          options: string[];
-          correctIndex: number;
-        }> | undefined;
-
-        if (rawQuestions?.length && multiTotal > 1) {
-          const currentIdx = multiQuestionIndex;
-          if (currentIdx >= rawQuestions.length) return null;
-          const q = rawQuestions[currentIdx];
-          const options = q.options.map((label, i) => ({ id: String(i), label }));
-          const isLast = currentIdx + 1 >= rawQuestions.length;
-
-          if (lifecycle === "correct" && isLast) {
-            return null;
-          }
-
-          return (
-            <div className="flex flex-col gap-4">
-              <MultipleChoice
-                key={`mc-${currentIdx}`}
-                question={q.question ?? q.text ?? ""}
-                options={options}
-                selectedIndex={userResponse?.selectedIndex as number | null}
-                onSelect={(index) => {
-                  handleResponse({ selectedIndex: index, questionIndex: currentIdx });
-                }}
-                showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-                correctIndex={q.correctIndex}
-              />
-            </div>
-          );
-        }
-
-        return (
-          <MultipleChoice
-            question={(activity.content.question as string) ?? ""}
-            options={(activity.content.options as Array<{ id: string; label: string; emoji?: string }>) ?? []}
-            selectedIndex={userResponse?.selectedIndex as number | null}
-            onSelect={(index) => {
-              handleResponse({ selectedIndex: index });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            correctIndex={(activity.content.correctIndex as number) ?? 0}
-          />
-        );
-      }
-
-      case "story_question": {
-        const storyQuestions = (normalizedContent.questions as Array<{
-          question: string;
-          options: string[];
-          correctIndex: number;
-        }>) ?? [];
-        const currentIdx = multiQuestionIndex;
-        if (currentIdx >= storyQuestions.length) return null;
-        const currentSQ = storyQuestions[currentIdx];
-        const isLast = currentIdx + 1 >= storyQuestions.length;
-
-        if (lifecycle === "correct" && isLast) return null;
-
-        return (
-          <StoryQuestion
-            scenario={(normalizedContent.scenario as string) ?? ""}
-            questions={storyQuestions}
-            currentQuestionIndex={currentIdx}
-            selectedIndex={userResponse?.selectedIndex as number | null}
-            onSelect={(index) => {
-              handleResponse({ selectedIndex: index, questionIndex: currentIdx });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            visual={(normalizedContent.visual as string) ?? undefined}
-          />
-        );
-      }
-
-      case "real_world":
-      case "real_world_task":
-        return (
-          <RealWorldTask
-            scenario={(normalizedContent.scenario as string) ?? ""}
-            taskDescription={(normalizedContent.taskDescription as string) ?? ""}
-            visualExample={(normalizedContent.visualExample as string) ?? undefined}
-            hint={(normalizedContent.hint as string) ?? undefined}
-            response={realWorldResponse}
-            onResponseChange={setRealWorldResponse}
-          />
-        );
-
-      case "fraction_visual":
-        return (
-          <FractionVisualizer
-            numerator={(normalizedContent.numerator as number) ?? 1}
-            denominator={(normalizedContent.denominator as number) ?? 2}
-            mode={(normalizedContent.mode as "bar" | "circle") ?? "bar"}
-            label={normalizedContent.label as string}
-            showLabel={(normalizedContent.showLabel as boolean) ?? false}
-            interactive={(normalizedContent.interactive as boolean) ?? false}
-            compare={normalizedContent.compare as { numerator: number; denominator: number } | undefined}
-            onShade={(shaded) => {
-              handleResponse({ shaded });
-            }}
-          />
-        );
-
-      case "place_value_chart": {
-        const pvcDraggableDigits = (normalizedContent.draggableDigits as number[]) ?? [];
-        return (
-          <PlaceValueChart
-            maxPlaces={(normalizedContent.maxPlaces as "lakh" | "crore") ?? "crore"}
-            placedDigits={pvcPlacedDigits}
-            draggableDigits={pvcDraggableDigits}
-            selectedDigit={pvcSelectedDigit}
-            activeColumn={null}
-            onSelectDigit={(digit) => setPvcSelectedDigit(digit === pvcSelectedDigit ? null : digit)}
-            onPlaceDigit={(digit, column) => {
-              const next = { ...pvcPlacedDigits, [column]: digit };
-              setPvcPlacedDigits(next);
-              setPvcSelectedDigit(null);
-              handleResponse({ placedDigits: next });
-            }}
-            onRemoveDigit={(column) => {
-              const next = { ...pvcPlacedDigits };
-              delete next[column];
-              setPvcPlacedDigits(next);
-              handleResponse({ placedDigits: next });
-            }}
-            targetNumber={normalizedContent.targetNumber as number | undefined}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-            showLabels={(normalizedContent.showLabels as boolean) ?? true}
-          />
-        );
-      }
-
-      case "grid_area": {
-        const gridRows = (normalizedContent.rows as number) ?? 5;
-        const gridCols = (normalizedContent.cols as number) ?? 5;
-        return (
-          <GridCounter
-            rows={gridRows}
-            cols={gridCols}
-            highlighted={gridHighlighted}
-            mode={(normalizedContent.mode as "area" | "perimeter") ?? "area"}
-            interactive={(normalizedContent.interactive as boolean) ?? false}
-            maxHighlights={normalizedContent.maxHighlights as number}
-            cellSize={(normalizedContent.cellSize as number) ?? 40}
-            showCount
-            onHighlight={(cells) => {
-              setGridHighlighted(cells);
-              const mode = (normalizedContent.mode as "area" | "perimeter") ?? "area";
-              const count = mode === "perimeter"
-                ? computePerimeter(cells, gridRows, gridCols)
-                : cells.length;
-              handleResponse({ highlighted: cells, count });
-            }}
-            onClearAll={() => {
-              setGridHighlighted([]);
-              handleResponse({ highlighted: [], count: 0 });
-            }}
-          />
-        );
-      }
-
-      case "chart_reader":
-        return (
-          <ChartReader
-            type={(normalizedContent.type as "bar" | "pictograph") ?? "bar"}
-            data={(normalizedContent.data as { label: string; value: number; emoji?: string }[]) ?? []}
-            title={normalizedContent.title as string}
-            showValues={(normalizedContent.showValues as boolean) ?? true}
-            interactive={(normalizedContent.interactive as boolean) ?? false}
-            onSelect={(label) => {
-              if ((normalizedContent.interactive as boolean) ?? false) {
-                handleResponse({ selectedLabel: label });
-              }
-            }}
-          />
-        );
-
-      case "clock_time":
-        return (
-          <ClockWidget
-            hour={(normalizedContent.hour as number) ?? 12}
-            minute={(normalizedContent.minute as number) ?? 0}
-            interactive={(normalizedContent.interactive as boolean) ?? false}
-            mode={(normalizedContent.mode as "read" | "set") ?? "read"}
-            showDigital={(normalizedContent.showDigital as boolean) ?? true}
-            targetTime={normalizedContent.targetTime as { hour: number; minute: number } | undefined}
-            onTimeChange={(h, m) => handleResponse({ hour: h, minute: m })}
-          />
-        );
-
-      case "measurement_scale":
-        return (
-          <ScaleReader
-            type={(normalizedContent.type as "ruler" | "thermometer" | "cylinder") ?? "ruler"}
-            min={(normalizedContent.min as number) ?? 0}
-            max={(normalizedContent.max as number) ?? 10}
-            step={(normalizedContent.step as number) ?? 1}
-            unit={(normalizedContent.unit as string) ?? "cm"}
-            value={normalizedContent.value as number | undefined}
-            interactive={(normalizedContent.interactive as boolean) ?? false}
-            targetValue={normalizedContent.targetValue as number | undefined}
-            showReading
-            onValueChange={(v) => handleResponse({ value: v })}
-          />
-        );
-
-      case "fill_blank":
-        return (
-          <FillBlank
-            template={(normalizedContent.template as string) ?? ""}
-            blanks={(normalizedContent.blanks as { id: string; position: number; correctAnswer: string | number; options?: (string | number)[] }[]) ?? []}
-            mode={(normalizedContent.mode as "select" | "type") ?? "select"}
-            filledAnswers={filledAnswers}
-            activeBlankId={activeBlankId}
-            onBlankActivate={(id) => setActiveBlankId(id)}
-            onBlankFill={(id, value) => {
-              setFilledAnswers((prev) => ({ ...prev, [id]: value }));
-              setActiveBlankId(null);
-              handleResponse({ answers: { ...filledAnswers, [id]: value } });
-            }}
-            onBlankClear={(id) => {
-              setFilledAnswers((prev) => {
-                const next = { ...prev };
-                delete next[id];
-                return next;
-              });
-            }}
-            showResult={lifecycle === "correct" || lifecycle === "incorrect"}
-          />
-        );
-
-      default:
-        return (
-          <div className="rounded-lg border-2 border-soft-coral/30 bg-soft-coral/5 p-6 text-center">
-            <p className="text-lg font-medium text-slate-text">
-              Activity not available
-            </p>
-            <p className="mt-2 text-sm text-muted-teal">
-              The activity type "{activity.type}" is not recognized.
-            </p>
-          </div>
-        );
+  const renderActivityContent = useCallback(() => {
+    if (!adapter) {
+      return (
+        <div className="rounded-lg border-2 border-soft-coral/30 bg-soft-coral/5 p-6 text-center">
+          <p className="text-lg font-medium text-slate-text">
+            Activity not available
+          </p>
+          <p className="mt-2 text-sm text-muted-teal">
+            The activity type "{activity.type}" is not recognized.
+          </p>
+        </div>
+      );
     }
-  };
+
+    return adapter.render({
+      content: normalizedContent,
+      adapterState,
+      lifecycle,
+      isObserveStep,
+      multiQuestionIndex,
+      multiTotal,
+      userResponse,
+      onResponse: handleResponse,
+      onAdapterStateChange: (updates) => setAdapterState((prev) => ({ ...prev, ...updates })),
+    });
+  }, [adapter, normalizedContent, adapterState, lifecycle, isObserveStep, multiQuestionIndex, multiTotal, userResponse, handleResponse, activity.type]);
 
   // Handle multi-question check answer: evaluate current sub-question
   const handleMultiCheckAnswer = useCallback(() => {

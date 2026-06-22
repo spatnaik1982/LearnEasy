@@ -39,3 +39,5 @@ export { OptionCard, type OptionCardProps } from "./OptionCard";
 export { ScenarioCard, type ScenarioCardProps } from "./ScenarioCard";
 export { NumberStepper, type NumberStepperProps } from "./NumberStepper";
 export { runRoundtrip, buildCorrectResponse } from './render-roundtrip';
+export { getAdapter } from './adapters';
+export type { ActivityAdapter } from './adapters/adapter-interface';
