@@ -14,14 +14,7 @@ interface ActivityExample {
 }
 
 interface PlaygroundProps {
-  rawYaml: string;
   examples: ActivityExample[];
-}
-
-function yamlBlock(raw: string, index: number): string {
-  const stripped = raw.replace(/^(#[^\n]*\n|\s*\n)+/, "");
-  const docs = stripped.split(/\n(?=- )/);
-  return docs[index] || "";
 }
 
 const typeBadge: Record<string, string> = {
@@ -48,8 +41,24 @@ const stepBadge: Record<string, string> = {
   mastery_check: "Quiz",
 };
 
-const Playground: NextPage<PlaygroundProps> = ({ rawYaml, examples }) => {
+const Playground: NextPage<PlaygroundProps> = ({ examples }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [jsonStrings, setJsonStrings] = useState<Record<number, string>>(() => {
+    const initial: Record<number, string> = {};
+    examples.forEach((ex, i) => { initial[i] = JSON.stringify(ex.content, null, 2); });
+    return initial;
+  });
+  const [jsonErrors, setJsonErrors] = useState<Record<number, string | null>>({});
+
+  const handleJsonChange = (i: number, value: string) => {
+    setJsonStrings((prev) => ({ ...prev, [i]: value }));
+    try {
+      JSON.parse(value);
+      setJsonErrors((prev) => ({ ...prev, [i]: null }));
+    } catch (e) {
+      setJsonErrors((prev) => ({ ...prev, [i]: (e as Error).message }));
+    }
+  };
 
   return (
     <>
@@ -62,7 +71,7 @@ const Playground: NextPage<PlaygroundProps> = ({ rawYaml, examples }) => {
           Activity Type Playground
         </h1>
         <p className="mb-8 text-base text-on-surface-variant">
-          Browse all 14 activity types. Expand a card to see its YAML definition
+          Browse all 14 activity types. Expand a card to see its JSON definition
           and a live preview.
         </p>
 
@@ -111,42 +120,59 @@ const Playground: NextPage<PlaygroundProps> = ({ rawYaml, examples }) => {
                   </svg>
                 </button>
 
-                {isExpanded && (
-                  <div className="border-t border-outline-variant px-6 py-4">
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                      <div className="overflow-auto rounded-lg bg-warm-off-white p-4">
-                        <h3 className="mb-2 text-sm font-semibold text-on-surface-variant">
-                          YAML Definition
-                        </h3>
-                        <pre className="overflow-x-auto text-xs leading-relaxed font-mono text-slate-text">
-                          {yamlBlock(rawYaml, i)}
-                        </pre>
+                {isExpanded && (() => {
+                  const jsonText = jsonStrings[i];
+                  let parsedContent: Record<string, unknown> | null = null;
+                  try {
+                    parsedContent = JSON.parse(jsonText);
+                  } catch {}
+                  const displayContent = parsedContent ?? example.content;
+
+                  return (
+                    <div className="border-t border-outline-variant px-6 py-4">
+                      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <div className="overflow-auto rounded-lg bg-warm-off-white p-4">
+                          <h3 className="mb-2 text-sm font-semibold text-on-surface-variant">
+                            JSON Definition
+                          </h3>
+                          <textarea
+                            value={jsonText}
+                            onChange={(e) => handleJsonChange(i, e.target.value)}
+                            className="w-full min-h-[24rem] font-mono text-xs leading-relaxed bg-transparent border-0 resize-y focus:outline-none text-slate-text"
+                            spellCheck={false}
+                          />
+                          {jsonErrors[i] && (
+                            <p className="mt-2 text-xs text-soft-coral font-mono whitespace-pre-wrap">
+                              {jsonErrors[i]}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-sm font-semibold text-on-surface-variant">
+                            Live Preview
+                          </h3>
+                          <ActivityRenderer
+                            activity={{
+                              id: `playground-${i}`,
+                              type: example.type,
+                              content: displayContent,
+                            }}
+                            stepLabel={example.step}
+                            onComplete={(result) => {
+                              console.log(
+                                `Activity ${i} completed:`,
+                                result,
+                              );
+                            }}
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="mb-2 text-sm font-semibold text-on-surface-variant">
-                          Live Preview
-                        </h3>
-                        <ActivityRenderer
-                          activity={{
-                            id: `playground-${i}`,
-                            type: example.type,
-                            content: example.content,
-                          }}
-                          stepLabel={example.step}
-                          onComplete={(result) => {
-                            console.log(
-                              `Activity ${i} completed:`,
-                              result,
-                            );
-                          }}
-                        />
-                      </div>
+                      <p className="mt-4 text-sm text-on-surface-variant leading-relaxed whitespace-pre-line">
+                        {example.description}
+                      </p>
                     </div>
-                    <p className="mt-4 text-sm text-on-surface-variant leading-relaxed whitespace-pre-line">
-                      {example.description}
-                    </p>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             );
           })}
@@ -165,7 +191,6 @@ export const getStaticProps: GetStaticProps<PlaygroundProps> = async () => {
 
     return {
       props: {
-        rawYaml,
         examples,
       },
     };

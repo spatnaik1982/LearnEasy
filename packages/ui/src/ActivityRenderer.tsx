@@ -50,6 +50,7 @@ export interface ActivityRendererProps {
     timeSpent: number;
     independenceScore: number;
   }) => void;
+  onContinueStep?: () => void;
   className?: string;
   promptLevel?: number;
   stepLabel?: string;
@@ -64,6 +65,7 @@ function computeIndependenceScore(hintsUsed: number, attempts: number): number {
 export function ActivityRenderer({
   activity,
   onComplete,
+  onContinueStep,
   className,
   promptLevel = 1,
   stepLabel,
@@ -196,7 +198,7 @@ export function ActivityRenderer({
 
   const handleContinue = useCallback(() => {
     if (lifecycle === "correct") {
-      // onComplete already fired; nothing more to do
+      onContinueStep?.();
     } else if (isObserveStep) {
       onComplete({
         correct: true,
@@ -206,8 +208,9 @@ export function ActivityRenderer({
         timeSpent: Date.now() - startTimeRef.current,
         independenceScore: 1,
       });
+      onContinueStep?.();
     }
-  }, [lifecycle, isObserveStep, onComplete]);
+  }, [lifecycle, isObserveStep, onComplete, onContinueStep]);
 
   const handleHintClick = useCallback(() => {
     const nextIndex = hintsUsed;
