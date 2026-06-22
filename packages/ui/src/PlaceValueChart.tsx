@@ -127,9 +127,9 @@ function ColumnCell({
         role="gridcell"
         aria-label={column.ariaLabel}
         tabIndex={canPlace || !isEmpty ? 0 : -1}
-        style={{ animation: isEmpty ? undefined : "dropAppear 200ms ease-out" }}
         className={cn(
-          "flex items-center justify-center w-14 h-14 text-2xl font-bold select-none transition-colors duration-150 rounded-md",
+          "flex items-center justify-center w-14 h-14 text-2xl font-bold select-none motion-safe:transition-colors motion-safe:duration-150 rounded-md",
+          !isEmpty && "pvc-drop",
           isEmpty && "border-2 border-dashed border-soft-blue bg-warm-off-white",
           !isEmpty && "bg-warm-off-white cursor-pointer",
           isOver && "!bg-soft-blue/10 !border-soft-blue !border-2",
@@ -210,6 +210,10 @@ export function PlaceValueChart({
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
   }
+  .pvc-drop { animation: dropAppear 200ms ease-out; }
+  @media (prefers-reduced-motion: reduce) {
+    .pvc-drop { animation: none !important; }
+  }
 `}</style>
       <div className="flex flex-col items-center gap-6">
         <p className="text-sm font-medium text-on-surface-variant self-start">
@@ -217,12 +221,13 @@ export function PlaceValueChart({
             ? `Digit ${selectedDigit} selected — tap a column to place it`
             : "Drag a digit to a column, or tap a digit then tap a column"}
         </p>
-        <div
-          role="grid"
-          aria-label="Place value chart"
-          style={gridStyle}
-          className="grid gap-px"
-        >
+        <div className="w-full overflow-x-auto pb-2">
+          <div
+            role="grid"
+            aria-label="Place value chart"
+            style={gridStyle}
+            className="grid gap-px"
+          >
           {columns.map((col, idx) => {
             const digit = idx in placedDigits ? placedDigits[idx] : undefined;
             const isEmpty = digit === undefined;
@@ -249,6 +254,7 @@ export function PlaceValueChart({
               />
             );
           })}
+          </div>
         </div>
 
         <div role="radiogroup" aria-label="Digit bank" className="flex flex-wrap gap-2 justify-center">

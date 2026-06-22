@@ -72,6 +72,9 @@ export function ActivityShell({
           from { opacity: 0; }
           to { opacity: 1; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .feedback-zone { animation: none !important; }
+        }
       `}</style>
 
       {/* Zone 1 — Instruction Bar */}
@@ -176,7 +179,7 @@ export function ActivityShell({
           role="status"
           aria-live="polite"
           data-testid="feedback-zone"
-          className={cn("motion-reduce:animate-none")}
+          className={cn("feedback-zone motion-reduce:animate-none")}
           style={{
             animation: "activityShellFadeIn 200ms ease-in",
           }}

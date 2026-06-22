@@ -34,13 +34,13 @@ describe('RealWorldTask', () => {
 
   it('shows hint only when hint prop is non-empty', () => {
     const { rerender } = render(<RealWorldTask {...defaultProps} />);
-    expect(screen.queryByText('Need Help?')).not.toBeInTheDocument();
+    expect(screen.queryByText('Show Hint')).not.toBeInTheDocument();
 
     rerender(<RealWorldTask {...defaultProps} hint="" />);
-    expect(screen.queryByText('Need Help?')).not.toBeInTheDocument();
+    expect(screen.queryByText('Show Hint')).not.toBeInTheDocument();
 
     rerender(<RealWorldTask {...defaultProps} hint="Look at the bird's wings" />);
-    expect(screen.getByText('Need Help?')).toBeInTheDocument();
+    expect(screen.getByText('Show Hint')).toBeInTheDocument();
   });
 
   it('has no party emoji', () => {

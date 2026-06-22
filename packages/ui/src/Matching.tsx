@@ -206,8 +206,8 @@ export function Matching({
             ? "Now tap the matching item on the right"
             : "Drag a left item to its match on the right, or tap a left item then tap its match"}
         </p>
-        <div className="flex gap-6">
-          <div className="flex flex-col gap-4" role="list" aria-label="Left column items">
+        <div className="flex flex-col gap-6 sm:flex-row sm:gap-6">
+          <div className="flex flex-1 flex-col gap-4" role="list" aria-label="Left column items">
             {pairs.map((pair) => {
               const matched = isMatched(pair.id);
               const result = getResult(pair.id);
@@ -225,7 +225,7 @@ export function Matching({
             })}
           </div>
 
-          <div className="flex flex-col gap-4" role="list" aria-label="Right column items">
+          <div className="flex flex-1 flex-col gap-4" role="list" aria-label="Right column items">
             {shuffled.map((pair) => {
               const matched = isMatched(pair.id);
               const selected = selectedRightId === pair.id;

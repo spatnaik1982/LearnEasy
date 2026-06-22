@@ -71,7 +71,7 @@ describe("GridCounter", () => {
         onClearAll={onClearAll}
       />
     );
-    fireEvent.click(screen.getByText("Clear All"));
+    fireEvent.click(screen.getByText("Clear Grid"));
     expect(onClearAll).toHaveBeenCalled();
   });
 });

@@ -64,7 +64,7 @@ function SortableSequenceItem({
       style={style}
       data-result={result || undefined}
       className={cn(
-        "flex items-center gap-3 rounded-lg border-2 px-3 py-2 bg-white",
+        "seq-drop flex items-center gap-3 rounded-lg border-2 px-3 py-2 bg-white",
         "touch-none",
         isDragging && "opacity-50 shadow-lg z-50",
         result === "correct" && "border-muted-green",
@@ -166,6 +166,9 @@ export function Sequencing({
   @keyframes dropAppear {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seq-drop { animation: none !important; }
   }
 `}</style>
       <div className="flex flex-col gap-6" role="group" aria-label="Sequencing activity">

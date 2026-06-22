@@ -135,6 +135,7 @@ export function GridCounter({
               "border",
               "border-gray-200",
               "select-none",
+              "motion-safe:transition-colors motion-safe:duration-150",
               interactive && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76A5AF] focus-visible:ring-inset",
               isHighlighted && "bg-[#76A5AF]",
               !isHighlighted && "bg-white",
@@ -187,9 +188,9 @@ export function GridCounter({
         <button
           type="button"
           onClick={onClearAll}
-          className="px-4 py-2 text-sm font-medium text-white bg-[#5D87B1] rounded-lg hover:opacity-90"
+          className="min-h-[44px] rounded-lg bg-[#5D87B1] px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 motion-safe:transition-opacity motion-safe:duration-150"
         >
-          Clear All
+          Clear Grid
         </button>
       )}
     </div>

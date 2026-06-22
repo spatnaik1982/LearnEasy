@@ -89,7 +89,7 @@ export function RealWorldTask({
             aria-expanded={showHint}
             aria-controls="task-hint"
           >
-            {showHint ? "Hide hint" : "Need Help?"}
+            {showHint ? "Hide Hint" : "Show Hint"}
           </button>
 
           {showHint && (
