@@ -1,0 +1,112 @@
+{
+  "conceptId": "fractions_intro",
+  "chapter": {
+    "code": "CH3",
+    "name": "Introduction to Fractions"
+  },
+  "learningObjective": "Identify and write simple fractions",
+  "coreIdea": "Fractions represent parts of a whole.",
+  "examples": [
+    "Half of a circle is written as 1/2. 🟠",
+    "One fourth of a pizza is written as 1/4. 🍕",
+    "Two thirds of a pie is written as 2/3. 🥧"
+  ],
+  "misconceptions": [
+    "Fractions only represent whole numbers.",
+    "The numerator and denominator can be the same in all fractions.",
+    "Fractions cannot be used in everyday situations."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.75,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "basic_shapes"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "fraction_visual",
+      "order": 1,
+      "content": {
+        "numerator": 1,
+        "denominator": 2,
+        "mode": "circle",
+        "label": "One half of a circle",
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fraction_visual",
+      "order": 2,
+      "content": {
+        "numerator": 1,
+        "denominator": 4,
+        "mode": "circle",
+        "label": "One fourth of a circle",
+        "interactive": false,
+        "hints": [
+          "The whole circle is divided into 4 equal parts.",
+          "One part is shaded.",
+          "That is 1/4 of the whole circle.",
+          "Look at how many parts are shaded out of the total.",
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fraction_visual",
+      "order": 3,
+      "content": {
+        "numerator": 2,
+        "denominator": 3,
+        "mode": "circle",
+        "label": "Two thirds of a circle",
+        "interactive": true
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which shows 1/2?",
+            "options": [
+              "1/2 circle",
+              "1/3 circle",
+              "1/4 circle",
+              "1/5 circle"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "How many parts are in 1/4?",
+            "options": [
+              "2",
+              "4",
+              "3",
+              "5"
+            ],
+            "correctIndex": 1
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "description": "Great job identifying fractions! Keep practicing!"
+      }
+    }
+  ]
+}

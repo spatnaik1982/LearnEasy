@@ -1,0 +1,112 @@
+{
+  "conceptId": "decimals_to_fractions",
+  "chapter": {
+    "code": "CH4",
+    "name": "Understanding Decimals and Fractions"
+  },
+  "learningObjective": "Convert decimals to fractions",
+  "coreIdea": "Decimals can be converted to fractions by removing the decimal point and adjusting the denominator.",
+  "examples": [
+    "0.5 = 5/10",
+    "0.25 = 25/100",
+    "0.125 = 125/1000"
+  ],
+  "misconceptions": [
+    "Decimals cannot be converted to fractions because they are different types of numbers.",
+    "The decimal point changes the value of the number, making it impossible to convert to a fraction.",
+    "All decimals can only be represented with a denominator of 10 or 100."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "decimals_intro",
+    "place_value_decimals",
+    "fractions_to_decimals"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "fraction_visual",
+      "order": 1,
+      "content": {
+        "numerator": 5,
+        "denominator": 10,
+        "mode": "bar",
+        "label": "0.5 as a fraction",
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "___",
+        "blanks": [
+          {
+            "id": "b1",
+            "position": 0,
+            "correctAnswer": "?"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "item"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "target"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "?",
+            "options": [
+              "a",
+              "b"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job converting decimals to fractions!"
+        ],
+        "text": "Keep practicing!"
+      }
+    }
+  ]
+}

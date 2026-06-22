@@ -1,0 +1,131 @@
+{
+  "conceptId": "add_subtract_decimals",
+  "chapter": {
+    "code": "CH4",
+    "name": "Decimals and Operations"
+  },
+  "learningObjective": "Add and subtract decimal numbers",
+  "coreIdea": "Align decimal points to accurately add or subtract decimal numbers.",
+  "examples": [
+    "3.5 + 2.5 = 6.0",
+    "5.75 - 1.25 = 4.50",
+    "0.1 + 0.2 = 0.3"
+  ],
+  "misconceptions": [
+    "Students may confuse the decimal point with a comma, leading to incorrect placement of values.",
+    "Students might think that adding or subtracting decimals is the same as whole numbers without aligning decimal points first.",
+    "Some students may struggle with understanding the concept of tenths and hundredths, leading to errors in calculations."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 25,
+  "dependencies": [
+    "decimals_intro",
+    "place_value_decimals",
+    "fractions_to_decimals",
+    "decimals_to_fractions",
+    "compare_decimals"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Let's add 3.5 and 2.5. Align the decimal points!"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "item"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "target"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0"
+        },
+        "hints": [
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "5.75 - 1.25 = ___",
+        "blanks": [
+          {
+            "id": "blank1",
+            "position": 0,
+            "correctAnswer": "4.50",
+            "options": [
+              "4.50",
+              "5.00",
+              "6.00",
+              "4.00"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 0.1 + 0.2?",
+            "options": [
+              "0.3",
+              "0.2",
+              "0.4",
+              "0.1"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which shows the correct result of 5.75 - 1.25?",
+            "options": [
+              "4.50",
+              "5.00",
+              "6.00",
+              "4.00"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job on adding and subtracting decimals!"
+        ],
+        "text": "You did it!"
+      }
+    }
+  ]
+}

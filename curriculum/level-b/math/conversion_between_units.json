@@ -1,0 +1,128 @@
+{
+  "conceptId": "conversion_between_units",
+  "chapter": {
+    "code": "CH5",
+    "name": "Measurement and Conversion"
+  },
+  "learningObjective": "Convert between different units of measurement",
+  "coreIdea": "Understanding conversions helps in practical applications.",
+  "examples": [
+    "1 m = 100 cm 🔄",
+    "1 m² = 10,000 cm² 🔄",
+    "1 m³ = 1000 L 🔄"
+  ],
+  "misconceptions": [
+    "Students may confuse different units of measurement, such as mixing meters and centimeters.",
+    "Students might believe that conversions are only necessary in specific contexts, not realizing their everyday applications.",
+    "Students may struggle with the concept of area and volume conversions, thinking they are the same as linear conversions."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "units_of_measurement"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "story_question",
+      "order": 1,
+      "content": {
+        "scenario": "...",
+        "questions": [
+          {
+            "question": "?",
+            "options": [
+              "a",
+              "b"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "___",
+        "blanks": [
+          {
+            "id": "b1",
+            "position": 0,
+            "correctAnswer": "?"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "1 square meter = ___ square centimeters.",
+        "blanks": [
+          {
+            "id": "blank1",
+            "position": 0,
+            "correctAnswer": "10000",
+            "options": [
+              "1000",
+              "10000",
+              "100",
+              "100000"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "How many liters are in 1 cubic meter?",
+            "options": [
+              "1000 L",
+              "100 L",
+              "10 L",
+              "1 L"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "What is 3 meters in centimeters?",
+            "options": [
+              "300 cm",
+              "30 cm",
+              "3 cm",
+              "3000 cm"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job on learning conversions!"
+        ],
+        "text": "You did it! Keep practicing!"
+      }
+    }
+  ]
+}

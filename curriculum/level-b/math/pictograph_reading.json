@@ -1,0 +1,151 @@
+{
+  "conceptId": "pictograph_reading",
+  "chapter": {
+    "code": "CH7",
+    "name": "Data Handling"
+  },
+  "learningObjective": "Read and interpret pictographs",
+  "coreIdea": "Pictographs use pictures or symbols to represent data.",
+  "examples": [
+    "A pictograph shows 8 apples using 8 apple symbols. 📊",
+    "A pictograph shows 5 bananas using 5 banana symbols. 📊",
+    "A pictograph shows 3 cherries using 3 cherry symbols. 📊"
+  ],
+  "misconceptions": [
+    "Students may think each symbol represents more than one item when it represents exactly one.",
+    "Students may confuse pictographs with bar graphs.",
+    "Students may ignore the legend or key when reading a pictograph."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "bar_graphs",
+    "data_collection"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "chart_reader",
+      "order": 1,
+      "content": {
+        "type": "pictograph",
+        "data": [
+          {
+            "label": "Apples",
+            "value": 8,
+            "emoji": "🍎"
+          },
+          {
+            "label": "Bananas",
+            "value": 5,
+            "emoji": "🍌"
+          },
+          {
+            "label": "Cherries",
+            "value": 3,
+            "emoji": "🍒"
+          }
+        ],
+        "title": "Fruits in the basket",
+        "showValues": true,
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "description": "Drag each label to its value",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "Apples"
+          },
+          {
+            "id": "item-1",
+            "label": "Bananas"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "8"
+          },
+          {
+            "id": "target-1",
+            "label": "5"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "How many apples are in the basket ___",
+        "blanks": [
+          {
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "8"
+          }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "5",
+          "8",
+          "3",
+          "10"
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "How many bananas are in the basket?",
+            "options": [
+              "8",
+              "5",
+              "3",
+              "7"
+            ],
+            "correctIndex": 1
+          },
+          {
+            "question": "How many fruits are there in total?",
+            "options": [
+              "16",
+              "13",
+              "8",
+              "10"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job reading pictographs!",
+        "encouragement": true
+      }
+    }
+  ]
+}

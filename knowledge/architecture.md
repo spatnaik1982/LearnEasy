@@ -258,7 +258,7 @@ Student requests help → POST /api/ai/tutor
 
 ## Curriculum Generation Pipeline (EPIC-13)
 
-The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that generates validated curriculum YAML files from NIOS OBE PDF textbooks:
+The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that generates validated curriculum JSON files from NIOS OBE PDF textbooks. All output content is validated against the shared [Activity Schema](...) (`packages/db/src/activity-schema.ts`) — a Zod discriminated union that is the single source of truth for content shape across generation, DB ingest, and UI rendering:
 
 ```
                           ┌─────────────────────┐
@@ -293,6 +293,9 @@ The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that gen
                     ┌──────────────────────────────┐
                     │ 4. Generate Activities (LLM)  │
                     │    → 5-step ALX-7 sequence    │
+                    │    → per-step generation      │
+                    │      (type selector + prompt/ │
+                    │       exemplar + 3 retries)   │
                     │    → GeneratedActivity[]       │
                     └──────────────┬───────────────┘
                                    │
@@ -305,8 +308,8 @@ The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that gen
                     │    → ALX compliance           │
                     │    ┌──────┐    ┌───────────┐ │
                     │    │ Pass │───→│ 6. Output │ │
-                    │    └──────┘    │ (js-yaml)  │ │
-                    │    ┌────────┐  │  YAML files│ │
+                    │    └──────┘    │ (json)     │ │
+                    │    ┌────────┐  │  JSON files│ │
                     │    │ Retry  │  │ curriculum/│ │
                     │    │ (x3)   │  │ level-b/   │ │
                     │    └────────┘  │ subject/   │ │
@@ -319,7 +322,7 @@ The PDF-to-Curriculum pipeline is an automated LangGraph.js state graph that gen
 |---------|------|
 | `@learn-easy/llm-config` | LLM provider abstraction (OpenAI, Anthropic) configurable via env vars |
 | `@learn-easy/pipeline` | LangGraph.js state graph with 6 pipeline stages |
-| `@learn-easy/db` | Zod schemas (`conceptSpecSchema`), validation CLI, dependency graph |
+| `@learn-easy/db` | Zod schemas (`conceptSpecSchema`, `activitySchema`), validation CLI, dependency graph, YAML→JSON migration CLI |
 
 ### LLM Provider Architecture
 

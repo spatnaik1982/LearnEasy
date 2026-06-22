@@ -1,0 +1,135 @@
+{
+  "conceptId": "line_types",
+  "chapter": {
+    "code": "CH7",
+    "name": "Geometry"
+  },
+  "learningObjective": "Identify straight, curved lines, rays, and segments",
+  "coreIdea": "Lines can be straight or curved, and segments have endpoints.",
+  "examples": [
+    "➡️ A straight line is like a ruler.",
+    "🌊 A curved line is like a wave."
+  ],
+  "misconceptions": [
+    "Students may confuse straight lines with curved lines due to lack of clear examples.",
+    "Students might think that all lines must have endpoints, not recognizing rays.",
+    "Students may not understand the difference between a line segment and a full line."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "basic_shapes",
+    "symmetry_intro",
+    "angles_intro"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "This is a straight line ➡️ and a curved line 🌊."
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "matching",
+      "order": 2,
+      "content": {
+        "pairs": [
+          {
+            "itemA": "a",
+            "itemB": "b"
+          }
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "items": [
+          {
+            "id": "straight",
+            "label": "Straight Line ➡️"
+          },
+          {
+            "id": "curved",
+            "label": "Curved Line 🌊"
+          },
+          {
+            "id": "ray",
+            "label": "Ray"
+          },
+          {
+            "id": "segment",
+            "label": "Line Segment"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-types_of_lines",
+            "label": "Types of Lines"
+          },
+          {
+            "id": "target-types_of_rays_and_segments",
+            "label": "Types of Rays and Segments"
+          }
+        ],
+        "expectedPositions": {
+          "straight": "target-types_of_lines",
+          "curved": "target-types_of_lines",
+          "ray": "target-types_of_rays_and_segments",
+          "segment": "target-types_of_rays_and_segments"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which one has no endpoints?",
+            "options": [
+              "Straight Line ➡️",
+              "Ray",
+              "Line Segment",
+              "Curved Line 🌊"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which one has two endpoints?",
+            "options": [
+              "Ray",
+              "Curved Line 🌊",
+              "Straight Line ➡️",
+              "Line Segment"
+            ],
+            "correctIndex": 3
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job identifying lines!"
+        ],
+        "text": "You did it!"
+      }
+    }
+  ]
+}

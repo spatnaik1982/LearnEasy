@@ -1,0 +1,112 @@
+{
+  "conceptId": "equivalent_fractions",
+  "chapter": {
+    "code": "CH3",
+    "name": "Understanding Fractions"
+  },
+  "learningObjective": "Identify equivalent fractions",
+  "coreIdea": "Equivalent fractions represent the same value.",
+  "examples": [
+    "1/2 is the same as 2/4. 🔄",
+    "3/6 is the same as 1/2. 🔄",
+    "4/8 is the same as 1/2. 🔄"
+  ],
+  "misconceptions": [
+    "Students may think that fractions with different numerators and denominators cannot be equivalent without understanding the concept of scaling.",
+    "Some students may confuse the terms numerator and denominator, leading to incorrect fraction representation.",
+    "Students might believe that only fractions with the same denominator can be equivalent."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.75,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "fractions_intro",
+    "counting_1_10",
+    "number_recognition_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "fraction_visual",
+      "order": 1,
+      "content": {
+        "numerator": 1,
+        "denominator": 2,
+        "mode": "bar",
+        "label": "1/2",
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "item"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "target"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0"
+        },
+        "hints": [
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "matching",
+      "order": 3,
+      "content": {
+        "pairs": [
+          {
+            "itemA": "a",
+            "itemB": "b"
+          }
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "?",
+            "options": [
+              "a",
+              "b"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job identifying equivalent fractions!"
+        ],
+        "text": "You did it! Keep practicing!"
+      }
+    }
+  ]
+}

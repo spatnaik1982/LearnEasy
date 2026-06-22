@@ -1,0 +1,119 @@
+{
+  "conceptId": "fractions_to_decimals",
+  "chapter": {
+    "code": "CH4",
+    "name": "Understanding Decimals"
+  },
+  "learningObjective": "Convert fractions with denominators 10, 100, 1000 to decimals",
+  "coreIdea": "Fractions can be expressed as decimals by placing the decimal point correctly.",
+  "examples": [
+    "1/10 = 0.1",
+    "2/100 = 0.02",
+    "5/1000 = 0.005"
+  ],
+  "misconceptions": [
+    "Students may confuse the decimal point with a comma when writing decimals.",
+    "Students might think that all fractions can be directly converted to decimals without understanding the place value system.",
+    "Students may believe that decimals are only used for numbers less than one, not realizing they can represent whole numbers as well."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.75,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "place_value_decimals"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "fraction_visual",
+      "order": 1,
+      "content": {
+        "numerator": 1,
+        "denominator": 10,
+        "mode": "bar",
+        "label": "1/10 as a decimal",
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "___",
+        "blanks": [
+          {
+            "id": "b1",
+            "position": 0,
+            "correctAnswer": "?"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "2/100 = ___.",
+        "blanks": [
+          {
+            "id": "blank1",
+            "position": 0,
+            "correctAnswer": "0.02",
+            "options": [
+              "0.02",
+              "0.2",
+              "2.0",
+              "0.002"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 5/1000 as a decimal?",
+            "options": [
+              "0.005",
+              "0.05",
+              "0.5",
+              "5.0"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which fraction equals 0.1?",
+            "options": [
+              "1/10",
+              "2/100",
+              "5/50",
+              "3/30"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "description": "Great job converting fractions to decimals! Keep practicing! 🎉"
+      }
+    }
+  ]
+}

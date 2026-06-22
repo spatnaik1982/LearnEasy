@@ -24,7 +24,7 @@ learn-easy/
 │   ├── api/            # NestJS backend — REST API
 │   │   └── src/        # Auth, Curriculum, AI modules
 │   ├── db/             # Prisma schema, migrations, seed, curriculum tools
-│   │   ├── src/        # Concept schema, pipeline, dependency graph, validation CLI
+│   │   ├── src/        # Activity schema (Zod), concept schema, pipeline, dependency graph, validation CLI, YAML→JSON migration CLI
 │   │   └── prisma/     # schema.prisma, seed.ts
 │   ├── ui/             # Shared React components (low-sensory)
 │   │   ├── src/        # VisualCounter, Matching, DragDrop, MCQ, AppShell, FractionVisualizer, PlaceValueChart, GridCounter, ChartReader, ClockWidget, ScaleReader, FillBlank, etc.
@@ -33,13 +33,13 @@ learn-easy/
 │   ├── llm-config/     # Configurable LLM provider abstraction (OpenAI, Anthropic)
 │   │   └── src/        # LlmProvider interface, OpenAIProvider, AnthropicProvider
 │   ├── pipeline/       # PDF-to-Curriculum generation pipeline (LangGraph)
-│   │   └── src/        # extract/, chunk/, generate-concept/, generate-activities/, validate/, output/, graph/, cli/
+│   │   └── src/        # extract/, chunk/, generate-concept/, generate-activities/ (per-step prompts/, type-selector.ts, exemplars.ts), validate/, output/, graph/, cli/
 │   └── config/         # Centralized TypeScript configs
-├── curriculum/         # Curriculum-as-code: validated YAML concept definitions
-│   ├── level-a/        # Level A: math/, language/, evs/
-│   └── level-b/        # Level B: math/ (pipeline-generated)
+├── curriculum/         # Curriculum-as-code: validated YAML/JSON concept definitions
+│   ├── level-a/        # Level A: math/, language/, evs/ (YAML, hand-authored)
+│   └── level-b/        # Level B: math/ (JSON, pipeline-generated)
 ├── knowledge/          # Project documentation
-│   ├── curriculum/     # Concept schema, validation CLI, dependency graph docs
+│   ├── curriculum/     # Concept schema, activity schema, validation CLI, dependency graph docs
 │   ├── design/         # ALX design guidelines
 │   ├── project-management/  # Backlog, issue templates
 │   ├── project-vision.md
@@ -103,8 +103,10 @@ learn-easy/
 | `pnpm test` | all | Run tests across workspaces |
 | `pnpm curriculum:validate` | root | Validate all curriculum YAML files |
 | `pnpm curriculum:generate` | root | Generate curriculum from PDF (LangGraph pipeline) |
+| `pnpm curriculum:migrate` | root | Migrate Level B YAML → JSON (run after pipeline generation) |
 | `pnpm --filter @learn-easy/pipeline test` | pipeline | Run pipeline tests |
 | `pnpm --filter @learn-easy/llm-config test` | llm-config | Run LLM config tests |
+| `pnpm --filter @learn-easy/db test` | db | Run DB tests (schema validation, migration CLI) |
 | `pnpm --filter @learn-easy/api start:dev` | api | Start NestJS in watch mode |
 | `pnpm --filter @learn-easy/student dev` | student | Start student Next.js app |
 | `pnpm --filter @learn-easy/parent dev` | parent | Start parent Next.js app |

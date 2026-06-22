@@ -1,0 +1,119 @@
+{
+  "conceptId": "subtracting_fractions",
+  "chapter": {
+    "code": "CH3",
+    "name": "Fractions and Their Operations"
+  },
+  "learningObjective": "Subtract fractions with equal denominators",
+  "coreIdea": "To subtract fractions with the same denominator, subtract the numerators.",
+  "examples": [
+    "5/8 - 3/8 = 2/8. ➖",
+    "7/10 - 4/10 = 3/10. ➖",
+    "6/9 - 2/9 = 4/9. ➖"
+  ],
+  "misconceptions": [
+    "Students may think that the denominators need to be subtracted as well as the numerators.",
+    "Some may confuse the process of subtracting fractions with adding fractions.",
+    "Students might believe that the result must always be simplified, even when it is already in simplest form."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 25,
+  "dependencies": [
+    "fractions_intro",
+    "like_fractions",
+    "adding_fractions"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "fraction_visual",
+      "order": 1,
+      "content": {
+        "numerator": 2,
+        "denominator": 8,
+        "mode": "bar",
+        "label": "5/8 - 3/8",
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "___",
+        "blanks": [
+          {
+            "id": "b1",
+            "position": 0,
+            "correctAnswer": "?"
+          }
+        ],
+        "mode": "type"
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "7/10 - 4/10 = ___/10.",
+        "blanks": [
+          {
+            "id": "fractionResult",
+            "position": 0,
+            "correctAnswer": "3",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "2"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 6/9 - 2/9?",
+            "options": [
+              "4/9",
+              "2/9",
+              "3/9",
+              "1/9"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "If you subtract 3/8 from 5/8, what do you get?",
+            "options": [
+              "2/8",
+              "3/8",
+              "1/8",
+              "4/8"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "description": "Great job! You learned to subtract fractions! 🎉"
+      }
+    }
+  ]
+}

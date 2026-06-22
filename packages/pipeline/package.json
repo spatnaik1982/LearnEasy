@@ -11,6 +11,7 @@
     "curriculum:generate": "node dist/cli/index.js"
   },
   "dependencies": {
+    "@learn-easy/db": "workspace:*",
     "@learn-easy/llm-config": "workspace:*",
     "zod": "^3.0.0",
     "js-yaml": "^4.2.0",

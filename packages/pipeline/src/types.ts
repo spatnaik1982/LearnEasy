@@ -49,11 +49,13 @@ export interface GeneratedConcept {
   dependencies: string[];
 }
 
+import type { ActivityContent } from '@learn-easy/db';
+
 export interface GeneratedActivity {
   step: 'observe' | 'guided_practice' | 'independent_practice' | 'mastery_check' | 'positive_completion';
   type: string;
   order: number;
-  content: Record<string, unknown>;
+  content: ActivityContent;
 }
 
 export interface ValidatedOutput {
@@ -129,21 +131,3 @@ export const VALID_ACTIVITY_TYPES = [
   'measurement_scale',
   'fill_blank',
 ] as const;
-
-export const VALID_TYPES_PER_STEP: Record<string, readonly string[]> = {
-  observe: [
-    'visual_counting', 'story_question', 'fraction_visual',
-    'place_value_chart', 'grid_area', 'clock_time',
-    'measurement_scale', 'chart_reader',
-  ],
-  guided_practice: [
-    'visual_counting', 'matching', 'drag_drop', 'sequencing',
-    'story_question', 'fraction_visual', 'place_value_chart', 'fill_blank',
-  ],
-  independent_practice: [
-    'visual_counting', 'matching', 'drag_drop', 'sequencing',
-    'fraction_visual', 'place_value_chart', 'fill_blank',
-  ],
-  mastery_check: ['multiple_choice', 'fill_blank'],
-  positive_completion: ['visual_counting'],
-};

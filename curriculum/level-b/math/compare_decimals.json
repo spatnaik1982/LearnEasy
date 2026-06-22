@@ -1,0 +1,136 @@
+{
+  "conceptId": "compare_decimals",
+  "chapter": {
+    "code": "CH4",
+    "name": "Understanding Decimals"
+  },
+  "learningObjective": "Compare decimal numbers",
+  "coreIdea": "Decimals can be compared by looking at their place values from left to right.",
+  "examples": [
+    "0.2 > 0.02",
+    "0.5 > 0.05",
+    "0.005 < 0.05"
+  ],
+  "misconceptions": [
+    "Students may think that decimals with more digits are always larger, regardless of their place values.",
+    "Students may confuse the decimal point with a comma, leading to incorrect comparisons.",
+    "Students may not understand that leading zeros do not affect the value of a decimal number."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 15,
+  "dependencies": [
+    "decimals_intro",
+    "place_value_decimals",
+    "fractions_to_decimals"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "place_value_chart",
+      "order": 1,
+      "content": {
+        "maxPlaces": "lakh",
+        "digits": [
+          0
+        ],
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "item"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "target"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0"
+        },
+        "hints": [
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "matching",
+      "order": 3,
+      "content": {
+        "pairs": [
+          {
+            "itemA": "0.005",
+            "itemB": "0.05"
+          },
+          {
+            "itemA": "0.5",
+            "itemB": "0.05"
+          },
+          {
+            "itemA": "0.2",
+            "itemB": "0.02"
+          },
+          {
+            "itemA": "0.05",
+            "itemB": "0.5"
+          }
+        ]
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "Which is greater?",
+            "options": [
+              "0.2",
+              "0.02",
+              "0.5",
+              "0.05"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "Which is less?",
+            "options": [
+              "0.005",
+              "0.05",
+              "0.5",
+              "0.2"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job comparing decimals!"
+        ],
+        "text": "You did it! Keep practicing!"
+      }
+    }
+  ]
+}

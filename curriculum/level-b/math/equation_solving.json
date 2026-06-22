@@ -1,0 +1,125 @@
+{
+  "conceptId": "equation_solving",
+  "chapter": {
+    "code": "CH2",
+    "name": "Addition and Subtraction Basics"
+  },
+  "learningObjective": "Find missing numbers in equations",
+  "coreIdea": "Equations show that two expressions are equal, and we can find missing numbers.",
+  "examples": [
+    "3 + 5 = 8, so the missing number in 3 + ___ = 8 is 5. ➕",
+    "10 - 6 = 4, so the missing number in 10 - ___ = 4 is 6. ➖",
+    "5 + 2 = 7, so the missing number in ___ + 2 = 7 is 5. ➕"
+  ],
+  "misconceptions": [
+    "Students may think the missing number is always the result of the equation.",
+    "Students may confuse addition and subtraction when solving for the missing number.",
+    "Students may think the blank can only be at the end of the equation."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "addition_basics",
+    "subtraction_basics",
+    "counting_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Observe the example",
+        "items": [
+          "🍎"
+        ],
+        "count": 3,
+        "text": "Look at the example."
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "fill_blank",
+      "order": 2,
+      "content": {
+        "template": "10 - ___ = 4",
+        "blanks": [
+          {
+            "id": "result",
+            "position": 0,
+            "correctAnswer": "6",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "7"
+            ]
+          }
+        ],
+        "mode": "select",
+        "hints": [
+          "Think about what number subtracted from 10 gives 4.",
+          "10 minus 6 equals 4.",
+          "Try counting backwards from 10 to 4."
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "___ + 2 = 7",
+        "blanks": [
+          {
+            "id": "result",
+            "position": 0,
+            "correctAnswer": "5",
+            "options": [
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "fill_blank",
+      "order": 4,
+      "content": {
+        "template": "9 - ___ = 2",
+        "blanks": [
+          {
+            "id": "result",
+            "position": 0,
+            "correctAnswer": "7",
+            "options": [
+              "5",
+              "6",
+              "7",
+              "8"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job solving equations!",
+        "encouragement": true
+      }
+    }
+  ]
+}

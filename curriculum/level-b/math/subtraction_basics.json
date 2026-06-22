@@ -1,0 +1,141 @@
+{
+  "conceptId": "subtraction_basics",
+  "chapter": {
+    "code": "CH2",
+    "name": "Addition and Subtraction Basics"
+  },
+  "learningObjective": "Subtract one number from another",
+  "coreIdea": "Subtraction finds the difference between numbers.",
+  "examples": [
+    "₹7563 - ₹2402 = ₹5161.",
+    "9834 children - 4456 girls = 5378 boys."
+  ],
+  "misconceptions": [
+    "Students may confuse subtraction with addition, thinking they are the same operation.",
+    "Students may believe that subtraction always results in a smaller number, not considering negative results in other contexts.",
+    "Students may struggle with the concept of 'borrowing' when subtracting larger numbers, leading to errors in calculations."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "comparing_quantities",
+    "addition_basics"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Here are 5 apples 🍏 and 2 apples 🍏. Let's subtract!"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "story_question",
+      "order": 2,
+      "content": {
+        "scenario": "There are 10 birds in a tree. 4 fly away. How many are left? 🐦",
+        "questions": [
+          {
+            "question": "How many birds are left in the tree?",
+            "options": [
+              "6",
+              "4",
+              "10",
+              "8"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "What operation do we use to find the answer?",
+            "options": [
+              "Addition",
+              "Subtraction",
+              "Multiplication",
+              "Division"
+            ],
+            "correctIndex": 1
+          }
+        ],
+        "hints": [
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "If I have 15 candies and eat ___, I will have 10 left.",
+        "blanks": [
+          {
+            "id": "blank1",
+            "position": 0,
+            "correctAnswer": "5",
+            "options": [
+              "5",
+              "10",
+              "15",
+              "0"
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 20 - 8?",
+            "options": [
+              "12",
+              "18",
+              "10",
+              "15"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "If I subtract 3 from 7, what do I get?",
+            "options": [
+              "4",
+              "3",
+              "10",
+              "5"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 5,
+        "emoji": "🎉",
+        "items": [
+          "Great job!",
+          "You did it!",
+          "Keep practicing!",
+          "You're a subtraction star!",
+          "Well done!"
+        ],
+        "text": "You completed the subtraction activities!"
+      }
+    }
+  ]
+}

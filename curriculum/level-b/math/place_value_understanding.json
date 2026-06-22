@@ -1,0 +1,181 @@
+{
+  "conceptId": "place_value_understanding",
+  "chapter": {
+    "code": "CH1",
+    "name": "Understanding Place Values"
+  },
+  "learningObjective": "Identify place values of digits in numbers",
+  "coreIdea": "Students will recognize the value of each digit based on its position.",
+  "examples": [
+    "In 5964, 9 is 900 (hundreds)",
+    "In 18,342, 3 is 3,000 (thousands)",
+    "In 807695, 0 is 0 (tens)"
+  ],
+  "misconceptions": [
+    "Students may confuse the place value of digits, thinking that the value is the same regardless of position.",
+    "Students might overlook the value of zero in a number, believing it contributes to the total value.",
+    "Students may struggle to translate numbers into words accurately, leading to incorrect representations."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 25,
+  "dependencies": [
+    "counting_1_10",
+    "number_recognition_1_10",
+    "reading_numbers_1000_9999",
+    "writing_numbers_1000_9999"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "place_value_chart",
+      "order": 1,
+      "content": {
+        "maxPlaces": "lakh",
+        "digits": [
+          5,
+          9,
+          6,
+          4
+        ],
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "items": [
+          {
+            "id": "item-0",
+            "label": "1"
+          },
+          {
+            "id": "item-1",
+            "label": "3"
+          },
+          {
+            "id": "item-2",
+            "label": "8"
+          },
+          {
+            "id": "item-3",
+            "label": "0"
+          },
+          {
+            "id": "item-4",
+            "label": "4"
+          },
+          {
+            "id": "item-5",
+            "label": "2"
+          },
+          {
+            "id": "item-6",
+            "label": "2"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-thousands",
+            "label": "thousands"
+          },
+          {
+            "id": "target-hundreds",
+            "label": "hundreds"
+          },
+          {
+            "id": "target-tens",
+            "label": "tens"
+          },
+          {
+            "id": "target-ones",
+            "label": "ones"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-thousands",
+          "item-1": "target-thousands",
+          "item-2": "target-hundreds",
+          "item-3": "target-hundreds",
+          "item-4": "target-tens",
+          "item-5": "target-tens",
+          "item-6": "target-ones"
+        },
+        "hints": [
+          "The correct answer is: 1 in thousands, 3 in hundreds.",
+          "Look at the thousands place carefully.",
+          "You're close! Check your hundreds placement.",
+          "Try thinking about where each digit belongs."
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "matching",
+      "order": 3,
+      "content": {
+        "pairs": [
+          {
+            "itemA": "807695",
+            "itemB": "0"
+          },
+          {
+            "itemA": "5964",
+            "itemB": "9"
+          },
+          {
+            "itemA": "18",
+            "itemB": "1"
+          },
+          {
+            "itemA": "342",
+            "itemB": "3"
+          }
+        ],
+        "description": "Match the numbers to their place values."
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the place value of 3 in 18,342?",
+            "options": [
+              "30",
+              "300",
+              "3,000",
+              "30,000"
+            ],
+            "correctIndex": 2
+          },
+          {
+            "question": "What does the 0 represent in 807695?",
+            "options": [
+              "0",
+              "10",
+              "100",
+              "1,000"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job! You've learned about place values! 🎉"
+      }
+    }
+  ]
+}

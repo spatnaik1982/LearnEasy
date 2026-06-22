@@ -1,0 +1,138 @@
+{
+  "conceptId": "capacity_reading",
+  "chapter": {
+    "code": "CH5",
+    "name": "Units of Measurement"
+  },
+  "learningObjective": "Read capacity on a measuring cylinder",
+  "coreIdea": "A measuring cylinder shows the volume of liquid in millilitres.",
+  "examples": [
+    "500 mL of water reaches the 500 mark on the cylinder. 🧪",
+    "250 mL of juice reaches the 250 mark on the cylinder. 🧪",
+    "750 mL of milk reaches the 750 mark on the cylinder. 🧪"
+  ],
+  "misconceptions": [
+    "Students may read the bottom of the meniscus instead of the top of the liquid.",
+    "Students may think the cylinder measures weight instead of volume.",
+    "Students may confuse mL with L when reading the scale."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "reading_cylinder",
+    "number_recognition_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "measurement_scale",
+      "order": 1,
+      "content": {
+        "type": "cylinder",
+        "min": 0,
+        "max": 1000,
+        "step": 100,
+        "unit": "mL",
+        "value": 500,
+        "showReading": true,
+        "showLabels": true,
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "description": "Drag the correct value to the cylinder",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "250"
+          },
+          {
+            "id": "item-1",
+            "label": "251"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "description": "Drag the correct value to the cylinder",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "750"
+          },
+          {
+            "id": "item-1",
+            "label": "751"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the reading on the cylinder?",
+            "options": [
+              "600 mL",
+              "601 mL",
+              "599 mL"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job reading the cylinder!",
+        "encouragement": true
+      }
+    }
+  ]
+}

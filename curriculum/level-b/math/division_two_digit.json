@@ -1,0 +1,148 @@
+{
+  "conceptId": "division_two_digit",
+  "chapter": {
+    "code": "CH2",
+    "name": "Division of Two-Digit Numbers"
+  },
+  "learningObjective": "Divide by two-digit numbers",
+  "coreIdea": "Dividing by two digits requires careful grouping.",
+  "examples": [
+    "8747 ÷ 12 = 729 R5.",
+    "21278 ÷ 16 = 1323 R10."
+  ],
+  "misconceptions": [
+    "Students may confuse division with subtraction, thinking they are the same operation.",
+    "Students may struggle with the concept of remainders, believing that division always results in whole numbers.",
+    "Some students may not understand how to group numbers correctly when dividing by two-digit numbers."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "intermediate",
+  "estimatedDuration": 25,
+  "dependencies": [
+    "division_basics",
+    "multiplication_two_digit",
+    "addition_with_carry",
+    "subtraction_with_borrowing"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "visual_counting",
+      "order": 1,
+      "content": {
+        "description": "Let's divide 8747 by 12. We group the numbers carefully. 📊"
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "story_question",
+      "order": 2,
+      "content": {
+        "scenario": "Maria has 8747 candies. She wants to share them with 12 friends. How many candies does each friend get?",
+        "questions": [
+          {
+            "question": "How many candies does each friend get?",
+            "options": [
+              "729",
+              "730",
+              "728",
+              "731"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "What is the remainder?",
+            "options": [
+              "5",
+              "10",
+              "0",
+              "1"
+            ],
+            "correctIndex": 0
+          }
+        ],
+        "hints": [
+          ""
+        ]
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "fill_blank",
+      "order": 3,
+      "content": {
+        "template": "21278 ÷ 16 = ___ R___.",
+        "blanks": [
+          {
+            "id": "result",
+            "position": 0,
+            "correctAnswer": "1323",
+            "options": [
+              "1323",
+              "1320",
+              "1325",
+              "1324"
+            ]
+          },
+          {
+            "id": "remainder",
+            "position": 1,
+            "correctAnswer": 10,
+            "options": [
+              10,
+              5,
+              0,
+              1
+            ]
+          }
+        ],
+        "mode": "select"
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is 8747 ÷ 12?",
+            "options": [
+              "729 R5",
+              "730 R5",
+              "728 R5",
+              "731 R5"
+            ],
+            "correctIndex": 0
+          },
+          {
+            "question": "What is 21278 ÷ 16?",
+            "options": [
+              "1323 R10",
+              "1323 R5",
+              "1320 R10",
+              "1320 R5"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "count": 1,
+        "emoji": "🎉",
+        "items": [
+          "Great job dividing by two-digit numbers! Keep practicing!"
+        ],
+        "text": "You're doing great!"
+      }
+    }
+  ]
+}

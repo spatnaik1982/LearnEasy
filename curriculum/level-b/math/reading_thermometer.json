@@ -1,0 +1,137 @@
+{
+  "conceptId": "reading_thermometer",
+  "chapter": {
+    "code": "CH5",
+    "name": "Units of Measurement"
+  },
+  "learningObjective": "Read a thermometer in degrees Celsius",
+  "coreIdea": "A thermometer measures temperature in degrees Celsius.",
+  "examples": [
+    "25°C is a warm day. The liquid in the thermometer rises to 25. 🌡️",
+    "0°C is freezing. The liquid in the thermometer is at the bottom. 🌡️",
+    "40°C is a hot day. The liquid in the thermometer rises to 40. 🌡️"
+  ],
+  "misconceptions": [
+    "Students may think the thermometer measures length instead of temperature.",
+    "Students may read the scale backwards, thinking higher is colder.",
+    "Students may confuse the unit °C with other measurement units."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "number_recognition_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "measurement_scale",
+      "order": 1,
+      "content": {
+        "type": "thermometer",
+        "min": 0,
+        "max": 50,
+        "step": 5,
+        "unit": "°C",
+        "value": 25,
+        "showReading": true,
+        "showLabels": true,
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "description": "Drag the correct value to the thermometer",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "20"
+          },
+          {
+            "id": "item-1",
+            "label": "21"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "description": "Drag the correct value to the thermometer",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "35"
+          },
+          {
+            "id": "item-1",
+            "label": "36"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the reading on the thermometer?",
+            "options": [
+              "40 °C",
+              "41 °C",
+              "39 °C"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job reading the thermometer!",
+        "encouragement": true
+      }
+    }
+  ]
+}

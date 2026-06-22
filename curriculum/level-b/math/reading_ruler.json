@@ -1,0 +1,137 @@
+{
+  "conceptId": "reading_ruler",
+  "chapter": {
+    "code": "CH5",
+    "name": "Units of Measurement"
+  },
+  "learningObjective": "Read a ruler in centimetres",
+  "coreIdea": "A ruler measures length in centimetres.",
+  "examples": [
+    "A pencil that is 5 cm long reaches the 5 mark on the ruler. 📏",
+    "A book that is 12 cm long reaches the 12 mark on the ruler. 📏",
+    "An eraser that is 3 cm long reaches the 3 mark on the ruler. 📏"
+  ],
+  "misconceptions": [
+    "Students may start measuring from the edge of the ruler instead of the 0 mark.",
+    "Students may count the marks instead of the spaces between them.",
+    "Students may confuse centimetres with inches on a dual-scale ruler."
+  ],
+  "supports": {
+    "visual": true
+  },
+  "masteryCriteria": 0.8,
+  "difficulty": "beginner",
+  "estimatedDuration": 20,
+  "dependencies": [
+    "number_recognition_1_10"
+  ],
+  "activities": [
+    {
+      "step": "observe",
+      "type": "measurement_scale",
+      "order": 1,
+      "content": {
+        "type": "ruler",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "unit": "cm",
+        "value": 5,
+        "showReading": true,
+        "showLabels": true,
+        "interactive": false
+      }
+    },
+    {
+      "step": "guided_practice",
+      "type": "drag_drop",
+      "order": 2,
+      "content": {
+        "description": "Drag the correct value to the ruler",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "8"
+          },
+          {
+            "id": "item-1",
+            "label": "9"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "independent_practice",
+      "type": "drag_drop",
+      "order": 3,
+      "content": {
+        "description": "Drag the correct value to the ruler",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "12"
+          },
+          {
+            "id": "item-1",
+            "label": "13"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
+      }
+    },
+    {
+      "step": "mastery_check",
+      "type": "multiple_choice",
+      "order": 4,
+      "content": {
+        "questions": [
+          {
+            "question": "What is the reading on the ruler?",
+            "options": [
+              "15 cm",
+              "16 cm",
+              "14 cm"
+            ],
+            "correctIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "positive_completion",
+      "type": "visual_counting",
+      "order": 5,
+      "content": {
+        "message": "Great job reading the ruler!",
+        "encouragement": true
+      }
+    }
+  ]
+}

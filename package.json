@@ -15,6 +15,7 @@
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "curriculum:validate": "pnpm --filter @learn-easy/db curriculum:validate",
+    "curriculum:migrate": "pnpm --filter @learn-easy/db curriculum:migrate",
     "curriculum:generate": "pnpm --filter @learn-easy/pipeline curriculum:generate"
   },
   "devDependencies": {

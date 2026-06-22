@@ -2,11 +2,12 @@
 
 ## Overview
 
-LearnEasy uses a **curriculum-as-code** approach: every concept a learner studies is defined as a YAML file checked into the repository. This gives us:
+LearnEasy uses a **curriculum-as-code** approach: every concept a learner studies is defined as a YAML (Level A) or JSON (Level B) file checked into the repository. All content is validated against a shared [Zod schema](activity-schema.md) that serves as the single source of truth for content shape. This gives us:
 
 - **Version control** — track every change to curriculum content
-- **Automated validation** — catch errors before they reach learners
+- **Automated validation** — catch errors before they reach learners, at generation time and at DB ingest
 - **Separation of concerns** — content authors write YAML, engineers build the platform
+- **Type-safe generation** — the schema is used directly by the LLM pipeline to enforce correct output shapes
 
 This guide covers everything you need to create, edit, and validate curriculum content.
 
@@ -571,17 +572,18 @@ content:
 
 The renderer builds the `blanks` array from the `answers` field and uses the `prompt` (or `statement`) as the `template`.
 
+### Content Format: YAML vs JSON
+
+Curriculum content is stored in two formats:
+
+- **Level A**: Hand-authored YAML files (`curriculum/level-a/`). These may use pre-canonical field names and are normalized at render time by `normalizeContent()`.
+- **Level B (pipeline-generated)**: JSON files (`curriculum/level-b/`). The pipeline (EPIC-18+) generates content directly in the canonical schema shapes defined in `packages/db/src/activity-schema.ts`. These files pass full Zod schema validation.
+
 ### Runtime Normalization
 
-The student app's `ActivityRenderer` includes a `normalizeContent()` helper that translates YAML shapes the EPIC-13 pipeline emits into the canonical component prop shape. Content authors writing YAML by hand should prefer the canonical shapes documented above, but the runtime will accept pipeline variants too.
+The `normalizeContent()` helper in `packages/ui/src/normalize-content.ts` handles legacy field names found only in Level A YAML files. Pipeline-generated content (Level B) uses the canonical schema shape and skips normalization entirely.
 
-For each new type, the runtime supports:
-- `place_value_chart`: 4 shapes (canonical + 3 pipeline variants shown above)
-- `chart_reader`: 2 shapes (canonical + `categories` variant)
-- `fill_blank`: 2 shapes (canonical + `prompt + answers` variant shown above)
-- `grid_area`, `clock_time`, `measurement_scale`, `fraction_visual`: the canonical shapes shown above
-
-See `packages/ui/src/ActivityRenderer.tsx` for the exact normalization rules.
+For pipeline-generated content, the canonical content shape is the single source of truth. See `knowledge/curriculum/activity-schema.md` for the complete schema reference.
 
 ### Positive Completion (Step 5)
 
@@ -805,12 +807,17 @@ Level B (and future Level C) curriculum content can be automatically generated f
 pnpm curriculum:generate --pdf <path> --level B --subject math
 ```
 
-See `knowledge/project-management/epic-13-pdf-curriculum-pipeline.md` for full documentation.
+The pipeline (EPIC-18+) generates content in the **canonical schema shape** defined in `packages/db/src/activity-schema.ts`. Each activity step is generated independently with a type-specific Zod output schema, 3 retries per step, and ALX compliance checks.
+
+Pipeline output is written as **JSON** (not YAML) to `curriculum/level-b/{subject}/`. The migration script `packages/db/src/cli/migrate-yaml-to-json.ts` converts existing Level B YAML files to the canonical JSON format.
+
+See `knowledge/project-management/epic-13-pdf-curriculum-pipeline.md` for full pipeline documentation.
 
 ---
 
 ## Related Documentation
 
+- [Activity Schema](activity-schema.md) — Canonical Zod schema for all 14 activity types, content shapes, scoring contracts, and step-type compatibility
 - [Concept Specification Schema](concept-schema.md) — TypeScript/Zod schema reference
 - [Validation CLI](validate-cli.md) — Validator usage and options
 - [Dependency Graph](dependency-graph.md) — How prerequisites are resolved
