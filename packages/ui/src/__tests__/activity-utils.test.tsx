@@ -49,7 +49,7 @@ describe("evaluateActivity - fraction_visual", () => {
   });
 
   it("interactive, missing shaded response returns incorrect (not auto-complete)", () => {
-    expect(evaluateActivity("fraction_visual", {}, { interactve: true, numerator: 3 })).toEqual({ correct: false });
+    expect(evaluateActivity("fraction_visual", {}, { interactive: true, numerator: 3 })).toEqual({ correct: false });
   });
 });
 
