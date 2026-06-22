@@ -44,58 +44,84 @@
     },
     {
       "step": "guided_practice",
-      "type": "measurement_scale",
+      "type": "drag_drop",
       "order": 2,
       "content": {
-        "type": "cylinder",
-        "min": 0,
-        "max": 500,
-        "step": 50,
-        "unit": "mL",
-        "value": 0,
-        "targetValue": 150,
-        "showReading": true,
-        "showLabels": true,
-        "interactive": true,
-        "hints": [
-          "Find the 150 mark on the cylinder.",
-          "Each big line is 50 mL.",
-          "Count by fifties from 0 to 150."
-        ]
+        "description": "Drag the correct value to the cylinder",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "150"
+          },
+          {
+            "id": "item-1",
+            "label": "151"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "independent_practice",
-      "type": "measurement_scale",
+      "type": "drag_drop",
       "order": 3,
       "content": {
-        "type": "cylinder",
-        "min": 0,
-        "max": 500,
-        "step": 50,
-        "unit": "mL",
-        "value": 0,
-        "targetValue": 350,
-        "showReading": true,
-        "showLabels": true,
-        "interactive": true
+        "description": "Drag the correct value to the cylinder",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "350"
+          },
+          {
+            "id": "item-1",
+            "label": "351"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Correct reading"
+          },
+          {
+            "id": "target-1",
+            "label": "Wrong"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "mastery_check",
-      "type": "measurement_scale",
+      "type": "multiple_choice",
       "order": 4,
       "content": {
-        "type": "cylinder",
-        "min": 0,
-        "max": 500,
-        "step": 50,
-        "unit": "mL",
-        "value": 0,
-        "targetValue": 400,
-        "showReading": true,
-        "showLabels": true,
-        "interactive": true
+        "questions": [
+          {
+            "question": "What is the reading on the cylinder?",
+            "options": [
+              "400 mL",
+              "401 mL",
+              "399 mL"
+            ],
+            "correctIndex": 0
+          }
+        ]
       }
     },
     {

@@ -83,20 +83,23 @@
     },
     {
       "step": "independent_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 3,
       "content": {
-        "questions": [
+        "template": "Arrange these numbers in descending order: 9,845, 67,833, 64,569, 8,765.",
+        "blanks": [
           {
-            "question": "Arrange these numbers in descending order: 9,845, 67,833, 64,569, 8,765.",
-            "options": [
-              "8,765 > 9,845 > 64,569 > 67,833",
-              "67,833 > 64,569 > 9,845 > 8,765",
-              "9,845 > 67,833 > 64,569 > 8,765",
-              "64,569 > 67,833 > 9,845 > 8,765"
-            ],
-            "correctIndex": 1
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "67,833 > 64,569 > 9,845 > 8,765"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "8,765 > 9,845 > 64,569 > 67,833",
+          "67,833 > 64,569 > 9,845 > 8,765",
+          "9,845 > 67,833 > 64,569 > 8,765",
+          "64,569 > 67,833 > 9,845 > 8,765"
         ]
       }
     },

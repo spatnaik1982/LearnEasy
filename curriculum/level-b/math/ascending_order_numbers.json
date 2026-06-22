@@ -40,39 +40,45 @@
     },
     {
       "step": "guided_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 2,
       "content": {
-        "questions": [
+        "template": "Arrange these numbers in ascending order: 840, 9345, 53706, 54905.",
+        "blanks": [
           {
-            "question": "Arrange these numbers in ascending order: 840, 9345, 53706, 54905.",
-            "options": [
-              "840, 9345, 53706, 54905",
-              "9345, 840, 54905, 53706",
-              "53706, 840, 9345, 54905",
-              "54905, 53706, 840, 9345"
-            ],
-            "correctIndex": 0
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "840, 9345, 53706, 54905"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "840, 9345, 53706, 54905",
+          "9345, 840, 54905, 53706",
+          "53706, 840, 9345, 54905",
+          "54905, 53706, 840, 9345"
         ]
       }
     },
     {
       "step": "independent_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 3,
       "content": {
-        "questions": [
+        "template": "Put these numbers in ascending order: 4564, 5645, 8793, 9873.",
+        "blanks": [
           {
-            "question": "Put these numbers in ascending order: 4564, 5645, 8793, 9873.",
-            "options": [
-              "4564, 5645, 8793, 9873",
-              "5645, 4564, 9873, 8793",
-              "8793, 9873, 5645, 4564",
-              "9873, 8793, 5645, 4564"
-            ],
-            "correctIndex": 0
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "4564, 5645, 8793, 9873"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "4564, 5645, 8793, 9873",
+          "5645, 4564, 9873, 8793",
+          "8793, 9873, 5645, 4564",
+          "9873, 8793, 5645, 4564"
         ]
       }
     },

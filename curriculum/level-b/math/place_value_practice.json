@@ -58,20 +58,23 @@
     },
     {
       "step": "independent_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 3,
       "content": {
-        "questions": [
+        "template": "What digit is in the hundreds place of 18342 ___",
+        "blanks": [
           {
-            "question": "What digit is in the hundreds place of 18342?",
-            "options": [
-              "1",
-              "8",
-              "3",
-              "4"
-            ],
-            "correctIndex": 2
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "3"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "1",
+          "8",
+          "3",
+          "4"
         ]
       }
     },

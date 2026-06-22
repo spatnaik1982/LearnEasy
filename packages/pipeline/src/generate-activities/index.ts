@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
-  activitySchema,
+  activityContentSchema,
+  VALID_TYPES_PER_STEP,
   visualCountingContentSchema,
   matchingContentSchema,
   dragDropContentSchema,
@@ -174,18 +175,24 @@ async function generateStep(
         content: result.content as GeneratedActivity['content'],
       };
 
-      // Validate with full activity schema
-      const schemaResult = activitySchema.safeParse({
-        step: activity.step,
+      // Validate content shape against the discriminated union (same shape DB ingest uses)
+      const contentResult = activityContentSchema.safeParse({
         type: activity.type,
-        order: activity.order,
         content: activity.content,
       });
 
-      if (!schemaResult.success) {
-        lastErrors = schemaResult.error.issues.map(
+      if (!contentResult.success) {
+        lastErrors = contentResult.error.issues.map(
           (i) => `${i.path.join('.')}: ${i.message}`,
         );
+        lastAttempt = { type: result.type, content: result.content };
+        continue;
+      }
+
+      // Validate step↔type compatibility
+      const allowed = VALID_TYPES_PER_STEP[step];
+      if (allowed && !allowed.includes(type)) {
+        lastErrors = [`Step "${step}" does not allow type "${type}". Allowed: ${allowed.join(', ')}`];
         lastAttempt = { type: result.type, content: result.content };
         continue;
       }

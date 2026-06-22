@@ -57,64 +57,55 @@
     },
     {
       "step": "guided_practice",
-      "type": "chart_reader",
+      "type": "drag_drop",
       "order": 2,
       "content": {
-        "type": "pictograph",
-        "data": [
+        "description": "Drag each label to its value",
+        "items": [
           {
-            "label": "Apples",
-            "value": 8,
-            "emoji": "🍎"
+            "id": "item-0",
+            "label": "Apples"
           },
           {
-            "label": "Bananas",
-            "value": 5,
-            "emoji": "🍌"
-          },
-          {
-            "label": "Cherries",
-            "value": 3,
-            "emoji": "🍒"
+            "id": "item-1",
+            "label": "Bananas"
           }
         ],
-        "title": "Which fruit has the most?",
-        "showValues": true,
-        "interactive": true,
-        "correctLabel": "Apples",
-        "hints": [
-          "Look at how many symbols each fruit has.",
-          "Apples have the most symbols.",
-          "Count the apple symbols to check."
-        ]
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "8"
+          },
+          {
+            "id": "target-1",
+            "label": "5"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "independent_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 3,
       "content": {
-        "questions": [
+        "template": "How many apples are in the basket ___",
+        "blanks": [
           {
-            "question": "How many apples are in the basket?",
-            "options": [
-              "5",
-              "8",
-              "3",
-              "10"
-            ],
-            "correctIndex": 1
-          },
-          {
-            "question": "Which fruit has the least?",
-            "options": [
-              "Apples",
-              "Bananas",
-              "Cherries",
-              "All are equal"
-            ],
-            "correctIndex": 2
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "8"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "5",
+          "8",
+          "3",
+          "10"
         ]
       }
     },

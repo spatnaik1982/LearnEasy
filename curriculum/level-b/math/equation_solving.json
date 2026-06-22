@@ -30,18 +30,15 @@
   "activities": [
     {
       "step": "observe",
-      "type": "fill_blank",
+      "type": "visual_counting",
       "order": 1,
       "content": {
-        "template": "3 + ___ = 8",
-        "blanks": [
-          {
-            "id": "b0",
-            "position": 0,
-            "correctAnswer": "5"
-          }
+        "description": "Observe the example",
+        "items": [
+          "🍎"
         ],
-        "mode": "type"
+        "count": 3,
+        "text": "Look at the example."
       }
     },
     {

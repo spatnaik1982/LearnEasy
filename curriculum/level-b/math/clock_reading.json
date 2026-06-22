@@ -40,51 +40,84 @@
     },
     {
       "step": "guided_practice",
-      "type": "clock_time",
+      "type": "drag_drop",
       "order": 2,
       "content": {
-        "hour": 6,
-        "minute": 30,
-        "mode": "read",
-        "showDigital": true,
-        "interactive": false,
-        "hints": [
-          "The hour hand is between 6 and 7.",
-          "The minute hand is at 6, which means 30 minutes.",
-          "That makes the time 6:30."
-        ]
+        "description": "Drag the correct hour and minute to match 6:30",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "6"
+          },
+          {
+            "id": "item-1",
+            "label": "30"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Hour"
+          },
+          {
+            "id": "target-1",
+            "label": "Minute"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "independent_practice",
-      "type": "clock_time",
+      "type": "drag_drop",
       "order": 3,
       "content": {
-        "hour": 10,
-        "minute": 15,
-        "mode": "set",
-        "showDigital": true,
-        "targetTime": {
-          "hour": 10,
-          "minute": 15
-        },
-        "interactive": true
+        "description": "Drag the correct hour and minute to match 10:15",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "10"
+          },
+          {
+            "id": "item-1",
+            "label": "15"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "Hour"
+          },
+          {
+            "id": "target-1",
+            "label": "Minute"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "mastery_check",
-      "type": "clock_time",
+      "type": "multiple_choice",
       "order": 4,
       "content": {
-        "hour": 7,
-        "minute": 45,
-        "mode": "set",
-        "showDigital": false,
-        "targetTime": {
-          "hour": 7,
-          "minute": 45
-        },
-        "interactive": true
+        "questions": [
+          {
+            "question": "What time is shown on the clock?",
+            "options": [
+              "7:45",
+              "8:45",
+              "7:15"
+            ],
+            "correctIndex": 0
+          }
+        ]
       }
     },
     {

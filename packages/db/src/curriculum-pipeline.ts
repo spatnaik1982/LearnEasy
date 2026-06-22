@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, relative, dirname, basename, extname, isAbsolute } from 'path';
 import { load } from 'js-yaml';
 import { validateConceptSpec, ConceptSpec } from './concept-schema';
-import { activityContentSchema } from './activity-schema';
+import { activityContentSchema, VALID_TYPES_PER_STEP } from './activity-schema';
 
 // ─── Exported types ─────────────────────────────────────────────
 
@@ -164,10 +164,23 @@ function validateActivity(
 
   // Validate content against typed schema (only for JSON with canonical shapes)
   if (isJson) {
+    // Validate content shape via the discriminated union (expects {type, content: <inner>})
     const contentResult = activityContentSchema.safeParse({ type, content });
     if (!contentResult.success) {
       const messages = contentResult.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`);
       errors.push({ file: filePath, conceptId, message: `Activity at index ${index}: ${messages.join('; ')}`, type: 'validation' });
+      return null;
+    }
+    // Validate step↔type compatibility (the superRefine on activitySchema is not reached
+    // because we validate content shape separately, so we enforce it explicitly here)
+    const allowed = VALID_TYPES_PER_STEP[step as string];
+    if (allowed && !allowed.includes(type as string)) {
+      errors.push({
+        file: filePath,
+        conceptId,
+        message: `Activity at index ${index}: step "${step}" does not allow type "${type}". Allowed: ${allowed.join(', ')}`,
+        type: 'validation',
+      });
       return null;
     }
   }

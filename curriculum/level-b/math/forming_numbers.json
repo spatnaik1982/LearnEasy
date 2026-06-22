@@ -78,20 +78,23 @@
     },
     {
       "step": "independent_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 3,
       "content": {
-        "questions": [
+        "template": "Arrange the digits 4, 0, 9, and 5 to form the largest number.",
+        "blanks": [
           {
-            "question": "Arrange the digits 4, 0, 9, and 5 to form the largest number.",
-            "options": [
-              "4059",
-              "9540",
-              "9405",
-              "5904"
-            ],
-            "correctIndex": 1
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": "9540"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "4059",
+          "9540",
+          "9405",
+          "5904"
         ]
       }
     },

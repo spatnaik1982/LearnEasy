@@ -40,19 +40,22 @@
     },
     {
       "step": "guided_practice",
-      "type": "multiple_choice",
+      "type": "fill_blank",
       "order": 2,
       "content": {
-        "questions": [
+        "template": "7 ___ 4",
+        "blanks": [
           {
-            "question": "7 ___ 4",
-            "options": [
-              "<",
-              ">",
-              "="
-            ],
-            "correctIndex": 1
+            "id": "blank-0",
+            "position": 0,
+            "correctAnswer": ">"
           }
+        ],
+        "mode": "select",
+        "blanks0options": [
+          "<",
+          ">",
+          "="
         ]
       }
     },

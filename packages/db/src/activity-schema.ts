@@ -250,8 +250,6 @@ export const activityTypeEnum = z.enum([
 ]);
 
 // ─── Step ↔ type compatibility lookup ──────────────────────────────
-// Duplicated from pipeline types.ts to keep db as the lowest layer
-// without importing pipeline. Source: packages/pipeline/src/types.ts
 
 export const VALID_TYPES_PER_STEP: Record<string, readonly string[]> = {
   observe: [

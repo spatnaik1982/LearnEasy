@@ -1,9 +1,9 @@
 import type { GeneratedConcept } from '../types';
-import { VALID_TYPES_PER_STEP } from '../types';
+import { VALID_TYPES_PER_STEP } from '@learn-easy/db';
 
 const KEYWORD_MAP: Record<string, string[]> = {
-  visual_counting: ['count', 'count', 'number', 'quantity', 'many', 'how many', 'objects', 'total'],
-  matching: ['match', 'match', 'match', 'identify', 'classify', 'sort', 'pair', 'correspond'],
+  visual_counting: ['count', 'number', 'quantity', 'many', 'how many', 'objects', 'total'],
+  matching: ['match', 'identify', 'classify', 'sort', 'pair', 'correspond'],
   drag_drop: ['drag', 'place', 'arrange', 'complete', 'fill', 'label', 'position'],
   sequencing: ['order', 'sequence', 'ascending', 'descending', 'arrange', 'first', 'next', 'last', 'before', 'after'],
   multiple_choice: ['which', 'choose', 'select', 'what is', 'identify'],
@@ -27,7 +27,7 @@ export function selectTypeForStep(
   step: string,
   concept: GeneratedConcept,
 ): string {
-  const allowed = VALID_TYPES_PER_STEP[step] as string[] | undefined;
+  const allowed = VALID_TYPES_PER_STEP[step] as readonly string[] | undefined;
   if (!allowed || allowed.length === 0) {
     throw new Error(`No valid types for step: ${step}`);
   }

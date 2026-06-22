@@ -46,40 +46,84 @@
     },
     {
       "step": "guided_practice",
-      "type": "grid_area",
+      "type": "drag_drop",
       "order": 2,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "area",
-        "interactive": true,
-        "hints": [
-          "Count the squares inside the shape.",
-          "Each full square counts as 1.",
-          "Add up all the squares to find the area."
-        ]
+        "description": "Drag the cell labels to the correct positions",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "Row 0 Col 0"
+          },
+          {
+            "id": "item-1",
+            "label": "Row 0 Col 1"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "First cell"
+          },
+          {
+            "id": "target-1",
+            "label": "Second cell"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "independent_practice",
-      "type": "grid_area",
+      "type": "drag_drop",
       "order": 3,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "area",
-        "interactive": true
+        "description": "Drag the cell labels to the correct positions",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "Row 0 Col 0"
+          },
+          {
+            "id": "item-1",
+            "label": "Row 0 Col 1"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "First cell"
+          },
+          {
+            "id": "target-1",
+            "label": "Second cell"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "mastery_check",
-      "type": "grid_area",
+      "type": "multiple_choice",
       "order": 4,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "area",
-        "interactive": true
+        "questions": [
+          {
+            "question": "How many squares are highlighted in the grid?",
+            "options": [
+              "0",
+              "1",
+              "-1"
+            ],
+            "correctIndex": 0
+          }
+        ]
       }
     },
     {

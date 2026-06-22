@@ -46,40 +46,84 @@
     },
     {
       "step": "guided_practice",
-      "type": "grid_area",
+      "type": "drag_drop",
       "order": 2,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "perimeter",
-        "interactive": true,
-        "hints": [
-          "Count the edges around the shape.",
-          "Each side of a unit square is one edge.",
-          "Add up all the edges to find the perimeter."
-        ]
+        "description": "Drag the cell labels to the correct positions",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "Row 0 Col 0"
+          },
+          {
+            "id": "item-1",
+            "label": "Row 0 Col 1"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "First cell"
+          },
+          {
+            "id": "target-1",
+            "label": "Second cell"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "independent_practice",
-      "type": "grid_area",
+      "type": "drag_drop",
       "order": 3,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "perimeter",
-        "interactive": true
+        "description": "Drag the cell labels to the correct positions",
+        "items": [
+          {
+            "id": "item-0",
+            "label": "Row 0 Col 0"
+          },
+          {
+            "id": "item-1",
+            "label": "Row 0 Col 1"
+          }
+        ],
+        "targets": [
+          {
+            "id": "target-0",
+            "label": "First cell"
+          },
+          {
+            "id": "target-1",
+            "label": "Second cell"
+          }
+        ],
+        "expectedPositions": {
+          "item-0": "target-0",
+          "item-1": "target-1"
+        }
       }
     },
     {
       "step": "mastery_check",
-      "type": "grid_area",
+      "type": "multiple_choice",
       "order": 4,
       "content": {
-        "rows": 5,
-        "cols": 5,
-        "mode": "perimeter",
-        "interactive": true
+        "questions": [
+          {
+            "question": "How many squares are highlighted in the grid?",
+            "options": [
+              "0",
+              "1",
+              "-1"
+            ],
+            "correctIndex": 0
+          }
+        ]
       }
     },
     {
