@@ -20,8 +20,8 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@types/js-yaml": "^4.0.9",
-    "js-yaml": "^4.2.0",
     "bcryptjs": "^2.4.3",
+    "js-yaml": "^4.2.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

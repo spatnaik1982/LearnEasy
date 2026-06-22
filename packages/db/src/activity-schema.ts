@@ -259,13 +259,17 @@ export const VALID_TYPES_PER_STEP: Record<string, readonly string[]> = {
   ],
   guided_practice: [
     'visual_counting', 'matching', 'drag_drop', 'sequencing',
-    'story_question', 'fraction_visual', 'place_value_chart', 'fill_blank',
+    'story_question', 'fraction_visual', 'place_value_chart',
+    'chart_reader', 'clock_time', 'measurement_scale',
+    'grid_area', 'fill_blank',
   ],
   independent_practice: [
     'visual_counting', 'matching', 'drag_drop', 'sequencing',
     'fraction_visual', 'place_value_chart', 'fill_blank',
+    'chart_reader', 'clock_time', 'measurement_scale',
+    'grid_area', 'real_world',
   ],
-  mastery_check: ['multiple_choice', 'fill_blank'],
+  mastery_check: ['multiple_choice', 'fill_blank', 'story_question', 'drag_drop'],
   positive_completion: ['visual_counting'],
 };
 
