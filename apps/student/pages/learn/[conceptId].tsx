@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
-import { ArrowLeft, ArrowRight, Home } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import {
   PositiveCompletion,
   TransitionScreen,
@@ -307,6 +307,7 @@ const Learn: NextPage = () => {
                               result.timeSpent,
                             );
                           }}
+                          onContinueStep={handleNext}
                         />
                       </div>
                     ) : null;
@@ -314,16 +315,6 @@ const Learn: NextPage = () => {
                 </section>
               </div>
             </LearningCard>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleNext}
-                className="h-[56px] px-8 bg-soft-blue hover:bg-primary text-white font-semibold text-lg rounded-full shadow-sm hover:shadow-md transition-all motion-safe:active:scale-[0.98] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2"
-              >
-                {COPY.continueConcept}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
           </>
         )}
 
@@ -370,6 +361,7 @@ const Learn: NextPage = () => {
                               result.timeSpent,
                             );
                           }}
+                          onContinueStep={handleNext}
                         />
                       </div>
                     ) : null;
@@ -377,21 +369,6 @@ const Learn: NextPage = () => {
                 </section>
               </div>
             </LearningCard>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleNext}
-                disabled={!activityCompleted}
-                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
-                  activityCompleted
-                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                }`}
-              >
-                {COPY.continueConcept}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
           </>
         )}
 
@@ -438,6 +415,7 @@ const Learn: NextPage = () => {
                               result.timeSpent,
                             );
                           }}
+                          onContinueStep={handleNext}
                         />
                       </div>
                     ) : null;
@@ -445,21 +423,6 @@ const Learn: NextPage = () => {
                 </section>
               </div>
             </LearningCard>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleNext}
-                disabled={!activityCompleted}
-                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
-                  activityCompleted
-                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                }`}
-              >
-                {COPY.continueConcept}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
           </>
         )}
 
@@ -506,6 +469,7 @@ const Learn: NextPage = () => {
                               result.timeSpent,
                             );
                           }}
+                          onContinueStep={handleNext}
                         />
                       </div>
                     ) : null;
@@ -513,21 +477,6 @@ const Learn: NextPage = () => {
                 </section>
               </div>
             </LearningCard>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleNext}
-                disabled={!activityCompleted}
-                className={`h-[56px] px-8 font-semibold text-lg rounded-full shadow-sm flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-soft-blue focus:ring-offset-2 ${
-                  activityCompleted
-                    ? "bg-soft-blue hover:bg-primary text-white hover:shadow-md transition-all motion-safe:active:scale-[0.98]"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                }`}
-              >
-                {COPY.continueConcept}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
           </>
         )}
 
