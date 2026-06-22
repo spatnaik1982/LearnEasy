@@ -48,16 +48,18 @@ const COLUMNS_LAKH = [
 
 function DraggableDigit({
   digit,
+  index,
   isSelected,
   onSelect,
 }: {
   digit: number;
+  index: number;
   isSelected: boolean;
   onSelect: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: `digit-${digit}`,
-    data: { digit },
+    id: `digit-${index}`,
+    data: { digit, index },
   });
 
   const style = transform
@@ -250,10 +252,11 @@ export function PlaceValueChart({
         </div>
 
         <div role="radiogroup" aria-label="Digit bank" className="flex flex-wrap gap-2 justify-center">
-          {draggableDigits.map((digit) => (
+          {draggableDigits.map((digit, index) => (
             <DraggableDigit
-              key={`digit-${digit}`}
+              key={`digit-${index}-${digit}`}
               digit={digit}
+              index={index}
               isSelected={selectedDigit === digit}
               onSelect={() => onSelectDigit(digit)}
             />

@@ -144,33 +144,46 @@ export function evaluateActivity(
 
       // Observe step: non-interactive, no expected answer -> auto-complete
       if (interactive === false) return { correct: true };
-      if (shaded === undefined) return { correct: true };
+
+      // Interactive: a missing shade response means the user hasn't answered correctly
+      if (shaded === undefined) return { correct: false };
 
       return { correct: shaded === expectedNumerator };
     }
 
     case "place_value_chart": {
       const targetNumber = content.targetNumber as number | undefined;
-      const digits = content.digits as (number | null)[] | undefined;
+      const maxPlaces = (content.maxPlaces as 'lakh' | 'crore') ?? 'crore';
       const interactive = content.interactive as boolean | undefined;
+      const placedDigits = response.placedDigits as Record<number, number> | undefined;
 
       // Observe step: non-interactive -> auto-complete
       if (interactive === false) return { correct: true };
 
-      // interactive steps need both targetNumber and digits to score
-      if (targetNumber == null || !digits) return { correct: false };
+      // Interactive: need both targetNumber and user's placed digits
+      if (targetNumber == null || !placedDigits) return { correct: false };
 
-      const targetStr = String(targetNumber).replace(/,/g, '').padStart(digits.length, '0');
-      const placedStr = digits.map((d) => d ?? 0).join('');
+      const columns = maxPlaces === 'lakh' ? 6 : 8;
+      const targetStr = String(targetNumber).padStart(columns, '0');
+      const placedStr = Array.from({ length: columns }, (_, i) => String(placedDigits[i] ?? 0)).join('');
       return { correct: placedStr === targetStr };
     }
 
     case "grid_area": {
-      const count = response.count as number | undefined;
       const highlighted = response.highlighted as { row: number; col: number }[] | undefined;
-      return {
-        correct: count !== undefined && highlighted !== undefined && count === highlighted.length,
-      };
+      const expectedHighlighted = content.highlighted as { row: number; col: number }[] | undefined;
+      const interactive = content.interactive as boolean | undefined;
+
+      // Non-interactive or no authored target -> can't score, auto-complete
+      if (interactive === false || !expectedHighlighted) return { correct: true };
+
+      if (!highlighted) return { correct: false };
+
+      const userSet = new Set(highlighted.map(c => `${c.row},${c.col}`));
+      const allMatch = expectedHighlighted.length === highlighted.length &&
+        expectedHighlighted.every(c => userSet.has(`${c.row},${c.col}`));
+
+      return { correct: allMatch };
     }
 
     case "chart_reader": {
