@@ -9,7 +9,7 @@ export const multipleChoiceAdapter: ActivityAdapter = {
     return {};
   },
 
-  render({ content, lifecycle, multiQuestionIndex, multiTotal, onResponse }) {
+  render({ content, lifecycle, multiQuestionIndex, multiTotal, userResponse, onResponse }) {
     const rawQuestions = content.questions as Array<{
       question?: string;
       text?: string;
@@ -30,7 +30,7 @@ export const multipleChoiceAdapter: ActivityAdapter = {
             key={`mc-${multiQuestionIndex}`}
             question={q.question ?? q.text ?? ""}
             options={options}
-            selectedIndex={null}
+            selectedIndex={userResponse?.selectedIndex as number | null}
             onSelect={(index) => {
               onResponse({ selectedIndex: index, questionIndex: multiQuestionIndex });
             }}
@@ -45,7 +45,7 @@ export const multipleChoiceAdapter: ActivityAdapter = {
       <MultipleChoice
         question={(content.question as string) ?? ""}
         options={(content.options as Array<{ id: string; label: string; emoji?: string }>) ?? []}
-        selectedIndex={null}
+        selectedIndex={userResponse?.selectedIndex as number | null}
         onSelect={(index) => {
           onResponse({ selectedIndex: index });
         }}

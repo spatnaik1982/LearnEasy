@@ -9,7 +9,7 @@ export const storyQuestionAdapter: ActivityAdapter = {
     return {};
   },
 
-  render({ content, lifecycle, multiQuestionIndex, onResponse }) {
+  render({ content, lifecycle, multiQuestionIndex, userResponse, onResponse }) {
     const questions = (content.questions as Array<{
       question: string;
       options: string[];
@@ -25,7 +25,7 @@ export const storyQuestionAdapter: ActivityAdapter = {
         scenario={(content.scenario as string) ?? ""}
         questions={questions}
         currentQuestionIndex={currentIdx}
-        selectedIndex={null}
+        selectedIndex={userResponse?.selectedIndex as number | null}
         onSelect={(index) => {
           onResponse({ selectedIndex: index, questionIndex: currentIdx });
         }}
