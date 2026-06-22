@@ -7,13 +7,14 @@
  * activityContentSchema validation.
  *
  * Usage:
- *   pnpm --filter @learn-easy/db curriculum:migrate     # default: curriculum/level-b
+ *   pnpm --filter @learn-easy/db curriculum:migrate         # default: curriculum/level-b
  *   pnpm --filter @learn-easy/db curriculum:migrate --dir /path --force
- *   pnpm --filter @learn-easy/db curriculum:migrate --dry-run   # preview without writing
- *   pnpm --filter @learn-easy/db curriculum:migrate --validate  # verify existing JSON files
+ *   pnpm --filter @learn-easy/db curriculum:migrate --dry-run       # preview without writing
+ *   pnpm --filter @learn-easy/db curriculum:migrate --keep-yaml     # write JSON but keep YAML
+ *   pnpm --filter @learn-easy/db curriculum:migrate --validate      # verify existing JSON files
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, renameSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, renameSync, unlinkSync } from 'fs';
 import { join, extname, dirname, relative } from 'path';
 import { tmpdir } from 'os';
 import { load } from 'js-yaml';
@@ -42,6 +43,7 @@ interface CliArgs {
   dryRun: boolean;
   force: boolean;
   validateOnly: boolean;
+  keepYaml: boolean;
 }
 
 // ─── Argument parsing ──────────────────────────────────────────────
@@ -51,15 +53,17 @@ function parseArgs(args: string[] = process.argv.slice(2)): CliArgs {
   let dryRun = false;
   let force = false;
   let validateOnly = false;
+  let keepYaml = false;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--dir' && i + 1 < args.length) { dir = args[i + 1]; i++; }
     else if (args[i] === '--dry-run') dryRun = true;
     else if (args[i] === '--force') force = true;
     else if (args[i] === '--validate') validateOnly = true;
+    else if (args[i] === '--keep-yaml') keepYaml = true;
   }
 
-  return { dir, dryRun, force, validateOnly };
+  return { dir, dryRun, force, validateOnly, keepYaml };
 }
 
 // ─── File scanning ─────────────────────────────────────────────────
@@ -153,24 +157,24 @@ function transformDragDrop(content: Record<string, unknown>): Record<string, unk
   }
 
   // Legacy C (options-based): { question, options: { placeName: [digits] }, hints }
+  // All option values must be arrays — if any value is a scalar, this is not
+  // the expected shape and we fall through to Legacy A / fallback.
   if (content.options) {
-    const options = content.options as Record<string, unknown[]>;
+    const options = content.options as Record<string, unknown>;
     const keys = Object.keys(options);
-    if (keys.length > 0) {
+    if (keys.length > 0 && Object.values(options).every(Array.isArray)) {
       const items: { id: string; label: string }[] = [];
       const targets: { id: string; label: string }[] = [];
       const expectedPositions: Record<string, string> = {};
       let idx = 0;
-      for (const [placeName, values] of Object.entries(options)) {
+      for (const [placeName, values] of Object.entries(options as Record<string, unknown[]>)) {
         const tid = `target-${placeName.toLowerCase()}`;
         targets.push({ id: tid, label: placeName });
-        if (Array.isArray(values)) {
-          for (const val of values) {
-            const iid = `item-${idx}`;
-            items.push({ id: iid, label: String(val) });
-            expectedPositions[iid] = tid;
-            idx++;
-          }
+        for (const val of values) {
+          const iid = `item-${idx}`;
+          items.push({ id: iid, label: String(val) });
+          expectedPositions[iid] = tid;
+          idx++;
         }
       }
       return { items, targets, expectedPositions, ...(hints ? { hints } : {}) };
@@ -303,7 +307,7 @@ function migrateContent(
 
 // ─── File migration ────────────────────────────────────────────────
 
-function migrateFile(filePath: string, dryRun: boolean, force: boolean): MigrationResult {
+function migrateFile(filePath: string, dryRun: boolean, force: boolean, keepYaml: boolean = false): MigrationResult {
   const result: MigrationResult = { file: filePath, status: 'error', activitiesMigrated: 0, activitiesUnchanged: 0 };
 
   try {
@@ -361,6 +365,18 @@ function migrateFile(filePath: string, dryRun: boolean, force: boolean): Migrati
             result.status = 'error';
             return result;
           }
+        }
+      }
+
+      // Delete original YAML file unless --keep-yaml was passed
+      // (result.status is set to 'written' after the !dryRun block below)
+      if (!keepYaml) {
+        try {
+          unlinkSync(filePath);
+        } catch (delErr) {
+          result.error = `JSON written but failed to delete YAML: ${delErr instanceof Error ? delErr.message : String(delErr)}`;
+          result.status = 'error';
+          return result;
         }
       }
     }
@@ -453,7 +469,7 @@ function main(): void {
 
   for (const filePath of yamlFiles.sort()) {
     const relPath = relative(targetDir, filePath);
-    const fileResult = migrateFile(filePath, args.dryRun, args.force);
+    const fileResult = migrateFile(filePath, args.dryRun, args.force, args.keepYaml);
     totalMigrated += fileResult.activitiesMigrated;
     totalUnchanged += fileResult.activitiesUnchanged;
 

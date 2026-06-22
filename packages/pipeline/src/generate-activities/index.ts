@@ -103,13 +103,13 @@ function buildRetryPrompt(
 
 // ─── ALX compliance check ─────────────────────────────────────────
 
-interface AlxWarning {
+export interface AlxWarning {
   type: string;
   field: string;
   message: string;
 }
 
-function checkALXCompliance(
+export function checkALXCompliance(
   step: string,
   type: string,
   content: Record<string, unknown>,
@@ -129,12 +129,36 @@ function checkALXCompliance(
   checkString('description', content.description);
   checkString('message', content.message);
   checkString('scenario', content.scenario);
+  checkString('template', content.template);
+  checkString('title', content.title);
+  checkString('taskDescription', content.taskDescription);
+  checkString('label', content.label);
+  checkString('text', content.text);
+  checkString('correctLabel', content.correctLabel);
 
   if (type === 'multiple_choice' || type === 'story_question') {
     const questions = content.questions as Array<Record<string, unknown>> | undefined;
     if (questions) {
       questions.forEach((q, i) => checkString(`questions[${i}].question`, q.question));
     }
+  }
+
+  if (type === 'fill_blank') {
+    const blanks = content.blanks as Array<Record<string, unknown>> | undefined;
+    if (blanks) {
+      blanks.forEach((b, i) => {
+        checkString(`blanks[${i}].correctAnswer`, b.correctAnswer);
+        if (Array.isArray(b.options)) {
+          b.options.forEach((o, j) => checkString(`blanks[${i}].options[${j}]`, o));
+        }
+      });
+    }
+  }
+
+  if (type === 'real_world') {
+    checkString('prompt', content.prompt);
+    checkString('expectedAnswer', content.expectedAnswer);
+    checkString('visualExample', content.visualExample);
   }
 
   return warnings;
