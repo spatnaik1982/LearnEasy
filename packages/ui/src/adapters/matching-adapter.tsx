@@ -9,7 +9,12 @@ export const matchingAdapter: ActivityAdapter = {
   },
 
   render({ content, adapterState, lifecycle, onResponse, onAdapterStateChange }) {
-    const pairs = (content.pairs as Array<{ id: string; itemA: string; itemB: string }>) ?? [];
+    const rawPairs = (content.pairs as Array<Record<string, unknown>>) ?? [];
+    const pairs = rawPairs.map((p, i) => ({
+      id: (p.id as string) ?? `pair-${i}`,
+      itemA: (p.itemA as string) ?? '',
+      itemB: (p.itemB as string) ?? '',
+    }));
     const connections = (adapterState.connections as Record<string, string>) ?? {};
     const selectedLeft = adapterState.selectedLeft as string | null;
     const selectedRight = adapterState.selectedRight as string | null;

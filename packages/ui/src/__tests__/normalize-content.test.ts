@@ -2,11 +2,11 @@ import { needsNormalization, normalizeContent } from '../normalize-content';
 
 describe('needsNormalization', () => {
   describe('matching', () => {
-    it('returns false when all pairs have canonical shape (itemA/itemB)', () => {
+    it('returns false when all pairs have canonical shape (itemA/itemB) with id', () => {
       const result = needsNormalization('matching', {
         pairs: [
-          { itemA: '1', itemB: 'one' },
-          { itemA: '2', itemB: 'two' },
+          { id: 'p1', itemA: '1', itemB: 'one' },
+          { id: 'p2', itemA: '2', itemB: 'two' },
         ],
       });
       expect(result).toBe(false);
@@ -124,10 +124,20 @@ describe('normalizeContent', () => {
     expect(result).toBe(content);
   });
 
-  it('returns content unchanged for canonical matching', () => {
-    const content = { pairs: [{ itemA: '1', itemB: 'one' }] };
+  it('returns content unchanged for fully canonical matching with ids', () => {
+    const content = { pairs: [{ id: 'p1', itemA: '1', itemB: 'one' }] };
     const result = normalizeContent('matching', content);
     expect(result).toBe(content);
+  });
+
+  it('normalizes canonical pairs missing id', () => {
+    const result = normalizeContent('matching', {
+      pairs: [{ itemA: '1', itemB: 'one' }, { itemA: '2', itemB: 'two' }],
+    });
+    expect(result.pairs).toEqual([
+      { id: 'pair-0', itemA: '1', itemB: 'one' },
+      { id: 'pair-1', itemA: '2', itemB: 'two' },
+    ]);
   });
 
   it('returns content unchanged for canonical sequencing', () => {
