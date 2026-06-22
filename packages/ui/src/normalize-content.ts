@@ -27,8 +27,9 @@ function splitEmojiLabel(raw: string): { label: string; emoji?: string } {
 
 function hasCanonicalPairs(pairs: unknown): boolean {
   return Array.isArray(pairs) && pairs.length > 0
-    && typeof pairs[0] === "object" && pairs[0] !== null
-    && "itemA" in (pairs[0] as Record<string, unknown>);
+    && pairs.every(
+      (p) => typeof p === "object" && p !== null && "itemA" in (p as Record<string, unknown>),
+    );
 }
 
 // Canonical fields that indicate content is already in the right shape.
