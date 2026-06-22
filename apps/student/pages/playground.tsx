@@ -111,7 +111,6 @@ const Playground: NextPage<PlaygroundProps> = ({ examples }) => {
     examples.forEach((ex, i) => { initial[i] = JSON.stringify(ex.content, null, 2); });
     return initial;
   });
-  const [jsonErrors, setJsonErrors] = useState<Record<number, string | null>>({});
   const [filterType, setFilterType] = useState<string>(ALL_TYPES);
   const [filterStep, setFilterStep] = useState<string>(ALL_STEPS);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
@@ -119,12 +118,6 @@ const Playground: NextPage<PlaygroundProps> = ({ examples }) => {
 
   const handleJsonChange = (i: number, value: string) => {
     setJsonStrings((prev) => ({ ...prev, [i]: value }));
-    try {
-      JSON.parse(value);
-      setJsonErrors((prev) => ({ ...prev, [i]: null }));
-    } catch (e) {
-      setJsonErrors((prev) => ({ ...prev, [i]: (e as Error).message }));
-    }
   };
 
   const filteredExamples = useMemo(() => {
@@ -228,7 +221,12 @@ const Playground: NextPage<PlaygroundProps> = ({ examples }) => {
 
         <p className="mb-4 text-sm text-on-surface-variant">
           Showing {filteredExamples.length} of {examples.length} examples.
-          {filteredExamples.length === 0 && (
+          {examples.length === 0 && (
+            <span className="ml-2 text-soft-coral">
+              Could not load example data file.
+            </span>
+          )}
+          {filteredExamples.length === 0 && examples.length > 0 && (
             <span className="ml-2">
               No examples match the current filters.
               <button
@@ -246,7 +244,6 @@ const Playground: NextPage<PlaygroundProps> = ({ examples }) => {
             const originalIdx = examples.indexOf(example);
             const isExpanded = expandedIndex === filteredIdx;
             const jsonText = jsonStrings[originalIdx];
-            const jsonError = jsonErrors[originalIdx];
 
             let parsedContent: Record<string, unknown> | null = null;
             let parseError: string | null = null;
@@ -487,7 +484,11 @@ export const getStaticProps: GetStaticProps<PlaygroundProps> = async () => {
       },
     };
   } catch {
-    return { notFound: true };
+    return {
+      props: {
+        examples: [],
+      },
+    };
   }
 };
 
