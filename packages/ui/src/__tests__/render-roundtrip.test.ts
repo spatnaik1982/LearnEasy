@@ -48,14 +48,36 @@ describe('buildCorrectResponse', () => {
     expect(r.answers).toEqual({ b1: '5' });
   });
 
-  it('returns __skip for place_value_chart', () => {
-    const r = buildCorrectResponse('place_value_chart', {});
-    expect(r.__skip).toBe('click-driven');
+  it('returns placedDigits for place_value_chart with targetNumber', () => {
+    const r = buildCorrectResponse('place_value_chart', { maxPlaces: 'lakh', targetNumber: 543 });
+    expect(r.placedDigits).toEqual({ 0: 0, 1: 0, 2: 0, 3: 5, 4: 4, 5: 3 });
+  });
+
+  it('returns placedDigits for place_value_chart crore', () => {
+    const r = buildCorrectResponse('place_value_chart', { maxPlaces: 'crore', targetNumber: 1234 });
+    expect(r.placedDigits).toEqual({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 1, 5: 2, 6: 3, 7: 4 });
+  });
+
+  it('returns __skip for place_value_chart without targetNumber', () => {
+    const r = buildCorrectResponse('place_value_chart', { maxPlaces: 'lakh' });
+    expect(r.__skip).toBe('no targetNumber');
   });
 
   it('returns completed for real_world', () => {
     const r = buildCorrectResponse('real_world', {});
     expect(r.completed).toBe(true);
+  });
+
+  it('returns shaded for fraction_visual', () => {
+    const r = buildCorrectResponse('fraction_visual', { numerator: 3 });
+    expect(r.shaded).toBe(3);
+  });
+
+  it('returns highlighted for grid_area', () => {
+    const highlighted = [{ row: 0, col: 0 }, { row: 0, col: 1 }];
+    const r = buildCorrectResponse('grid_area', { highlighted });
+    expect(r.highlighted).toEqual(highlighted);
+    expect(r.count).toBe(2);
   });
 });
 
@@ -102,13 +124,28 @@ describe('runRoundtrip', () => {
     expect(result.passed).toBe(true);
   });
 
-  it('passes place_value_chart (click-driven skip)', () => {
+  it('passes fraction_visual interactive with correct response', () => {
+    const result = runRoundtrip({ id: 't1', type: 'fraction_visual', step: 'guided_practice', content: { numerator: 3, denominator: 4, mode: 'bar', interactive: true } });
+    expect(result.passed).toBe(true);
+  });
+
+  it('passes place_value_chart observe step', () => {
     const result = runRoundtrip({ id: 't1', type: 'place_value_chart', step: 'observe', content: { maxPlaces: 'lakh', digits: [5, 4, 3], interactive: false } });
+    expect(result.passed).toBe(true);
+  });
+
+  it('passes place_value_chart interactive with targetNumber', () => {
+    const result = runRoundtrip({ id: 't1', type: 'place_value_chart', step: 'guided_practice', content: { maxPlaces: 'lakh', targetNumber: 543, interactive: true, draggableDigits: [5, 4, 3] } });
     expect(result.passed).toBe(true);
   });
 
   it('passes grid_area non-interactive', () => {
     const result = runRoundtrip({ id: 't1', type: 'grid_area', step: 'observe', content: { rows: 5, cols: 5, mode: 'area', highlighted: [{ row: 0, col: 0 }] } });
+    expect(result.passed).toBe(true);
+  });
+
+  it('passes grid_area interactive with authored target', () => {
+    const result = runRoundtrip({ id: 't1', type: 'grid_area', step: 'guided_practice', content: { rows: 5, cols: 5, mode: 'area', interactive: true, highlighted: [{ row: 0, col: 0 }, { row: 0, col: 1 }] } });
     expect(result.passed).toBe(true);
   });
 

@@ -44,7 +44,16 @@ export function buildCorrectResponse(type: string, content: Record<string, unkno
       return { shaded: (content.numerator as number) ?? 0 };
     }
     case 'place_value_chart': {
-      return { __skip: 'click-driven' };
+      const targetNumber = content.targetNumber as number | undefined;
+      const maxPlaces = (content.maxPlaces as 'lakh' | 'crore') ?? 'crore';
+      const columns = maxPlaces === 'lakh' ? 6 : 8;
+      if (targetNumber == null) return { __skip: 'no targetNumber' };
+      const targetStr = String(targetNumber).padStart(columns, '0');
+      const placedDigits: Record<number, number> = {};
+      for (let i = 0; i < columns; i++) {
+        placedDigits[i] = parseInt(targetStr[i], 10);
+      }
+      return { placedDigits };
     }
     case 'grid_area': {
       const highlighted = (content.highlighted as { row: number; col: number }[]) ?? [];

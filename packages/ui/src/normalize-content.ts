@@ -75,13 +75,8 @@ export function normalizeContent(type: string, content: Record<string, unknown>)
       });
     }
     if (!n.correctOrder) {
-      n.correctOrder = (n.items as Array<Record<string, unknown>>).map((item) => item.id as string);
+      n.correctOrder = (n.items as Array<Record<string, unknown>>).map((item, i) => (item.id as string) ?? `item-${i}`);
     }
-  }
-
-  // Fill in default correctOrder for canonical items that lack it
-  if (t === "sequencing" && Array.isArray(n.items) && !n.correctOrder) {
-    n.correctOrder = (n.items as Array<Record<string, unknown>>).map((_, i) => `item-${i}`);
   }
 
   return n;

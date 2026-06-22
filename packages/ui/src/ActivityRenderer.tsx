@@ -630,15 +630,16 @@ export function ActivityRenderer({
             activeColumn={null}
             onSelectDigit={(digit) => setPvcSelectedDigit(digit === pvcSelectedDigit ? null : digit)}
             onPlaceDigit={(digit, column) => {
-              setPvcPlacedDigits((prev) => ({ ...prev, [column]: digit }));
+              const next = { ...pvcPlacedDigits, [column]: digit };
+              setPvcPlacedDigits(next);
               setPvcSelectedDigit(null);
+              handleResponse({ placedDigits: next });
             }}
             onRemoveDigit={(column) => {
-              setPvcPlacedDigits((prev) => {
-                const updated = { ...prev };
-                delete updated[column];
-                return updated;
-              });
+              const next = { ...pvcPlacedDigits };
+              delete next[column];
+              setPvcPlacedDigits(next);
+              handleResponse({ placedDigits: next });
             }}
             targetNumber={normalizedContent.targetNumber as number | undefined}
             showResult={lifecycle === "correct" || lifecycle === "incorrect"}
